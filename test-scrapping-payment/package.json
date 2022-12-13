@@ -1,0 +1,19 @@
+{
+  "name": "test-scrapping-payment",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "]",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "extra": "^0.2.1",
+    "puppeteer": "^19.4.0",
+    "puppeteer-extra": "^3.3.4",
+    "puppeteer-extra-plugin-stealth": "^2.11.1"
+  }
+}
