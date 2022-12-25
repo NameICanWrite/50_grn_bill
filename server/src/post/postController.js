@@ -1,6 +1,16 @@
 import Post from "./post.js"
 import { deleteFileFromGoogleDrive, uploadFileToGoogleDrive } from "../utils/file-upload/googleDrive.utils.js"
 
+import makeUrlScreenshot from "../utils/makeUrlScreenshot.js";
+import { file } from "googleapis/build/src/apis/file/index.js";
+import fs from "fs";
+import axios from "axios";
+import urlExists from "../utils/urlExists.js";
+
+// import urlExists from 'url-exist'
+
+// console.log(await urlExists('https://www.quora.com'));
+
 const postTags = [
 	'social media',
 	'tech',
@@ -16,14 +26,12 @@ post.likes = post.likedBy.length
 if (!req.auth.isAdmin) {
 	post.likedBy = undefined
 }
-console.log(post)
 res.send(post)
 }
 
 
 export async function getAllPosts(req, res, next) {
 const posts = await Post.find({})
-console.log(posts)
 posts.forEach(post => {
 	post.likes = post.likedBy.length
 	// if (!req.auth?.isAdmin) {
@@ -36,23 +44,52 @@ res.send(posts)
 
 
 export async function addPost(req, res, next) {
-let {website, tags} = req.body
+let {website, tags, isScreenshotNeeded} = req.body
 const user = req.user
 const {uid} = req.auth.uid
 
+// validate url
+let websiteExists
+websiteExists = (await urlExists(website)) 
+if (!websiteExists && !/^https?:\/\//i.test(website)) {
+		website = 'https://' + website
+    websiteExists = (await urlExists(website)) 
+		if (!websiteExists) {
+			website = 'http://' + website
+    	websiteExists = (await urlExists(website)) 
+		}
+}
+if (!websiteExists) return res.status(400).send('You should post only existing website')
+
+let fileId
+
+if (isScreenshotNeeded) {
+	const screenshot = await makeUrlScreenshot(website)
+	fileId = (await uploadFileToGoogleDrive(screenshot)).id
+	fs.unlinkSync(screenshot.path)
+}
+
 tags = tags.filter(tag => postTags.includes(tag))
-await Post.create({
+const post = await Post.create({
   website,
 	tags,
   author: user._id,
-	date: new Date().toISOString()
+	date: new Date().toISOString(),
+	images: fileId ? [fileId] : []
 })
+
 if (user.didAddPost == false) {
 	user.didAddPost = true
 	await user.save()
 }
 
-res.send("post added successfully")
+console.log('post added');
+console.log(post);
+
+res.send({
+	message: "post added successfully",
+	post
+})
 }
 
 
@@ -132,6 +169,8 @@ export async function addPostImages(req, res, next) {
 	console.log(post._id)
 
 	const images = req.files
+
+	console.log(req.files);
 	
 	for (let prop in images) {
 	 const image = images[prop]
@@ -170,9 +209,8 @@ export async function getPostByIdAndConfirmOwner(req, res, next) {
 	const id = req.body.id || req.body._id || req.params.postId
 	const post = await Post.findById(id)
 
-	if (!(post.author.id === req.auth.uid) || req.auth.isAdmin) return req.status(400).send('It\'s not your post!')
+	if (!(post.author === req.auth.uid) && !req.auth.isAdmin) return res.status(400).send('It\'s not your post!')
 	req.post = post
 
 	next()
 }
-

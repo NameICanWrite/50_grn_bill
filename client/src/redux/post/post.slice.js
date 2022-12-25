@@ -39,7 +39,10 @@ const postSlice = createSlice({
     likePost() {},
     removeLike() {},
     createPost() {
-    } 
+    } ,
+    addPost(state, {payload}) {
+      state.all.push(payload)
+    }
   }
 })
 
@@ -51,7 +54,8 @@ export const {
   createPost,
   likePostLocally,
   removeLikeLocally,
-  removeLike
+  removeLike,
+  addPost
 } = postSlice.actions
 
 export const selectPostSlice = state => state.post

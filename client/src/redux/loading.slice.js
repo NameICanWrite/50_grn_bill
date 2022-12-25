@@ -51,6 +51,11 @@ const initialState = {
         success: false,
         isLoading: false,
         message: ''
+    },
+    createPost: {
+        success: false,
+        isLoading: false,
+        message: ''
     }
 
 }
@@ -107,11 +112,15 @@ const loadingSlice = createSlice({
         setResetUserPasswordLoading(state, {payload}) {
             state.user.modify=payload
         },
+        setCreatePostLoading(state, {payload}) {
+            state.createPost=payload
+        }
     }
 })
 
 export default loadingSlice.reducer
 export const {
+    setCreatePostLoading,
     setFetchCurrentUserLoading,
     setAuthLoading,
     setAuthLoadingSilently,
@@ -125,12 +134,13 @@ export const {
     setPostsLoading,
     setSendActivationCodeLoading,
     removeModifyLoadingMessages
-
 } = loadingSlice.actions
 
 export const selectLoading = state => state.loading
 
 export const selectUserLoading = createSelector(selectLoading, (loading) => loading.user)
+export const selectCreatePostLoading = createSelector(selectLoading, (loading) => loading.createPost)
+
 export const selectSendActivationCodeLoading = createSelector(selectUserLoading, (userLoading) => userLoading.sendActivationCode)
 export const selectCurrentUserLoading = createSelector(selectUserLoading, (userLoading) => userLoading.current)
 export const selectAuthLoading = createSelector(selectUserLoading, (userLoading) => userLoading.auth)

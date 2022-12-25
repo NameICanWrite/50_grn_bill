@@ -26,7 +26,7 @@ const Post = ({post: {
 			<p>author: <Link to={`/profile/${author._id}`}>{author.name}</Link></p>
 			<p>date: {new Date(date).toDateString()}</p>
 			<p>likes: {likedBy.length}</p>
-			<img src={images[0] ? `${baseUrl}/image/${images[0]}` : emptyPostImage} alt="post" />
+			<img src={images[0] ? `${baseUrl}/image/${images[0]}` : emptyPostImage} alt="post" style={{width: '70px', height: '80px'}}/>
 
 			{
 				likedBy.some(id => id == currentUser?._id)

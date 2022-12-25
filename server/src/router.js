@@ -9,6 +9,7 @@ import postRouter from './post/postRouter.js'
 import titleRouter from './title/titleRouter.js'
 import priceRouter from "./price/priceRouter.js"
 import rewardRouter from './reward/rewardRouter.js'
+import { isLoggedIn } from './auth/authController.js'
 
 const router = express.Router()
 
@@ -25,6 +26,7 @@ router.use('/post', postRouter)
 router.use('/title', titleRouter)
 router.use('/price', priceRouter)
 router.use('/reward', rewardRouter)
+
 
 // router.get('/send1USDT', (req, res, next) => {
 //     const usdtTestAddress =

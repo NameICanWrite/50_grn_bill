@@ -24,6 +24,6 @@ router
   
 
 router.get('/all', decodeAuthToken, getAllPosts)
-router.post('/', decodeAuthToken, isLoggedIn, getCurrentUserAndContinue, addPost)
+router.post('/create-post', decodeAuthToken, isLoggedIn, getCurrentUserAndContinue, addPost)
 
 export default router

@@ -20,6 +20,9 @@ const userSlice = createSlice({
         setAllUsers(state, {payload}) {
             state.all =[...payload]
         },
+        createPost() {
+
+        },
         getCurrentUser() {
         },
         getAllUsers() {
@@ -70,7 +73,7 @@ export const {
     forgetUserPassword,
     resetUserPassword,
     activateAccountWithCode,
-    sendActivationCode
+    sendActivationCode,
 } = userSlice.actions
 
 const selectUserSlice = state => state.user

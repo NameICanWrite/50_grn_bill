@@ -88,6 +88,7 @@ export const getAllInactiveUsers = async (req, res) => {
 
 export const setAvatar = async (req, res) => {
     const avatar = req.files.avatar
+    console.log(avatar);
     const fileName = `${Date.now()}${avatar.name}`
 
     

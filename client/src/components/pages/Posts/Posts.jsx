@@ -20,11 +20,14 @@ const Posts = ({posts, isAuthenticated}) => {
 			<button onClick={() => navigate('create-post')}>Create post</button>
 
 			<hr />
-			{
-				posts.map(post =>
-					<Post post={post}/>
-				)
-			}
+			<div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr'}}>
+				{
+					posts.map(post =>
+						<Post post={post}/>
+					)
+				}
+			</div>
+			
 			<Routes>
 				<Route path={'create-post'} element={
 					<Modal open={true} onClose={() => navigate('.')} >

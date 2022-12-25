@@ -6,6 +6,9 @@ import { createStructuredSelector } from 'reselect'
 
 import * as htmlToImage from 'html-to-image';
 import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import { createPost } from '../../../../redux/post/post.slice';
+import DivWithSpinner from '../../../layout/DivWithSpinner'
+import { selectCreatePostLoading } from '../../../../redux/loading.slice';
 
 const postTags = [
 	'social media',
@@ -20,10 +23,11 @@ const postTags = [
 
 
 
-const CreatePostForm = () => {
+const CreatePostForm = ({createPost, loading}) => {
 
 	const [selectedFile, setSelectedFile] = useState()
   const [preview, setPreview] = useState()
+	const [isDefaultImage, setIsDefaultImage] = useState(true)
 
   useEffect(() => {
 
@@ -42,12 +46,34 @@ const CreatePostForm = () => {
     return () => URL.revokeObjectURL(objectUrl)
   }, [selectedFile])
 
+  const onSelectFile = e => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedFile(undefined)
+      return
+    }
+    setSelectedFile(e.target.files[0])
+  }
+
 	return (
-		<div className={styles.container}>
-			<img src={preview} alt="preview" />
-			<form onSubmit={() => {}}>
-				<input type="text" name="website" onChange={() => {
-				}}/>
+		<DivWithSpinner className={styles.container} isLoading={loading.isLoading}>
+			{preview && <img src={preview} alt="preview" style={{ height: '20px', width: '20px' }} />}
+			<form onSubmit={(event) => {
+				const website = event.target.website.value
+				const tags = postTags.filter(tag => event.target[`${tag}Tag`].checked == true)
+				createPost({
+					website,
+					tags,
+					image: selectedFile
+				})
+			}}>
+        {!isDefaultImage && <input
+          name='image'
+          type={'file'}
+          onChange={onSelectFile}
+        />}
+				<input type="text" name="website" />
+				<input type='checkbox' name='isDefaultImage' defaultChecked={true} onChange={(event) => setIsDefaultImage(event.target.checked)}/>
+				<label htmlFor="isDefaultImage">is default image</label>
 				{
 					postTags.map((tag, index) => 
 						<>
@@ -58,12 +84,17 @@ const CreatePostForm = () => {
 				}
 				<button type='submit'>Create post</button>
 			</form>
-		</div>
+			<p>{loading.message}</p>
+		</DivWithSpinner>
 	)
 }
 
-const mapStateToProps = createStructuredSelector({})
-const mapDispatchToProps = (dispatch) => ({})
+const mapStateToProps = createStructuredSelector({
+	loading: selectCreatePostLoading
+})
+const mapDispatchToProps = (dispatch) => ({
+	createPost: (payload) => dispatch(createPost(payload))
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreatePostForm)
 
