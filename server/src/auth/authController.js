@@ -233,7 +233,7 @@ export const logout = (req, res) => {
 };
 
 export const isNewUsernameValid = async (req, res, next) => {
-  const {name } = req.body
+  const name = req.body.name.toLowerCase()
   if (!name) res.status(400).send('Name is required')
   if (name.length < 3) res.status(400).send('The name should be 3 symbols or longer')
 
@@ -243,7 +243,8 @@ export const isNewUsernameValid = async (req, res, next) => {
   
   if (uid) {
     const oldName = users.find(user => user._id == uid).name
-    if (name == oldName) next()
+    if (name == oldName) return res.status(400).send('Its your name already!')
+    console.log('Its your name already');
   }
 
   if (users.some(user => user.name == name)) res.status(400).send('The name is already registered. Choose a unique name')
@@ -275,8 +276,8 @@ export const isNewEmailValid = async (req, res, next) => {
 
 export const isNewUsernameAndEmailValid = async (req, res, next) => {
   const {name, email} = req.body
-  if (!name) res.status(400).send('Name is required')
-  if (name.length < 3) res.status(400).send('The name should be 3 symbols or longer')
+  if (!name) return res.status(400).send('Name is required')
+  if (name.length < 3) return res.status(400).send('The name should be 3 symbols or longer')
   if (!isEmail.validate(email)) return res.status(400).send('It`s not a email...')
 
   const uid = req.auth?.uid

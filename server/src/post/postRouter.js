@@ -1,6 +1,6 @@
 import express from "express"
-import { isLoggedIn } from "../auth/authController.js";
-import { addPost, addPostImages, deletePost, editPost, getAllPosts, getPost, getPostByIdAndConfirmOwner, likePost, removeLike, removePostImages } from "./postController.js";
+import { isAdmin, isLoggedIn } from "../auth/authController.js";
+import { addPost, addPostImages, deleteAllPosts, deletePost, editPost, getAllPosts, getPost, getPostByIdAndConfirmOwner, likePost, removeLike, removePostImages } from "./postController.js";
 import { getCurrentUserAndContinue } from "../user/userController.js";
 import { decodeAuthToken } from "../utils/auth/jwt.utils.js";
 
@@ -12,13 +12,14 @@ router
   .get('/one/:postId', decodeAuthToken, getPost)
 
   .get('/one/:postId/like', decodeAuthToken, isLoggedIn, getCurrentUserAndContinue, likePost)
-  .delete('/one/:postId/like', decodeAuthToken, isLoggedIn, removeLike)
+  .get('/one/:postId/remove-like', decodeAuthToken, isLoggedIn, removeLike)
 
   .post('/one/:postId', decodeAuthToken, isLoggedIn, getPostByIdAndConfirmOwner, editPost)
   .delete('/one/:postId', decodeAuthToken, isLoggedIn, getPostByIdAndConfirmOwner, deletePost)
 
   .post('/one/:postId/add-images', decodeAuthToken, isLoggedIn, getPostByIdAndConfirmOwner, addPostImages)
   .post('/one/:postId/remove-images', decodeAuthToken, isLoggedIn, getPostByIdAndConfirmOwner, removePostImages)
+  .delete('/all', decodeAuthToken, isAdmin, deleteAllPosts)
 
   
 

@@ -12,7 +12,7 @@ const cardNumber = '5375411414987953'
 puppeteer.use(StealthPlugin())
 
 
-  const browser = await puppeteer.launch({ headless: true, executablePath: executablePath(), userDataDir: "./puppeteer_user_data" });
+  const browser = await puppeteer.launch({ headless: true, executablePath: executablePath(), currentUserDir: "./puppeteer_user_data" });
   const page = await browser.newPage();
 
   

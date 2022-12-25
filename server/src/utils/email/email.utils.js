@@ -26,6 +26,7 @@ export async function sendEmailRecovery(email, token) {
 }
 
 export async function sendEmailActivationCode(email, code) {
+  console.log('sending email activation: ' + code)
   let subject = 'Activation Code'
   let text = ''
   let html = `<p>Your activation code is<span style="font-size: 30"> ${code}</span></p>`

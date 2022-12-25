@@ -6,15 +6,16 @@ import localtunnel from 'localtunnel'
 import { sendEmailOrderUpdateToAdmin } from "../utils/email/email.utils.js"
 
 const titles = [
-  'Справжній власник цього сайту',
+  'Терміналтор',
   'Hard code and a hammer',
   'Звезда по имени User',
   'Той, хто біжить 2FA: Випробування вогнем',
-  '💵 bill Gates ',
-  'Людина-web',
+  '50grn bill Gates ',
+  'Людина-web. Уже тиждень дома',
   'Мирний диванний воїн',
   'Кіберпанк 24/7',
-  'The Da Vinci Coder',
+  'Кодер да Вінчі',
+  'Люк Skype Walker'
 ]
 
 export async function receiveRandomTitle(req, res, next) {

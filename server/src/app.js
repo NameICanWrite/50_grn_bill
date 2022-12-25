@@ -38,7 +38,7 @@ const app = express()
 // })
 app.use(cors({
     origin: ["https://vigorous-volhard-c82a2c.netlify.app", "http://localhost:3000"],
-    methods: ["GET", "POST", "OPTIONS"],
+    methods: ["GET", "POST", "OPTIONS", "DELETE"],
     credentials: true
 }))
 

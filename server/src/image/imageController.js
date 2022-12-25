@@ -5,7 +5,7 @@ export async function getImage(req, res) {
 	
 	try {
 		const readStream = await getFileStreamFromGoogleDrive(fileId)
-
+		
 		const contentType = readStream.headers['content-type']
 		const data = readStream.data
 		if (data) {

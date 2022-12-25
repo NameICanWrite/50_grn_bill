@@ -1,0 +1,29 @@
+import React from 'react';
+import { Link, Navigate } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { selectAuthLoading } from '../../../redux/loading.slice';
+import styles from './Landing.module.sass'
+
+
+const Landing = ({ isAuthenticated }) => {
+  if (isAuthenticated) {
+    return <Navigate to='/dashboard' />;
+  }
+
+  return (
+    <section className={styles.landing}>
+      <div className={styles.dark_overlay}>
+        <div className={styles.landing_inner}>
+          <h1 className={styles.x_large}>MERN Boilerplate</h1>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
+const mapStateToProps = state => ({
+  isAuthenticated: selectAuthLoading(state).success
+});
+
+export default connect(mapStateToProps)(Landing);

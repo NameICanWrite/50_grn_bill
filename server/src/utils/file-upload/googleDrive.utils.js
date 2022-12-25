@@ -39,8 +39,9 @@ export async function uploadFileToGoogleDrive(file) {
 }
 
 export async function deleteFileFromGoogleDrive(fileId) {
-  const auth = createAuthorizedGoogle()
+  const auth = createAuthorizedGoogleClient()
   const drive = google.drive({ version: 'v3', auth });
 
   await drive.files.delete({fileId}).catch(err => console.log('Error while deleting file: ',err.message))
+  console.log('Deleted file from gdrive. id: ' + fileId);
 }

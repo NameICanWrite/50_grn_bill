@@ -1,6 +1,6 @@
 import express from "express"
 import { isAdmin, isLoggedIn } from "../auth/authController.js";
-import { getAllInactiveUsers, getAllUsers, getCurrentInactiveUser, getCurrentUser, getCurrentUserAndContinue, getUser, setAvatar, updateUserCart } from "./userController.js";
+import { getAllInactiveUsers, getAllUsers, getCurrentInactiveUser, getCurrentUser, getCurrentUserAndContinue, getUser, setAvatar, modifyCurrentUserCart } from "./userController.js";
 
 
 import { decodeAuthToken} from "../utils/auth/jwt.utils.js";
@@ -10,7 +10,7 @@ const router = express.Router();
 router.use(decodeAuthToken)
 
 router.route('/one/:uid')
-    .get(getUser)
+    .get(decodeAuthToken, getUser)
 
 
 router.get('/all', getAllUsers)

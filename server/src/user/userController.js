@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import nodemailer from 'nodemailer'
 import InactiveUser from './inactiveUserModel.js'
-import { uploadFileToGoogleDrive } from '../utils/file-upload/googleDrive.utils.js'
+import { deleteFileFromGoogleDrive, uploadFileToGoogleDrive } from '../utils/file-upload/googleDrive.utils.js'
 import { isNameInFreelancehuntProject } from '../utils/reward/freelancehunt.utils.js'
 
 export const getCurrentUser = async (req, res, next) => {
@@ -34,39 +34,40 @@ export const getCurrentUserAndContinue = async (req, res, next) => {
 
 export const getUser = async (req, res, next) => {
     const uid = req.params.uid
+    
     let user
-
     if (uid === 'current') {
-        user = await User.findById(req.auth?.uid);
+        if (!(req.auth?.uid || req.auth?.inactiveUid)) return res.status(400).send('Login required')
+        if (req.auth?.uid) {
+            user = await User.findById(req.auth?.uid) 
+        } else if (req.auth?.inactiveUid) {
+            user = await InactiveUser.findById(req.auth?.inactiveUid)
+            user = {...user, shouldBeActivated: true}
+        }
     } else {
         user = await User.findById(req.params.uid); 
     }
 
-    if (!(req.auth?.isAdmin || uid == req.auth?.uid)) delete user.email
+    if (!(req.auth?.isAdmin || uid == req.auth?.uid)) user.email = undefined
     user.password = undefined
     return res.send(user)
 
 };
 
-export const updateUserCart = async (req, res, next) => {
+export const modifyCurrentUserCart = async (req, res, next) => {
     const cart = req.body
     const user = await User.findByIdAndUpdate(req.auth.uid, {cart})
     res.send('user cart set successfully')
 }
 
 export async function getAllUsers(req, res) {
-
     let users = await User.find({});
     users = users.map(user => {
-        console.log(!(req.auth?.isAdmin || user._id == req.auth?.uid))
         if (!(req.auth?.isAdmin || user._id == req.auth?.uid)) user.email = undefined
         user.password = undefined
-        console.log(user.password)
-        console.log(user.email)
 
         return user
     })
-    console.log(users)
     res.send(users)
 };
 
@@ -92,6 +93,10 @@ export const setAvatar = async (req, res) => {
     
     const fileId = (await uploadFileToGoogleDrive({ ...avatar, name: fileName })).id
 
+    if (req.user.avatar) {
+        await deleteFileFromGoogleDrive(req.user.avatar)
+    }
+    
     req.user.avatar = fileId
     req.user.didAddAvatar = true
     await req.user.save()

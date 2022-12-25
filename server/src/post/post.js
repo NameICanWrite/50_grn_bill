@@ -7,8 +7,8 @@ import dotenv from 'dotenv'
 
 //price in usd
 const postSchema = mongoose.Schema({
-  header: String,
-  text: String,
+  website: String,
+  tags: [String],
   images: [String],
   date: String,
   author: String, 
