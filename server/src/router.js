@@ -7,7 +7,7 @@ import userRouter from "./user/userRouter.js"
 import { decodeAuthToken } from './utils/auth/jwt.utils.js'
 import postRouter from './post/postRouter.js'
 import titleRouter from './title/titleRouter.js'
-import priceRouter from "./price/priceRouter.js"
+import settingsRouter from "./settings/settingsRouter.js"
 import rewardRouter from './reward/rewardRouter.js'
 import { isLoggedIn } from './auth/authController.js'
 
@@ -24,7 +24,7 @@ router.use("/auth", authRouter)
 router.use("/user", userRouter)
 router.use('/post', postRouter)
 router.use('/title', titleRouter)
-router.use('/price', priceRouter)
+router.use('/settings', settingsRouter)
 router.use('/reward', rewardRouter)
 
 
@@ -88,6 +88,12 @@ router.post('/', (req, res) => {
     console.log(req.body)
     console.log('sending response...')
     res.status(200).send()
+})
+
+router.post('/redirect-to/*', (req, res) => {
+    const url = req.params[0]
+    console.log('redirecting to ' + url);
+    res.redirect(url)
 })
 
 

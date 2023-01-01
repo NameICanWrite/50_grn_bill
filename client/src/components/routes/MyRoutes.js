@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { Route, Routes, BrowserRouter, useNavigate, useNavigationType } from 'react-router-dom';
+import { Route, Routes, BrowserRouter, useNavigate, useNavigationType, Navigate } from 'react-router-dom';
 
 import NotFound from '../pages/NotFound/NotFound';
 import PrivateRoute from './PrivateRoute';
 import { connect } from 'react-redux';
 import AuthMenu, { PasswordAuthMenu } from '../pages/Auth/AuthMenu';
 import Landing from '../pages/Landing/Landing';
-import { selectAllUsersLoading, selectAuthLoading, selectCurrentUserLoading } from '../../redux/loading.slice';
+import { selectAllUsersLoading, selectAuthLoading, selectCurrentUserLoading, selectPostsLoading } from '../../redux/loading.slice';
 import ProfileContainer from "../pages/profile/Profile.container";
 import Dashboard from "../pages/dashboard/Dashboard";
 import PasswordReset from "../pages/password-reset/PasswordReset.Component";
@@ -16,6 +16,8 @@ import Login from '../pages/Auth/password-auth/Login';
 import Register from '../pages/Auth/password-auth/Register';
 import ActivationPage from '../pages/Auth/ActivationPage';
 import Posts from '../pages/Posts/Posts';
+import ReceiveTitlePage from '../pages/ReceiveTitlePage/ReceiveTitlePage';
+import RewardPage from '../pages/RewardPage/RewardPage';
 
 class DebugRouter extends BrowserRouter {
   constructor(props){
@@ -31,27 +33,30 @@ class DebugRouter extends BrowserRouter {
 }
 
 
-const MyRoutes = ({isAuthLoading, isCurrentUserLoading, isAllUsersLoading}) => {
+const MyRoutes = ({isAuthLoading, isCurrentUserLoading, isAllUsersLoading, isPostsLoading}) => {
   useEffect(() => console.log('isAuthLoading || isCurrentUserLoading = ' + isAuthLoading || isCurrentUserLoading))
   return (
     // <DebugRouter>
       <Routes>
-        <Route  path='/'  element={<Landing />} />
+        <Route path='/' element={<Navigate to="/posts"/>}/>
+        <Route  path='/landing'  element={<Landing />} />
         <Route  path='/dashboard' element={
           <PrivateRoute  
             isLoading={isAuthLoading || isCurrentUserLoading} 
             component={() => <Dashboard isLoading={isCurrentUserLoading}/>} />
         } />
         <Route path='/profile/:userId/*' element={
-          <PrivateRoute  
-            isLoading={isAuthLoading || isCurrentUserLoading || isAllUsersLoading} 
-            component={ProfileRoutes} />
+          <ProfileContainer />
         } />
         <Route path={ '/reset-password/:token' } element={<PasswordReset />}/>
         <Route  path={'/register'} element={<Register />} />
         <Route  path={`/login`} element={<Login />} />
         <Route path={`/activate-with-code`} element={<ActivationPage />} />
-        <Route path={'/posts/*'} element={<Posts />} />
+        <Route path={'/posts/*'} element={<Posts isLoading={isPostsLoading || isAllUsersLoading || isCurrentUserLoading}/>} />
+        <Route path={'/receive-random-title/*'} element={<ReceiveTitlePage />}/>
+        <Route path='/reward' element={
+          <PrivateRoute isLoading={isAuthLoading || isCurrentUserLoading} component={RewardPage} />
+        }/>
         <Route path="*" element={<NotFound/>} />
       </Routes>
     // </DebugRouter>
@@ -62,7 +67,8 @@ const MyRoutes = ({isAuthLoading, isCurrentUserLoading, isAllUsersLoading}) => {
 const mapStateToProps = (state) => ({
   isCurrentUserLoading: selectCurrentUserLoading(state).isLoading,
   isAuthLoading: selectAuthLoading(state).isLoading,
-  isAllUsersLoading: selectAllUsersLoading(state).isLoading
+  isAllUsersLoading: selectAllUsersLoading(state).isLoading,
+  isPostsLoading: selectPostsLoading(state).isLoading,
 })
 
 export default connect(mapStateToProps, null)(MyRoutes);

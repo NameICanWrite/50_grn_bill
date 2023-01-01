@@ -1,8 +1,9 @@
 import express from "express"
 import { isAdmin, isLoggedIn } from "../auth/authController.js";
-import { addPost, addPostImages, deleteAllPosts, deletePost, editPost, getAllPosts, getPost, getPostByIdAndConfirmOwner, likePost, removeLike, removePostImages } from "./postController.js";
+import { addPost, addPostImage, addPostImages, deleteAllPosts, deletePost, editPost, getAllPosts, getPost, getPostByIdAndConfirmOwner, likePost, removeLike, removePostImages } from "./postController.js";
 import { getCurrentUserAndContinue } from "../user/userController.js";
 import { decodeAuthToken } from "../utils/auth/jwt.utils.js";
+import { verifyImageFiles } from "../utils/file-upload/upload.utils.js";
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ router
   .post('/one/:postId', decodeAuthToken, isLoggedIn, getPostByIdAndConfirmOwner, editPost)
   .delete('/one/:postId', decodeAuthToken, isLoggedIn, getPostByIdAndConfirmOwner, deletePost)
 
-  .post('/one/:postId/add-images', decodeAuthToken, isLoggedIn, getPostByIdAndConfirmOwner, addPostImages)
+  .post('/one/:postId/add-image', decodeAuthToken, isLoggedIn, getPostByIdAndConfirmOwner, verifyImageFiles, addPostImage)
   .post('/one/:postId/remove-images', decodeAuthToken, isLoggedIn, getPostByIdAndConfirmOwner, removePostImages)
   .delete('/all', decodeAuthToken, isAdmin, deleteAllPosts)
 

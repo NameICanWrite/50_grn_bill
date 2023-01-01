@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { createStructuredSelector } from "reselect";
 import { forgetUserPassword, selectCurrentUser, modifyCurrentUser, modifyCurrentUserPassword, selectUserById, modifyCurrentUserEmail, modifyCurrentUserName, modifyCurrentUserAvatar, selectAllUsers } from "../../../redux/user/user.slice";
-import { removeModifyLoadingMessages, selectModifyCurrentUserAvatarLoading, selectModifyCurrentUserEmailLoading, selectModifyCurrentUserNameLoading, selectModifyCurrentUserPasswordLoading } from '../../../redux/loading.slice'
+import { removeModifyLoadingMessages, selectAllUsersLoading, selectAuthLoading, selectCurrentUserLoading, selectModifyCurrentUserAvatarLoading, selectModifyCurrentUserEmailLoading, selectModifyCurrentUserNameLoading, selectModifyCurrentUserPasswordLoading } from '../../../redux/loading.slice'
 import { connect, useSelector } from "react-redux";
 
 import {Modal, Box, Typography} from '@mui/material'
@@ -13,6 +13,7 @@ import baseUrl from "../../../api/baseUrl";
 import { EditAvatarForm, EditEmailForm, EditNameForm, EditPasswordForm } from "./Forms";
 import { setShowEditUserAvatar, setShowEditUserEmail, setShowEditUserName, setShowEditUserPassword } from "../../../redux/modals/modals.slice";
 import { Route, Routes, useNavigate, useParams } from "react-router-dom";
+import DivWithSpinner from "../../layout/DivWithSpinner";
 
 const Profile = ({
     // user: { name, avatar, isCurrent, email, title }, 
@@ -21,6 +22,9 @@ const Profile = ({
     setShowEditUserName,
     setShowEditUserEmail,
     setShowEditUserPassword, 
+    isAuthLoading, 
+    isCurrentUserLoading, 
+    isAllUsersLoading,
     ...otherProps 
 }) => {
     const [currentFormName, setCurrentFormName] = useState('')
@@ -32,44 +36,47 @@ const Profile = ({
     const users = useSelector(state => selectAllUsers(state))
     console.log(users)
     console.log(userId);
-    const { name, avatar, isCurrent, email, title } = useSelector(state => selectUserById(userId)(state))
+    const { name, avatar, isCurrent, email, title } = (useSelector(state => selectUserById(userId)(state)) || {})
     const navigate = useNavigate()
 
     return (
         <div>
-            <div>
-                <img src={avatar ? `${baseUrl}/image/${avatar}` : emptyAvatar} alt="" style={{height: '40px', width: '40px'}} />
-                {isCurrent && <button onClick={() => {
-                    navigate('set-avatar')
-                }}>Edit avatar</button>}
-            </div>
-            <div >
+            <DivWithSpinner isLoading={isAuthLoading || isCurrentUserLoading || isAllUsersLoading}>
                 <div>
-                    {name}
+                    <img src={avatar ? `${baseUrl}/image/${avatar}` : emptyAvatar} alt="" style={{height: '40px', width: '40px'}} />
+                    {isCurrent && <button onClick={() => {
+                        navigate('set-avatar')
+                    }}>Edit avatar</button>}
                 </div>
-                {isCurrent && <button onClick={() => {
-                    navigate('set-name')
-                }}>Edit name</button>}
-            </div>
-            <div>
-                <div>
-                    {title}
-                </div>
-                {isCurrent && <button>Receive new title</button>}
-            </div>
-            {isCurrent && <>
-                <div>
-                    <div>{email}</div>
-                    <button onClick={() => {
-                    navigate('set-email')
-                    }}>Change email</button>
+                <div >
+                    <div>
+                        {name}
+                    </div>
+                    {isCurrent && <button onClick={() => {
+                        navigate('set-name')
+                    }}>Edit name</button>}
                 </div>
                 <div>
-                    <button onClick={() => {
-                    navigate('set-password')
-                    }}>Change password</button>
+                    <div>
+                        {title}
+                    </div>
+                    {isCurrent && <button onClick={() => navigate('/receive-random-title')}>Receive new title</button>}
                 </div>
-            </>}
+                {isCurrent && <>
+                    <div>
+                        <div>{email}</div>
+                        <button onClick={() => {
+                        navigate('set-email')
+                        }}>Change email</button>
+                    </div>
+                    <div>
+                        <button onClick={() => {
+                        navigate('set-password')
+                        }}>Change password</button>
+                    </div>
+                </>}
+            </DivWithSpinner>
+            
             {isCurrent && <Routes>
                 <Route path={'set-name'} element={
                     <Modal open={true} onClose={() => navigate('.')} >
@@ -189,6 +196,10 @@ const mapStateToProps = (state, ownProps) => ({
     // modifyCurrentUserPasswordLoading: selectModifyCurrentUserPasswordLoading(state),
     // modifyCurrentUserEmailLoading: selectModifyCurrentUserEmailLoading(state),
     // modifyCurrentUserAvatarLoading: selectModifyCurrentUserAvatarLoading(state)
+   
+    isAuthLoading: selectAuthLoading(state).isLoading,
+    isCurrentUserLoading: selectCurrentUserLoading(state).isLoading,
+    isAllUsersLoading: selectAllUsersLoading(state).isLoading,
 })
 
 const mapDispatchToProps = dispatch => ({

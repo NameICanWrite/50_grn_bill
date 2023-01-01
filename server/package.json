@@ -41,6 +41,7 @@
     "install": "^0.13.0",
     "isemail": "^3.2.0",
     "jsonwebtoken": "^8.5.1",
+    "link-preview-js": "^3.0.4",
     "localtunnel": "^2.0.2",
     "merge-packages": "^0.1.6",
     "mongodb": "^4.1.1",

@@ -56,7 +56,12 @@ const initialState = {
         success: false,
         isLoading: false,
         message: ''
-    }
+    },
+    receiveTitle: {
+        success: false,
+        isLoading: false,
+        message: ''
+    },
 
 }
 
@@ -90,6 +95,9 @@ const loadingSlice = createSlice({
         },
         setModifyCurrentUserAvatarLoading(state, {payload}) {
             state.user.modifyAvatar=payload
+        },
+        setReceiveTitleLoading(state, {payload}) {
+            state.receiveTitle = payload
         },
 
        
@@ -133,7 +141,8 @@ export const {
     setFetchAllUsersLoading,
     setPostsLoading,
     setSendActivationCodeLoading,
-    removeModifyLoadingMessages
+    removeModifyLoadingMessages,
+    setReceiveTitleLoading,
 } = loadingSlice.actions
 
 export const selectLoading = state => state.loading
@@ -144,7 +153,7 @@ export const selectCreatePostLoading = createSelector(selectLoading, (loading) =
 export const selectSendActivationCodeLoading = createSelector(selectUserLoading, (userLoading) => userLoading.sendActivationCode)
 export const selectCurrentUserLoading = createSelector(selectUserLoading, (userLoading) => userLoading.current)
 export const selectAuthLoading = createSelector(selectUserLoading, (userLoading) => userLoading.auth)
-export const selectModifyCurrentUserLoading = createSelector(selectUserLoading, (userLoading) => userLoading.modify)
+// export const selectModifyCurrentUserLoading = createSelector(selectUserLoading, (userLoading) => userLoading.modify)
 export const selectModifyCurrentUserPasswordLoading= createSelector(selectUserLoading, (userLoading) => {
     return userLoading.modifyPassword})
 export const selectModifyCurrentUserEmailLoading = createSelector(selectUserLoading, (userLoading) => userLoading.modifyEmail)
@@ -152,8 +161,14 @@ export const selectModifyCurrentUserNameLoading = createSelector(selectUserLoadi
     return userLoading.modifyName})
 export const selectModifyCurrentUserAvatarLoading = createSelector(selectUserLoading, (userLoading) => userLoading.modifyAvatar)
 
+export const selectReceiveTitleLoading = createSelector(selectLoading, (loading) => loading.receiveTitle)
+
 
 export const selectForgetUserPasswordLoading= createSelector(selectUserLoading, (userLoading) => userLoading.modify)
 export const selectResetUserPasswordLoading= createSelector(selectUserLoading, (userLoading) => userLoading.modify)
-export const selectAllUsersLoading = createSelector(selectUserLoading, userLoading => userLoading.all)
+export const selectAllUsersLoading = createSelector(selectUserLoading, userLoading => {
+    console.log('select all users');
+    console.log(userLoading.all);
+    return userLoading.all})
+export const selectPostsLoading = createSelector(selectLoading, (loading) => loading.posts)
 

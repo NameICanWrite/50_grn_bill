@@ -9,3 +9,5 @@ const authApi = createApiProvider({
 
 export default authApi
 
+
+console.log((true && '') === (false ? 'dd' : ''));

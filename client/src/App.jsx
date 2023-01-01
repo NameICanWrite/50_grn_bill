@@ -10,6 +10,7 @@ import styles from './App.module.sass';
 import { createStructuredSelector } from 'reselect';
 import { getAllUsers, getCurrentUser } from './redux/user/user.slice';
 import { getAllPosts } from './redux/post/post.slice';
+import {LinkPreview} from "@dhaiwat10/react-link-preview"
 
 
 const App = ({ getCurrentUser, getAllUsers, getAllPosts, match }) => {
@@ -21,6 +22,7 @@ const App = ({ getCurrentUser, getAllUsers, getAllPosts, match }) => {
   return (
       <section className={styles.container}>
         <Navbar />
+        {/* <LinkPreview url="https://www.npmjs.com/package/@dhaiwat10/react-link-preview"/> */}
         <MyRoutes />
       </section>
   )

@@ -37,27 +37,28 @@ const removeLikeSaga = withLoading(function* ({payload}) {
 export const createPostSaga = withLoading(function* ({payload: {image, website, tags}}) {
   let createPostResponse, createdPost
   if (image) {
-    createPostResponse = yield postsApi.postSingle('create-post', {website, tags, isScreenshotNeeded: false})
+    createPostResponse = yield postsApi.postSingle('create-post', {website, tags, isImageNeeded: false})
     createdPost = createPostResponse.post
     yield console.log(createPostResponse);
 
     let formData = new FormData();
     formData.append('postImage', image)
-    yield postsApi.postSingle(`one/${createdPost._id}/add-images`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+    yield postsApi.postSingle(`one/${createdPost._id}/add-image`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
     createdPost = yield postsApi.getSingle('one/' + createdPost._id)
     
+
   } else {
-    createPostResponse = yield postsApi.postSingle('create-post', {website, tags, isScreenshotNeeded: true})
+    createPostResponse = yield postsApi.postSingle('create-post', {website, tags, isImageNeeded: true})
     createdPost = createPostResponse.post
   }
   
   yield put(addPost(createdPost))
 
   let message = createPostResponse.message
-
   return message
-  
 }, setCreatePostLoading) 
+
+
 
 export default function* postSaga() {
   yield takeLatest(getAllPosts, fetchPostsSaga)

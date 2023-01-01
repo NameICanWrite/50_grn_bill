@@ -6,6 +6,7 @@ import { file } from "googleapis/build/src/apis/file/index.js";
 import fs from "fs";
 import axios from "axios";
 import urlExists from "../utils/urlExists.js";
+import getLinkPreviewCustom from "../utils/linkPreview.utils.js";
 
 // import urlExists from 'url-exist'
 
@@ -44,9 +45,10 @@ res.send(posts)
 
 
 export async function addPost(req, res, next) {
-let {website, tags, isScreenshotNeeded} = req.body
+let {website, tags, isImageNeeded} = req.body
 const user = req.user
-const {uid} = req.auth.uid
+
+console.log(isImageNeeded);
 
 // validate url
 let websiteExists
@@ -61,13 +63,18 @@ if (!websiteExists && !/^https?:\/\//i.test(website)) {
 }
 if (!websiteExists) return res.status(400).send('You should post only existing website')
 
-let fileId
 
-if (isScreenshotNeeded) {
-	const screenshot = await makeUrlScreenshot(website)
-	fileId = (await uploadFileToGoogleDrive(screenshot)).id
-	fs.unlinkSync(screenshot.path)
-}
+
+	const linkPreview = await getLinkPreviewCustom({url: website, isImageNeeded})
+
+	//if cant get metadata image
+	const isScreenshotNeeded = (!linkPreview.imageUrl && isImageNeeded)
+	if (isScreenshotNeeded) {
+		const screenshot = await makeUrlScreenshot(website)
+		linkPreview.screenshotFileId = (await uploadFileToGoogleDrive(screenshot)).id
+		fs.unlinkSync(screenshot.path)
+	}
+
 
 tags = tags.filter(tag => postTags.includes(tag))
 const post = await Post.create({
@@ -75,7 +82,8 @@ const post = await Post.create({
 	tags,
   author: user._id,
 	date: new Date().toISOString(),
-	images: fileId ? [fileId] : []
+	// images: fileId ? [fileId] : []
+	linkPreview
 })
 
 if (user.didAddPost == false) {
@@ -144,7 +152,7 @@ for (let index in post.images) {
 }
 
 await Post.findByIdAndDelete(req.post._id)
-res.send("post deleted successfully id: " + id)
+res.send("post deleted successfully id: " + req.post._id)
 }
 
 export async function deleteAllPosts(req, res, next) {
@@ -184,6 +192,29 @@ export async function addPostImages(req, res, next) {
 	await post.save()
 	console.log('images ids added:')
 	console.log(post.images)
+	return res.status(200).send('images added successfully')
+}
+
+export async function addPostImage(req, res, next) {
+	const post = req.post
+	console.log(req.body)
+	console.log('id:')
+	console.log(post._id)
+
+	const image = req.files.postImage
+
+	console.log(req.files);
+	
+
+	 const fileName = `${Date.now()}${image.name}`
+
+	 const fileId = (await uploadFileToGoogleDrive({ ...image, name: fileName })).id
+
+	 post.linkPreview.screenshotFileId = fileId
+	
+
+	await post.save()
+	console.log('images ids added:')
 	return res.status(200).send('images added successfully')
 }
 

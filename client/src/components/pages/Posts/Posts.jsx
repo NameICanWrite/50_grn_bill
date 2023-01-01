@@ -9,6 +9,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import { selectAuthLoading } from '../../../redux/loading.slice'
 import { Modal } from '@mui/material'
 import CreatePostForm from './CreatePostForm/CreatePostForm'
+import WithSpinner from '../../layout/WithSpinner/WithSpinner'
 
 const Posts = ({posts, isAuthenticated}) => {
 	useEffect(() => {
@@ -46,6 +47,6 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = (dispatch) => ({})
 
-export default connect(mapStateToProps, mapDispatchToProps)(Posts)
+export default WithSpinner(connect(mapStateToProps, mapDispatchToProps)(Posts))
 
 

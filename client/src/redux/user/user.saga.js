@@ -4,6 +4,7 @@ import {
     takeLatest,
 } from '@redux-saga/core/effects'
 import authApi from '../../api/auth.api'
+import titleApi from '../../api/title.api'
 import userApi from '../../api/user.api'
 import withLoading from '../../utils/redux-utils/withLoading.saga'
 import {
@@ -19,7 +20,8 @@ import {
     setModifyCurrentUserNameLoading,
     setModifyCurrentUserEmailLoading,
     setModifyCurrentUserAvatarLoading,
-    setSendActivationCodeLoading
+    setSendActivationCodeLoading,
+    setReceiveTitleLoading
 } from '../loading.slice'
 import {
     createUserWithNameAndPassword,
@@ -38,13 +40,18 @@ import {
     modifyCurrentUserName,
     modifyCurrentUserAvatar,
     sendActivationCode,
-    activateAccountWithCode
+    activateAccountWithCode,
+    setPendingTitle,
+    decreaseSpins,
+    receiveTitle
 } from './user.slice'
 
 
 export const getCurrentUserSaga = withLoading(function* () {
     const currentUser = yield userApi.getSingle('one/current')
     yield put(setCurrentUser(currentUser))
+    yield console.log('current user');
+    yield console.log(currentUser);
     return currentUser.message
 }, setFetchCurrentUserLoading, setAuthLoadingSilently)
 
@@ -146,6 +153,15 @@ export const modifyCurrentUserAvatarSaga = withLoading(function* ({payload}) {
     yield call(fetchAllUsersSaga)
 }, setModifyCurrentUserAvatarLoading) 
 
+export const receiveTitleSaga = withLoading(function* ({payload}) {
+    yield put(decreaseSpins())
+    const {message, title} = yield titleApi.getSingle('/receive-random-title')
+
+    yield put(setPendingTitle(title))
+
+    return message
+}, setReceiveTitleLoading)
+
 
 const forgetUserPasswordSaga= withLoading( function* ({payload}){
     const message= yield userApi.postSingle('forgot-password', payload)
@@ -182,6 +198,8 @@ export default function* userSaga() {
 
     yield takeLatest(forgetUserPassword, forgetUserPasswordSaga)
     yield takeLatest(resetUserPassword, resetUserPasswordSaga)
+
+    yield takeLatest(receiveTitle, receiveTitleSaga)
     
 }
 

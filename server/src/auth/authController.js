@@ -244,7 +244,6 @@ export const isNewUsernameValid = async (req, res, next) => {
   if (uid) {
     const oldName = users.find(user => user._id == uid).name
     if (name == oldName) return res.status(400).send('Its your name already!')
-    console.log('Its your name already');
   }
 
   if (users.some(user => user.name == name)) res.status(400).send('The name is already registered. Choose a unique name')

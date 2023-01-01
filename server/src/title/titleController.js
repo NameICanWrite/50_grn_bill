@@ -1,4 +1,4 @@
-import Price from "../price/price.js"
+import Settings from "../settings/settings.js"
 import User from "../user/user.js"
 import Order from "./order.js"
 import {isValidPurchaseWayforpay, signProductsPurchaseWayforpay} from '../utils/pay.utils.js'
@@ -29,7 +29,10 @@ export async function receiveRandomTitle(req, res, next) {
   user.didReceiveTitle = true
   await user.save()
 
-  return res.send('Ви отримали звання "' + user.title + '"')
+  return res.send({
+    title: user.title,
+    message: 'Ви отримали звання "' + user.title + '"'
+  })
 }
 
 
@@ -42,7 +45,7 @@ export async function orderSpin(req, res, next) {
 
   if (count % 1 != 0 || count < 1) return res.status(400).send('...!?')
 
-  const { spinPrice } = await Price.findOne()
+  const { spinPrice } = await Settings.findOne()
   const totalPrice = spinPrice * count
 
   const currency = 'UAH'
@@ -156,6 +159,16 @@ export async function getUserOrders(req, res, next) {
       uid: req.user?.uid
   })
   res.send(orders)
+}
+
+export async function getUserOrderById(req, res, next) {
+  const { orderId }= req.params
+  const orders = await Order.find({
+      uid: req.user?._id
+  })
+  const order = orders.find(order => order._id = orderId)
+  if (!order) res.status(400).send('No order found')
+  res.send(order)
 }
 
 export async function clearAllOrders(req, res, next) {

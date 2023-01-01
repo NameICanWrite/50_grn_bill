@@ -7,30 +7,32 @@ import nodemailer from 'nodemailer'
 import InactiveUser from './inactiveUserModel.js'
 import { deleteFileFromGoogleDrive, uploadFileToGoogleDrive } from '../utils/file-upload/googleDrive.utils.js'
 import { isNameInFreelancehuntProject } from '../utils/reward/freelancehunt.utils.js'
+import Settings from '../settings/settings.js'
 
-export const getCurrentUser = async (req, res, next) => {
-    const user = await User.findById(req.auth?.uid);
+// export const getCurrentUser = async (req, res, next) => {
+//     const user = await User.findById(req.auth?.uid);
 
-    //additional logic to check beyond schedule if user name is in freelancehunt project 
-    if (!user.didReceiveReward) {
-        const bool = await isNameInFreelancehuntProject(user.name)
-        if (bool) {
-            user.isNameInFreelancehuntProject = true
-            await user.save()
-        } else if (user.isNameInFreelancehuntProject) {
-            user.isNameInFreelancehuntProject = false
-            await user.save()
-        }
-    }
+//     //additional logic to check beyond schedule if user name is in freelancehunt project 
+//     if (!user.didReceiveReward) {
+//         const bool = await isNameInFreelancehuntProject(user.name)
+//         if (bool) {
+//             user.isNameInFreelancehuntProject = true
+//             await user.save()
+//         } else if (user.isNameInFreelancehuntProject) {
+//             user.isNameInFreelancehuntProject = false
+//             await user.save()
+//         }
+//     }
 
-    user.password = undefined
-    res.send(user)
-};
+//     user.password = undefined
+//     res.send(user)
+// };
 
 export const getCurrentUserAndContinue = async (req, res, next) => {
     req.user = await User.findById(req.auth?.uid);
     next()
 };
+
 
 export const getUser = async (req, res, next) => {
     const uid = req.params.uid
@@ -48,9 +50,19 @@ export const getUser = async (req, res, next) => {
         user = await User.findById(req.params.uid); 
     }
 
-    if (!(req.auth?.isAdmin || uid == req.auth?.uid)) user.email = undefined
+    if (!(req.auth?.isAdmin || user._id.toString() == req.auth?.uid)) user.email = undefined
     user.password = undefined
-    return res.send(user)
+
+    let isWhitelisted,didReceiveReward
+    if (uid == 'current' || req.auth?.isAdmin) {
+        const settings = await Settings.findOne()
+        isWhitelisted = settings.whitelistedUsers.some(item => (item == user.name) || (item == user.email))
+        didReceiveReward = settings.receivedRewardUsers.some(item => (item.name && (item.name == user.name)) || (item.email && (item.email == user.email)) || (item.uid && (item.uid == user._id)))
+        console.log(didReceiveReward)
+    }
+
+
+    return res.send({...user._doc, isWhitelisted, didReceiveReward})
 
 };
 

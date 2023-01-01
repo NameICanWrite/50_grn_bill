@@ -15,10 +15,24 @@ const userSlice = createSlice({
     reducers: {
         setCurrentUser(state, {payload}) {
             state.current = {...payload} 
-            
+            let allUsersHaveCurrentUser
+            state.all = state.all.map(user => {
+                if (user._id == payload?._id) {
+                    allUsersHaveCurrentUser = true
+                    return payload
+                }
+                else return user
+            })
+            if (payload && !allUsersHaveCurrentUser) state.all = [...state.all, payload]
         },
         setAllUsers(state, {payload}) {
             state.all =[...payload]
+        },
+        setPendingTitle(state, {payload}) {
+            state.current = {...state.current, pendingTitle: payload}
+        },
+        setTitle(state, {payload}) {
+            state.current = {...state.current, title: payload}
         },
         createPost() {
 
@@ -51,6 +65,12 @@ const userSlice = createSlice({
         forgetUserPassword(){
         },
         resetUserPassword(){
+        },
+
+        receiveTitle() {
+        },
+        decreaseSpins(state) {
+            state.current = {...state.current, spins: state.current.spins - 1}
         }
     }
 })
@@ -74,6 +94,10 @@ export const {
     resetUserPassword,
     activateAccountWithCode,
     sendActivationCode,
+    receiveTitle,
+    setPendingTitle,
+    setTitle,
+    decreaseSpins
 } = userSlice.actions
 
 const selectUserSlice = state => state.user
@@ -83,6 +107,9 @@ export const selectCurrentUser = createSelector(selectUserSlice, userSlice => us
 export const selectCurrentUserShouldBeActivated = createSelector(selectCurrentUser, currentUser => currentUser.shouldBeActivated)
 export const selectCurrentUserName = createSelector(selectCurrentUser, currentUser => currentUser.name)
 export const selectCurrentUserEmail = createSelector(selectCurrentUser, currentUser => currentUser.email)
+export const selectCurrentUserPendingTitle = createSelector(selectCurrentUser, currentUser => currentUser.pendingTitle)
+export const selectCurrentUserTitle = createSelector(selectCurrentUser, currentUser => currentUser.title)
+export const selectCurrentUserSpins = createSelector(selectCurrentUser, currentUser => currentUser.spins)
 
 export const selectAllUsers = createSelector([selectCurrentUser, selectAllUsersWithoutCheckForCurrent], (currentUser, allUsers) => {
     return allUsers.map(user => {

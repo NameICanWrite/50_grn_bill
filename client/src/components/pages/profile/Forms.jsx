@@ -42,16 +42,16 @@ function EditNameFormFunction({ name, modifyCurrentUserName, modifyCurrentUserNa
 
 function EditEmailFormFunction({ email, modifyCurrentUserEmail, modifyCurrentUserEmailLoading }) {
   useEffect(() => {
-
+    
   }, [])
 
   const onSubmit = event => {
     event.preventDefault()
-    modifyCurrentUserEmail({ email: event.target.newEmail })
+    modifyCurrentUserEmail({ email: event.target.newEmail.value })
   }
 
   return (
-    <DivWithSpinner isLoading={modifyCurrentUserEmail.isLoading}>
+    <DivWithSpinner isLoading={modifyCurrentUserEmailLoading.isLoading}>
       <form onSubmit={onSubmit}>
         <input
           name={'newEmail'}
@@ -72,7 +72,7 @@ function EditPasswordFormFunction({ modifyCurrentUserPassword, modifyCurrentUser
 
   const onSubmit = event => {
     event.preventDefault()
-    modifyCurrentUserPassword({ password: event.target.newPassword })
+    modifyCurrentUserPassword({ password: event.target.newPassword.value })
   }
   return (
     <DivWithSpinner isLoading={modifyCurrentUserPasswordLoading.isLoading}>

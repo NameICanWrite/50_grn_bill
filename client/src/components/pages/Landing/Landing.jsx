@@ -6,9 +6,11 @@ import styles from './Landing.module.sass'
 
 
 const Landing = ({ isAuthenticated }) => {
-  if (isAuthenticated) {
-    return <Navigate to='/dashboard' />;
-  }
+  // if (isAuthenticated) {
+  //   return <Navigate to='/dashboard' />;
+  // }
+
+  
 
   return (
     <section className={styles.landing}>

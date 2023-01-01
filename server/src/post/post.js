@@ -9,7 +9,13 @@ import dotenv from 'dotenv'
 const postSchema = mongoose.Schema({
   website: String,
   tags: [String],
-  images: [String],
+  linkPreview: {
+    title: String,
+    siteName: String,
+    description: String,
+    imageUrl: String,
+    screenshotFileId: String,
+  },
   date: String,
   author: String, 
   likedBy: [String]

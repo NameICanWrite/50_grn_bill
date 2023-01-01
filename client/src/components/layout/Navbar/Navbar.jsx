@@ -6,7 +6,7 @@ import { selectAuthLoading } from '../../../redux/loading.slice';
 import styles from './Navbar.module.sass'
 
 
-const Navbar = ({ isAuthenticated, logout, currentUser }) => {
+const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser }) => {
   const authLinks = (
     <ul>
       <li>
@@ -44,11 +44,26 @@ const Navbar = ({ isAuthenticated, logout, currentUser }) => {
         <Link to='/'>
            MERN Boilerplate
         </Link>
-        <Link to="/posts">
-          Posts
-        </Link>
+        
+        {/* <Link to="/reward">
+          Reward
+        </Link> */}
       </h1>
-        <>{isAuthenticated ? authLinks : guestLinks}</>
+      <ul>
+        <li>
+          <Link to="/posts">
+            Posts
+          </Link>
+        </li>
+        <li>
+          <Link to="/reward">
+            Get 50 grn reward!
+          </Link>
+        </li>
+      </ul>
+        
+        
+        <>{!isAuthLoading && (isAuthenticated ? authLinks : guestLinks)}</>
       )
     </nav>
   );
@@ -57,6 +72,7 @@ const Navbar = ({ isAuthenticated, logout, currentUser }) => {
 
 const mapStateToProps = state => ({
   isAuthenticated: selectAuthLoading(state).success,
+  isAuthLoading: selectAuthLoading(state).isLoading,
   currentUser: selectCurrentUser(state)
 });
 

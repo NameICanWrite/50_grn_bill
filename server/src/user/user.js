@@ -56,26 +56,12 @@ const userSchema = mongoose.Schema({
     type: Boolean,
     default: false
   },
-  isNameInFreelancehuntProject: {
+
+  isReceivingRewardNow: { //to prevent multiple requests attack
     type: Boolean,
     default: false
   },
-  didAdminRecognized: {
-    type: Boolean,
-    default: false
-  },
-  didRequestAdminRecognition: {
-    type: Boolean,
-    default: false
-  },
-  isReceivingRewardNow: {
-    type: Boolean,
-    default: false
-  },
-  didReceiveReward: {
-    type: Boolean,
-    default: false
-  },
+
 });
 
 // userSchema.pre('save', async function(next) {

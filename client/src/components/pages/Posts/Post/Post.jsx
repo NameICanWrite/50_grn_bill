@@ -13,7 +13,13 @@ import { likePost, removeLike } from '../../../../redux/post/post.slice'
 const Post = ({post: {
 	website,
   tags,
-  images = [],
+  linkPreview: {
+		title,
+    siteName,
+    description,
+    imageUrl,
+    screenshotFileId,
+	} = {},
   date,
   author, 
   likedBy = [],
@@ -26,7 +32,7 @@ const Post = ({post: {
 			<p>author: <Link to={`/profile/${author._id}`}>{author.name}</Link></p>
 			<p>date: {new Date(date).toDateString()}</p>
 			<p>likes: {likedBy.length}</p>
-			<img src={images[0] ? `${baseUrl}/image/${images[0]}` : emptyPostImage} alt="post" style={{width: '70px', height: '80px'}}/>
+			<img src={imageUrl || (screenshotFileId && `${baseUrl}/image/${screenshotFileId}`) || emptyPostImage} alt="post" style={{width: '70px', height: '80px'}}/>
 
 			{
 				likedBy.some(id => id == currentUser?._id)

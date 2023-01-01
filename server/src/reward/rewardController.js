@@ -1,3 +1,4 @@
+import Settings from "../settings/settings.js"
 import User from "../user/user.js"
 import { sendEmailRecognizedByAdmin } from "../utils/email/email.utils.js"
 import { getAllNamesInFreelancehuntProject, isNameInFreelancehuntProject as isNameInFreelancehuntProjectFunction } from "../utils/reward/freelancehunt.utils.js"
@@ -8,27 +9,29 @@ import RewardRequest from "./rewardRequest.js"
 
 export async function askForReward(req, res, next) {
   const user = req.user
-  const cardNumber = req.body.cardNumber
 
-   //check beyond schedule if user name is in freelancehunt project 
-   if (!user.didReceiveReward) {
-    const bool = await isNameInFreelancehuntProjectFunction(user.name)
-    if (bool) {
-        user.isNameInFreelancehuntProject = true
-    } else if (user.isNameInFreelancehuntProject) {
-        user.isNameInFreelancehuntProject = false
-    }
+  if (user.isReceivingRewardNow) {
+    return res.status(400).send('Wait a little. You reward is already being sent')
   }
 
+  const cardNumber = req.body.cardNumber
+  const settings = await Settings.findOne()
+  const {whitelistedUsers, receivedRewardUsers} = settings
+
+  if (receivedRewardUsers.some(item => (item.name == user.name) || (item.email == user.email) || (item.uid == user._id))) return res.status(400).send('It seems you have already received reward')
+
+   //check beyond schedule if user name is in freelancehunt project 
+    if (!whitelistedUsers.some(item => (item == user.name) || (item == user.email))) {
+      const isNameInFreelancehuntProject = await isNameInFreelancehuntProjectFunction(user.name)
+      if (isNameInFreelancehuntProject) whitelistedUsers.push(user.name)
+    }
+    
+  const isWhitelisted = whitelistedUsers.some(item => (item == user.name) || (item == user.email))
   const {
     didReceiveTitle,
     didAddPost,
     didLikePost,
     didAddAvatar,
-    isNameInFreelancehuntProject,
-    didAdminRecognized,
-    isReceivingRewardNow,
-    didReceiveReward
   } = user
 
   const isEligible = (
@@ -40,17 +43,12 @@ export async function askForReward(req, res, next) {
     && 
     didLikePost 
     && 
-    (isNameInFreelancehuntProject || didAdminRecognized) 
-    && 
-    !didReceiveReward
+    isWhitelisted
     )
 
   if (!isEligible) {
     await user.save()
     return res.status(400).send('You are not eligible')
-  }
-  if (isReceivingRewardNow) {
-    return res.status(400).send('Wait a little. You reward is already being sent')
   }
 
   user.isReceivingRewardNow = true
@@ -65,7 +63,10 @@ export async function askForReward(req, res, next) {
   }
   
   user.isReceivingRewardNow = false
-  user.didReceiveReward = true
+  
+  settings.receivedRewardUsers.push({name: user.name, email: user.email, uid: user._id})
+  
+  await settings.save()
   await user.save()
 
   return res.send('Reward has been sent. Wait a little bit')
@@ -94,14 +95,14 @@ export async function requestAdminEligibilityRecognition(req, res, next) {
 
 
 
-export async function recognizeUserByAdmin(req, res, next) {
-  const uid = req.body.uid
-  const user = await User.findByIdAndUpdate(uid, {didAdminRecognized: true})
-  await RewardRequest.findOneAndDelete({uid})
+// export async function recognizeUserByAdmin(req, res, next) {
+//   const uid = req.body.uid
+//   const user = await User.findByIdAndUpdate(uid, {didAdminRecognized: true})
+//   await RewardRequest.findOneAndDelete({uid})
 
-  await sendEmailRecognizedByAdmin(user.email)
-  return res.send('recognized user successfully')
-}
+//   await sendEmailRecognizedByAdmin(user.email)
+//   return res.send('recognized user successfully')
+// }
 
 export async function getRewardRequests(req, res, next) {
 const requests = await RewardRequest.find({})
@@ -111,17 +112,27 @@ const requests = await RewardRequest.find({})
 
 export async function checkAllUsersNamesForBeingFreelanceInProject() {
   const users = await User.find({})
+  const settings = await Settings.findOne()
   const allNamesInFreelancehuntProject = await getAllNamesInFreelancehuntProject()
 
   for (let i in users) {
     const user = users[i]
 
-    if (!user.didReceiveReward) {
-      user.isNameInFreelancehuntProject = allNamesInFreelancehuntProject.includes(user.name)
-      await user.save()
+    //if user didnt receive reward and not in whitelist add to whitelist
+    if (
+        (
+            !settings.whitelistedUsers.some(item => item == user.name || item == user.email) 
+          || 
+            !settings.receivedRewardUsers.some(item => (item.name && (item.name == user.name)) || (item.email && (item.email == user.email)) || (item.uid && (item.uid == user._id.toString())))
+        ) 
+      && 
+        allNamesInFreelancehuntProject.includes(user.name)
+      ) {
+      settings.whitelistedUsers.push(user.name)
     }
   }
 
   console.log('checked all users names for being freelance in project')
+  console.log(curr);
 }
 
