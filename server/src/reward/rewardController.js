@@ -67,6 +67,8 @@ export async function askForReward(req, res, next) {
   settings.receivedRewardUsers.push({name: user.name, email: user.email, uid: user._id})
   
   await settings.save()
+
+  user.receivedRewardDate = new Date().toISOString() 
   await user.save()
 
   return res.send('Reward has been sent. Wait a little bit')

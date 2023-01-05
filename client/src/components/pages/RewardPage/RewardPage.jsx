@@ -40,7 +40,7 @@ const RewardPage = ({user: {didAddPost, didAddAvatar, didLikePost, didReceiveTit
 			<p>{didLikePost ? '✔️' : '❌'} Like 1 post</p>
 			<p>{didReceiveTitle ? '✔️' : '❌'} Receive a title</p>
 			<p>{isWhitelisted ? '✔️' : '❌'} Get whitelisted</p>
-			{/* {isEligible && <input type={'card'} onChange={(event) => setCardNumber(event.target.value)}/>} */}
+			
 			{isEligible && <Cleave 
 				options={{creditCard: true}}
 				// onFocus={this.onCreditCardFocus}

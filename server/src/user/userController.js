@@ -38,19 +38,22 @@ export const getUser = async (req, res, next) => {
     const uid = req.params.uid
     
     let user
+    let shouldBeActivated = false
     if (uid === 'current') {
         if (!(req.auth?.uid || req.auth?.inactiveUid)) return res.status(400).send('Login required')
         if (req.auth?.uid) {
             user = await User.findById(req.auth?.uid) 
         } else if (req.auth?.inactiveUid) {
             user = await InactiveUser.findById(req.auth?.inactiveUid)
-            user = {...user, shouldBeActivated: true}
+            shouldBeActivated = true
         }
     } else {
         user = await User.findById(req.params.uid); 
     }
+    if (!user) return res.status(400).send('No user found with this id')
 
-    if (!(req.auth?.isAdmin || user._id.toString() == req.auth?.uid)) user.email = undefined
+
+    if (!(req.auth?.isAdmin || user._id.toString() == req.auth?.uid || user._id.toString == req.auth?.inactiveUid)) user.email = undefined
     user.password = undefined
 
     let isWhitelisted,didReceiveReward
@@ -58,11 +61,11 @@ export const getUser = async (req, res, next) => {
         const settings = await Settings.findOne()
         isWhitelisted = settings.whitelistedUsers.some(item => (item == user.name) || (item == user.email))
         didReceiveReward = settings.receivedRewardUsers.some(item => (item.name && (item.name == user.name)) || (item.email && (item.email == user.email)) || (item.uid && (item.uid == user._id)))
-        console.log(didReceiveReward)
+
     }
 
 
-    return res.send({...user._doc, isWhitelisted, didReceiveReward})
+    return res.send({...user._doc, isWhitelisted, didReceiveReward, shouldBeActivated})
 
 };
 
@@ -113,6 +116,7 @@ export const setAvatar = async (req, res) => {
     req.user.avatar = fileId
     req.user.didAddAvatar = true
     await req.user.save()
+    console.log('added avatar')
 
     res.send('new awatar has been set')
 }

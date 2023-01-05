@@ -6,24 +6,50 @@ import { createStructuredSelector } from 'reselect'
 import { selectAllPosts } from '../../../redux/post/post.slice'
 import Post from './Post/Post'
 import { Route, Routes, useNavigate } from 'react-router-dom'
-import { selectAuthLoading } from '../../../redux/loading.slice'
+import { selectAuthLoading, setCreatePostLoading } from '../../../redux/loading.slice'
 import { Modal } from '@mui/material'
 import CreatePostForm from './CreatePostForm/CreatePostForm'
 import WithSpinner from '../../layout/WithSpinner/WithSpinner'
 
-const Posts = ({posts, isAuthenticated}) => {
+const Posts = ({posts, isAuthenticated, setCreatePostLoading}) => {
 	useEffect(() => {
 		console.log(posts);
 	}, [posts])
 	const navigate = useNavigate()
 	return (
 		<div className={styles.container}>
-			<button onClick={() => navigate('create-post')}>Create post</button>
+			<button className={styles.createPostButton} onClick={() => navigate('create-post')}>+</button>
 
 			<hr />
-			<div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr'}}>
+			<div className={styles.postsContainer}>
 				{
-					posts.map(post =>
+					[...posts]
+					// .sort((postA, postB) => {
+					// 	const likesA = postA.likedBy.length
+					// 	const likesB = postB.likedBy.length
+
+					// 	let res
+					// 	if (likesA > likesB) res = -1
+					// 	if (likesA < likesB) res = 1
+					// 	if (likesA === likesB) res = 0
+					// 	console.log(postA.website + '-' + postB.website)
+					// 	console.log(res);
+					// 	return res
+
+					// })
+					.sort((postA, postB) => {
+						const dateA = postA.date
+						const dateB = postB.date
+
+						let res
+						if (new Date(dateA).getTime() > new Date(dateB).getTime()) res = -1
+						if (new Date(dateA).getTime() < new Date(dateB).getTime()) res = 1
+						
+						return res
+
+					})
+					
+					.map(post =>
 						<Post post={post}/>
 					)
 				}
@@ -31,7 +57,10 @@ const Posts = ({posts, isAuthenticated}) => {
 			
 			<Routes>
 				<Route path={'create-post'} element={
-					<Modal open={true} onClose={() => navigate('.')} >
+					<Modal open={true} onClose={() => {
+						setCreatePostLoading({success: false, message: '', isLoading: false})
+						navigate('.')
+						}} >
 						<CreatePostForm />
 					</Modal>
 				}>
@@ -45,7 +74,9 @@ const mapStateToProps = (state) => ({
 	posts: selectAllPosts(state),
 	isAuthenticated: selectAuthLoading(state).success
 })
-const mapDispatchToProps = (dispatch) => ({})
+const mapDispatchToProps = (dispatch) => ({
+	setCreatePostLoading: (loading) => dispatch(setCreatePostLoading(loading)) 
+})
 
 export default WithSpinner(connect(mapStateToProps, mapDispatchToProps)(Posts))
 

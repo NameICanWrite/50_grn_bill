@@ -14,10 +14,10 @@ const ActivationPage = ({sendCode, activateWithCode, loading, sendCodeLoading, s
 			<DivWithSpinner isLoading={loading.isLoading}>
 				Please activate yourself
 				<form onSubmit={(event) => {
-					activateWithCode(event.target.code.value)
+					event.target.code.value.length == 6 && activateWithCode(event.target.code.value)
 				}}>
-					<input type="text" name="code" />
-					<input type="submit" title='Activate'/>
+					<input type="number" name="code" />
+					<input type="submit" value='Activate'/>
 				</form>
 				<p>{loading.message}</p>
 				<button onClick={sendCode}>Send activation code to email</button>

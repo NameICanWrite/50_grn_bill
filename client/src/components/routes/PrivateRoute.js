@@ -12,6 +12,7 @@ const PrivateRoute = ({
   shouldBeActivated,
   ...rest
 }) => {
+  console.log(shouldBeActivated)
   return (
   ((isAuthenticated || isLoading) && !shouldBeActivated) 
     ? 

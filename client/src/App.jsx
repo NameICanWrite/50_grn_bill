@@ -23,7 +23,10 @@ const App = ({ getCurrentUser, getAllUsers, getAllPosts, match }) => {
       <section className={styles.container}>
         <Navbar />
         {/* <LinkPreview url="https://www.npmjs.com/package/@dhaiwat10/react-link-preview"/> */}
-        <MyRoutes />
+        <div className={styles.mainContainer}>
+          <MyRoutes />
+        </div>
+        
       </section>
   )
 };

@@ -11,7 +11,6 @@ import ProfileContainer from "../pages/profile/Profile.container";
 import Dashboard from "../pages/dashboard/Dashboard";
 import PasswordReset from "../pages/password-reset/PasswordReset.Component";
 import { Modal } from '@mui/material';
-import { ProfileRoutes } from './ProfileRoutes';
 import Login from '../pages/Auth/password-auth/Login';
 import Register from '../pages/Auth/password-auth/Register';
 import ActivationPage from '../pages/Auth/ActivationPage';

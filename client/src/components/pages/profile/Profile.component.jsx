@@ -27,15 +27,8 @@ const Profile = ({
     isAllUsersLoading,
     ...otherProps 
 }) => {
-    const [currentFormName, setCurrentFormName] = useState('')
-    const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const openModal = () => setIsModalOpen(true)
-    const closeModal = () => setIsModalOpen(false)
     const { userId } = useParams()
-    const users = useSelector(state => selectAllUsers(state))
-    console.log(users)
-    console.log(userId);
     const { name, avatar, isCurrent, email, title } = (useSelector(state => selectUserById(userId)(state)) || {})
     const navigate = useNavigate()
 

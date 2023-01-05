@@ -6,10 +6,10 @@ export default async function getLinkPreviewCustom({url, isImageNeeded}) {
     title,
     siteName,
     description,
-    images
+    images = []
   } = await getLinkPreview(url, {
     headers: {
-      "user-agent": "googlebot"
+      // "user-agent": "googlebot"
     },
     followRedirects: `manual`,
     handleRedirects: (baseURL, forwardedURL) => {

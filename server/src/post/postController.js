@@ -45,7 +45,7 @@ res.send(posts)
 
 
 export async function addPost(req, res, next) {
-let {website, tags, isImageNeeded} = req.body
+let {website, tags = [], isImageNeeded} = req.body
 const user = req.user
 
 console.log(isImageNeeded);

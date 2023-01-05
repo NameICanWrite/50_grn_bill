@@ -18,7 +18,10 @@ const postSchema = mongoose.Schema({
   },
   date: String,
   author: String, 
-  likedBy: [String]
+  likedBy: {
+    type: [String],
+    default: []
+  }
 })
 
 const Post = mongoose.model("Post", postSchema)

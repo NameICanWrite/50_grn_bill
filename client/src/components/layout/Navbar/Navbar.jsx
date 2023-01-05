@@ -1,4 +1,4 @@
-import React, {  } from 'react';
+import React, { } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout, selectCurrentUser } from '../../../redux/user/user.slice';
@@ -7,64 +7,58 @@ import styles from './Navbar.module.sass'
 
 
 const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser }) => {
-  const authLinks = (
-    <ul>
-      <li>
-        <Link to='/dashboard'>
-          <span className={styles.hide_if_small}>Dashboard</span>
-        </Link>
-      </li>
-      <li>
+  const authLinks = [
+      // <div className={styles.navLink}>
+      //   <Link to='/dashboard'>
+      //     <span className={styles.hide_if_small}>Dashboard</span>
+      //   </Link>
+      // </div>,
+      <div className={styles.navLink}>
         <Link to={`/profile/${currentUser?._id}`}>
-          ⚙️
+          🆔 Account
         </Link>
-      </li>
-      {
-        isAuthenticated ? 
-          <li>
-        <Link to='/' onClick={logout}>Logout</Link>
-      </li> :
-      ''
-      }
+      </div>,
       
-    </ul>
-  );
+        isAuthenticated ?
+          <div className={styles.navLink}>
+            <Link to='/' onClick={logout}>↪️ Logout</Link>
+          </div> :
+          ''
+  ]
 
-  const guestLinks = (
-    <ul>
-      <li>
+  const guestLinks = [
+      <div className={styles.navLink}>
         <Link to='/login'>Login</Link>
-      </li>
-    </ul>
-  );
+      </div>
+  ]
 
   return (
     <nav className={styles.navbar}>
       <h1>
-        <Link to='/'>
-           MERN Boilerplate
+        <Link to='/landing'>
+          Unoriginal startup ideas
         </Link>
-        
-        {/* <Link to="/reward">
-          Reward
-        </Link> */}
       </h1>
-      <ul>
-        <li>
-          <Link to="/posts">
-            Posts
-          </Link>
-        </li>
-        <li>
-          <Link to="/reward">
-            Get 50 grn reward!
-          </Link>
-        </li>
-      </ul>
-        
-        
+      <div className={styles.navContainer}>
+          <div className={styles.navLink}>
+            <Link to="/posts">
+              📝 Posts
+            </Link>
+          </div>
+          <div className={styles.navLink}>
+            <Link to="/reward">
+              🤑 Get 50 grn reward!
+            </Link>
+          </div>
+          <div className={styles.navLink}>
+            <Link to="/landing">
+              🧐 About
+            </Link>
+          </div>
         <>{!isAuthLoading && (isAuthenticated ? authLinks : guestLinks)}</>
-      )
+      </div>
+
+
     </nav>
   );
 };

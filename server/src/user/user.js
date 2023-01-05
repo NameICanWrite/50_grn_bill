@@ -62,6 +62,7 @@ const userSchema = mongoose.Schema({
     default: false
   },
 
+  receivedRewardDate: String
 });
 
 // userSchema.pre('save', async function(next) {

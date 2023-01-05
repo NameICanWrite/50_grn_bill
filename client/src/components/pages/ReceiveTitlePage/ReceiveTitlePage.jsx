@@ -50,6 +50,7 @@ const ReceiveTitlePage = ({title, pendingTitle, spins, receiveTitle, setTitle, s
 		userApi.getSingle('one/current').then((res) => setCurrentUser(res.data))
 	}, [pendingTitle, setPendingTitle, setCurrentUser])
 
+
 	async function onBuySpinsSubmit(event) {
 		event.preventDefault()
 		setIsBuySpinsLoading(true)
@@ -87,8 +88,6 @@ const ReceiveTitlePage = ({title, pendingTitle, spins, receiveTitle, setTitle, s
 				event.target.append(input)
 			}
 		}
-
-	
 
 		for (let i in products) {
 			const item = products[i]
