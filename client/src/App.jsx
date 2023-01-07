@@ -8,7 +8,7 @@ import { connect, Provider } from 'react-redux';
 
 import styles from './App.module.sass';
 import { createStructuredSelector } from 'reselect';
-import { getAllUsers, getCurrentUser } from './redux/user/user.slice';
+import { getAllUsers, getCurrentUser, selectCurrentUser } from './redux/user/user.slice';
 import { getAllPosts } from './redux/post/post.slice';
 import {LinkPreview} from "@dhaiwat10/react-link-preview"
 
@@ -32,6 +32,7 @@ const App = ({ getCurrentUser, getAllUsers, getAllPosts, match }) => {
 };
 
 const mapStateToProps = createStructuredSelector({
+  user: selectCurrentUser
 })
 
 const mapDispatchToProps = (dispatch) => ({

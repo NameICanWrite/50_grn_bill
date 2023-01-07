@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
 import { selectAuthLoading } from '../../../../redux/loading.slice';
-import { createUserWithNameAndPassword, loginWithGoogle } from '../../../../redux/user/user.slice';
+import { createUserWithNameAndPassword, loginWithGoogle, selectCurrentUser } from '../../../../redux/user/user.slice';
 import AuthMessage from '../../../layout/AuthMessage';
 import WithSpinner from '../../../layout/WithSpinner/WithSpinner';
 
@@ -10,7 +10,7 @@ import styles from '../AuthMenu.module.sass'
 import GoogleLoginButton from '../oauth-buttons/GoogleLoginButton';
 
 
-const Register = ({ register, isAuthenticated, isLoading, loginWithGoogle, isLoadingAuth }) => {
+const Register = ({ register, isAuthenticated, isLoading, loginWithGoogle, isLoadingAuth, currentUser }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,8 +28,12 @@ const Register = ({ register, isAuthenticated, isLoading, loginWithGoogle, isLoa
   };
 
 
-  if (isAuthenticated) {
-    return <Navigate to='/dashboard' />;
+  if (isAuthenticated && !currentUser.shouldBeActivated) {
+    return <Navigate to={'/profile/' + currentUser._id} />;
+  }
+
+  if (isAuthenticated && currentUser.shouldBeActivated) {
+    return <Navigate to={'/activate-with-code'} />;
   }
 
   return (
@@ -80,7 +84,8 @@ const Register = ({ register, isAuthenticated, isLoading, loginWithGoogle, isLoa
 
 const mapStateToProps = state => ({
   isAuthenticated: selectAuthLoading(state).success,
-  isLoading: selectAuthLoading(state).isLoading
+  isLoading: selectAuthLoading(state).isLoading,
+  currentUser: selectCurrentUser(state)
 })
 
 const mapDispatchToProps = (dispatch) => ({

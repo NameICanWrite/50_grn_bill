@@ -53,7 +53,7 @@ export const getUser = async (req, res, next) => {
     if (!user) return res.status(400).send('No user found with this id')
 
 
-    if (!(req.auth?.isAdmin || user._id.toString() == req.auth?.uid || user._id.toString == req.auth?.inactiveUid)) user.email = undefined
+    if (!(req.auth?.isAdmin || user._id.toString() == req.auth?.uid || user._id.toString() == req.auth?.inactiveUid)) user.email = undefined
     user.password = undefined
 
     let isWhitelisted,didReceiveReward

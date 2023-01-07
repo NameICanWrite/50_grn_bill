@@ -1,17 +1,18 @@
 import styles from './RewardPage.module.sass'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { selectCurrentUser } from '../../../redux/user/user.slice'
+import { getCurrentUser, selectCurrentUser } from '../../../redux/user/user.slice'
 import rewardApi from '../../../api/reward.api'
 import DivWithSpinner from '../../layout/DivWithSpinner'
 import { useCallback } from 'react'
 import validator from 'validator'
 import Cleave from 'cleave.js/react'
 import { selectAuthLoading, selectCurrentUserLoading } from '../../../redux/loading.slice'
+import WithSpinner from '../../layout/WithSpinner/WithSpinner'
 
-const RewardPage = ({user: {didAddPost, didAddAvatar, didLikePost, didReceiveTitle, isWhitelisted, didReceiveReward}, isAuthenticated}) => {
+const RewardPage = ({user: {didAddPost, didAddAvatar, didLikePost, didReceiveTitle, isWhitelisted, didReceiveReward}, isUserLoading, isAuthenticated, getCurrentUser}) => {
 	const [isAskForRewardLoading, setIsAskForRewardLoading] = useState(false)
 	const [askForRewardSuccess, setAskForRewardSuccess] = useState('')
 	const [askForRewardError, setAskForRewardError] = useState('')
@@ -30,9 +31,14 @@ const RewardPage = ({user: {didAddPost, didAddAvatar, didLikePost, didReceiveTit
 			setAskForRewardError(err.message)
 		}).finally(() => setIsAskForRewardLoading(false))
 	}, [cardNumber])
+
+	useEffect(() => {
+		console.log('get current user from reward page');
+		getCurrentUser()
+	}, [getCurrentUser])
 	
 	return (
-		<div className={styles.container}>
+		<DivWithSpinner isLoading={isUserLoading} className={styles.container}>
 			<h2>What to do to receive 50 grn:</h2>
 			<p>{isAuthenticated ? '✔️' : '❌'} Register</p>
 			<p>{didAddPost ? '✔️' : '❌'} Create a post</p>
@@ -63,19 +69,22 @@ const RewardPage = ({user: {didAddPost, didAddAvatar, didLikePost, didReceiveTit
 				<p className={styles.success}>{askForRewardSuccess}</p>
 				<p className={styles.error}>{askForRewardError}</p>
 			</DivWithSpinner>
-		</div>
+		</DivWithSpinner>
 	)
 }
 
 const mapStateToProps = (state) => ({
 	user: selectCurrentUser(state),
-	isAuthenticated: selectAuthLoading(state).success
+	isAuthenticated: selectAuthLoading(state).success,
+	isUserLoading: selectCurrentUserLoading(state).isLoading
 })
 
-const mapDispatchToProps = (dispatch) => ({})
+const mapDispatchToProps = (dispatch) => ({
+	getCurrentUser: () => dispatch(getCurrentUser())
+})
 
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(RewardPage)
+export default WithSpinner(connect(mapStateToProps, mapDispatchToProps)(RewardPage))
 
 

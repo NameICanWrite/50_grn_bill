@@ -2,6 +2,7 @@ import { Modal } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import titleApi from "../../../api/title.api"
+import styles from './ReceiveTitlePage.module.sass'
 
 export function PurchaseStatusModal({onClose}) {
   const {orderId} = useParams()
@@ -25,10 +26,12 @@ export function PurchaseStatusModal({onClose}) {
 
   }, [orderId])
 
+
+
   return (
     <div>
       <Modal open={true} onClose={onClose}>
-        <div>
+        <div className={styles.purchaseStatusModal}>
           {
             !loading && <div>
               <p>Payment status is "{order?.payment.status}"</p>

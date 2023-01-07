@@ -4,10 +4,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { selectAuthLoading, selectSendActivationCodeLoading } from '../../../redux/loading.slice'
-import { activateAccountWithCode, selectCurrentUserShouldBeActivated, sendActivationCode } from '../../../redux/user/user.slice'
+import { activateAccountWithCode, selectCurrentUser, selectCurrentUserShouldBeActivated, sendActivationCode } from '../../../redux/user/user.slice'
 import DivWithSpinner from '../../layout/DivWithSpinner'
 
-const ActivationPage = ({sendCode, activateWithCode, loading, sendCodeLoading, shouldBeActivated}) => {
+const ActivationPage = ({sendCode, activateWithCode, loading, sendCodeLoading, shouldBeActivated, currentUser}) => {
 	return (
 		shouldBeActivated
 		?
@@ -26,14 +26,15 @@ const ActivationPage = ({sendCode, activateWithCode, loading, sendCodeLoading, s
 				</DivWithSpinner>
 			</DivWithSpinner>
 		:
-			<Navigate to="/dashboard" />
+			<Navigate to={'/profile/' + currentUser._id} />
 	)
 }
 
 const mapStateToProps = (state) => ({
 	loading: selectAuthLoading(state),
 	sendCodeLoading: selectSendActivationCodeLoading(state),
-	shouldBeActivated: selectCurrentUserShouldBeActivated(state)
+	shouldBeActivated: selectCurrentUserShouldBeActivated(state),
+	currentUser: selectCurrentUser(state)
 })
 
 const mapDispatchToProps = (dispatch) => ({

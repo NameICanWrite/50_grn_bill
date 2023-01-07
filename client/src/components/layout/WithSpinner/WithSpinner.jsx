@@ -1,17 +1,22 @@
-import classes from './WithSpinner.module.sass'
+import styles from './WithSpinner.module.sass'
 
 import React from 'react'
 
-const WithSpinner = WrappedComponent => ({ isLoading, ...otherProps }) => {
+const WithSpinner = WrappedComponent => ({ isLoading, spinnerClassName, spinnerContainerClassName, spinner: Spinner, ...otherProps }) => {
 	// useEffect(() => console.log(is))
 	console.log(isLoading)
 	return (
 		isLoading
 			?
-				<div className={classes.container}>
-					<div className={classes.spinner}></div>
-				</div>
+				Spinner
+					?
+						<Spinner />
+					:
+						<div className={`${styles.container} ${spinnerContainerClassName || ''}`}>
+							<div className={`${styles.spinner} ${spinnerClassName}`}></div>
+						</div>
 			:
+
 				<WrappedComponent {...otherProps} />
 	)
 

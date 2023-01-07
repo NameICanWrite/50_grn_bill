@@ -10,6 +10,8 @@ import { createPost } from '../../../../redux/post/post.slice';
 import DivWithSpinner from '../../../layout/DivWithSpinner'
 import { selectCreatePostLoading } from '../../../../redux/loading.slice';
 import { FileUploader } from "react-drag-drop-files";
+import { useNavigate } from 'react-router-dom';
+import closeCross from '../../../../assets/icons/close-window.png'
 const postTags = [
 	'social media',
 	'tech',
@@ -23,7 +25,7 @@ const postTags = [
 
 
 
-const CreatePostForm = ({ createPost, loading }) => {
+const CreatePostForm = ({ createPost, loading, onClose }) => {
 
 	const [selectedFile, setSelectedFile] = useState()
 	const [preview, setPreview] = useState()
@@ -33,6 +35,7 @@ const CreatePostForm = ({ createPost, loading }) => {
 
 	}, [])
 
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		if (!selectedFile) {
@@ -65,46 +68,61 @@ const CreatePostForm = ({ createPost, loading }) => {
 
 	return (
 		<div className={styles.container}>
+			<img className={styles.closeCross} src={closeCross} alt='close' onClick={onClose}/>
 			<DivWithSpinner className={styles.container} isLoading={loading.isLoading}>
-				{preview && <img src={preview} alt="preview" style={{ height: '20px', width: '20px' }} />}
-				<form onSubmit={(event) => {
-					event.preventDefault()
-					const website = event.target.website.value
-					// const tags = postTags.filter(tag => event.target[`${tag}Tag`].checked == true)
-					createPost({
-						website,
-						// tags,
-						image: selectedFile
-					})
-				}}>
-					{/* {!isDefaultImage && <input
-						name='image'
-						accept="image/*"
-						type={'file'}
-						onChange={onSelectFile}
-					/>} */}
-					{!isDefaultImage && <FileUploader
-						handleChange={onSelectFile} 
-						name="image" 
-						// types={fileTypes}
-						accept="image/*"
-					/>}
-					<input type="text" name="website" />
-					<label className={styles.getImageAuthomaticallyCheckbox}>
-						<input key='is-default-image-checkbox' type='checkbox' name='isDefaultImage' defaultChecked={isDefaultImage} onChange={(event) => setIsDefaultImage(event.target.checked)} />
-						<span>Отримати картинку автоматично</span>
-					</label>
-					{/* {
-						postTags.map((tag, index) =>
+				{
+					!loading.message
+						?
 							<>
-								<input type="checkbox" name={`${tag}Tag`} id={index} />
-								<label htmlFor={`${tag}Tag`}>{tag}</label>
+								{preview && <img src={preview} alt="preview" style={{ height: '20px', width: '20px' }} />}
+								<form onSubmit={(event) => {
+									event.preventDefault()
+									const website = event.target.website.value
+									// const tags = postTags.filter(tag => event.target[`${tag}Tag`].checked == true)
+									createPost({
+										website,
+										// tags,
+										image: selectedFile
+									})
+								}}>
+									{!isDefaultImage && <FileUploader
+										handleChange={onSelectFile}
+										name="image"
+										// types={fileTypes}
+										accept="image/*"
+									/>}
+									<input type="text" name="website" />
+									<label className={styles.getImageAuthomaticallyCheckbox}>
+										<input key='is-default-image-checkbox' type='checkbox' name='isDefaultImage' defaultChecked={isDefaultImage} onChange={(event) => setIsDefaultImage(event.target.checked)} />
+										<span>Отримати картинку автоматично</span>
+									</label>
+									<button type='submit'>Create post</button>
+								</form>
+								<p>{loading.message}</p>
+								
 							</>
-						)
-					} */}
-					<button type='submit'>Create post</button>
-				</form>
-				<p>{loading.message}</p>
+						:
+							<>
+								{
+									loading.success
+									?
+										<>
+											<p className={styles.message}>
+												{loading.message}
+											</p>
+											<button onClick={onClose}>OK</button>
+										</>
+									:
+										<>
+											<p>
+												{loading.message}
+											</p>
+											<button onClick={onClose}>OK</button>
+										</>
+								}
+							</>
+
+				}
 			</DivWithSpinner>
 		</div>
 

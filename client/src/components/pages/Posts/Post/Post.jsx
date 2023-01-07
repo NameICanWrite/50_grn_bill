@@ -34,15 +34,18 @@ const Post = ({ post: {
 	}
 	return (
 		<div className={styles.container}>
-			<div className={styles.top}>
-				<img src={author.avatar ? `${baseUrl}/image/${author.avatar}` : emptyAvatar} alt="avatar" className={styles.avatar} />
-				<div className={styles.rightText}>
-					<div className={styles.authorName}>{author.name}</div>
-					<div className={styles.authorTitle}>{author.title}</div>
-				</div>
+			<Link to={`/profile/${author._id}`}>
+				<div className={styles.top}>
+					<img src={author.avatar ? `${baseUrl}/image/${author.avatar}` : emptyAvatar} alt="avatar" className={styles.avatar} />
+					<div className={styles.rightText}>
+						<div className={styles.authorName}>{author.name}</div>
+						<div className={styles.authorTitle}>{author.title}</div>
+					</div>
 
-				<div className={styles.dateCreated}>{new Date(date).toLocaleDateString()}</div>
-			</div>
+					<div className={styles.dateCreated}>{new Date(date).toLocaleDateString()}</div>
+				</div>
+			</Link>
+			
 			<div className={styles.textBlock}>
 				{/* metadata can contain some html syntax */}
 				<div className={styles.siteName} dangerouslySetInnerHTML={{ __html: siteName || '' }}></div>

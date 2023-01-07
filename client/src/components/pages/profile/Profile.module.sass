@@ -1,4 +1,231 @@
-.avatar
-  height: 100px
-  width: 100px
+.container
+  width: 100%
+  display: flex
+  margin-left: 5%
+  margin-top: 7%
+  gap: 7%
+
+
+
+.avatarWrapper
+  position: relative
+
+.accountPropsWrapper
+  width: fit-content
+  // padding-left: 4%
+  
+  height: 100%
+
+.nameWrapper, .emailWrapper, .titleWrapper
+  display: flex
+  justify-content: center
+
+.username
+  font-size: 40px
+  // width: fit-content
+  // margin: 0 auto
+  // margin-top: 0.5%
+
+.title
+  font-size: 30px
+  // width: fit-content
+  // margin: 0 auto
+  margin-top: 1%
+
+.email
+  font-size: 30px
+  margin-top: 1%
+
+.changePasswordButton
+  cursor: pointer
+
+.username~button, .email~button, .title~button 
+  background-color: #ffffff00
+  background-image: url(/assets/icons/edit-something.png)
+  background-size: contain
+  background-repeat: no-repeat
+  color: inherit
+  border: none
+  width: 30px
   display: block
+  margin-left: 30px
+  margin-top: 10px
+
+  padding: 0
+  font: inherit
+  cursor: pointer
+  outline: inherit
+
+.username~button
+  width: 40px
+
+.passwordWrapper
+  margin-top: 70px
+
+  .changePasswordButton
+    display: block
+    padding: 10px
+    margin: 0 auto
+    font-size: 20px
+    border-radius: 10px
+    background-color: #89f382
+    color: white
+    border: none
+
+.avatar
+  height: 300px
+  width: 300px
+  display: block
+  object-fit: cover
+  border-radius: 25px
+  border: 3px black solid
+  position: relative
+
+  // &:hover
+  ~button
+    display: none
+
+  &:hover~button
+    top: 0
+    border: none
+    background-color: #00000081
+    display: block
+    position: absolute
+    background-image: url(/assets/img/edit-avatar.png)
+    height: 300px
+    width: 300px
+    border-radius: 25px
+      // object-fit: cover
+    background-size: 200px
+    background-position: 60% 60%
+    background-repeat: no-repeat
+    opacity: 50%
+    pointer-events: none
+
+.editFormWrapper
+  position: absolute
+  left: 50%
+  top: 50%
+  transform: translate(-50%, -50%)
+  max-width: 500px
+  min-width: 300px
+  min-height: 100px
+  background-color: #fff
+  padding: 20px
+  border-radius: 15px
+
+  .spinnerContainer
+    height: 100px
+
+  .editForm
+    height: 100px
+    display: flex
+    flex-direction: column
+    justify-content: space-around
+
+    input[type=text]
+      width: 100%
+      display: block
+      height: 30px
+      font-size: 20px
+
+    &.avatarForm
+      height: 300px
+      justify-content: space-between
+
+      .avatarPreview
+        display: block
+        max-height: 60%
+        object-fit: cover
+
+      .noFileSelected
+        text-align: center
+        height: 60%
+        vertical-align: middle
+        padding: 20% 0
+        font-size: 20px
+
+  .blackSubmit
+    display: block
+    background-color: black
+    border-radius: 10px
+    font-size: 15px
+    color: #fff
+    padding: 5px
+    width: 100%
+    margin: 10px auto
+    margin-bottom: 0
+    background-size: cover
+    cursor: pointer
+
+    &.disabled
+      background-color: #6e6e6e
+      cursor: not-allowed
+
+  .small
+    width: 70%
+
+  .message
+    font-weight: bold
+    text-align: center
+    font-size: 20px
+
+    .success
+      color: green
+
+    .error
+      color: red
+
+  .getImageAuthomaticallyCheckbox
+    display: block
+
+.closeCross
+  position: absolute
+  top: -30px
+  right: -30px
+  height: 30px
+  width: 30px
+  cursor: pointer
+
+
+
+@media (max-width: 900px)
+  .container
+    gap: 10px
+    margin-left: 10px
+
+@media (max-width: 800px)
+  .container
+    display: block
+    margin: 0
+  
+  .avatar
+    margin: 0 auto
+
+    ~button
+      left: 50%
+      transform: translateX(-50%)
+
+  .accountPropsWrapper
+    margin: 10px auto
+
+  .username
+    font-size: 30px
+  
+    ~button
+      width: 30px
+
+  .email
+    font-size: 20px
+
+    ~button
+      width: 20px
+
+  .title
+    font-size: 20px
+
+    ~button
+      width: 20px
+
+  .changePassword
+    margin: auto

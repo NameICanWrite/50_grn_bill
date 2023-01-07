@@ -47,8 +47,11 @@ const ReceiveTitlePage = ({title, pendingTitle, spins, receiveTitle, setTitle, s
 			setMustSpin(true)
 			setPendingTitle('')
 		}
-		userApi.getSingle('one/current').then((res) => setCurrentUser(res.data))
+		
 	}, [pendingTitle, setPendingTitle, setCurrentUser])
+	useEffect(() => {
+		console.log(title);
+	}, [title])
 
 
 	async function onBuySpinsSubmit(event) {
@@ -125,8 +128,10 @@ const ReceiveTitlePage = ({title, pendingTitle, spins, receiveTitle, setTitle, s
         data={rouletteData}
         onStopSpinning={() => {
           setMustSpin(false)
-					setTitle(pendingTitle)
+					console.log('stop spinning')
+					setTitle(titles[prizeNumber])
 					setIsModalWithResultOpen(true)
+					userApi.getSingle('one/current').then((data) => setCurrentUser(data)).catch()
         }}
       />
 			{!mustSpin && 

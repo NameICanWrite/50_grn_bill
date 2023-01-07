@@ -96,6 +96,18 @@ const loadingSlice = createSlice({
         setModifyCurrentUserAvatarLoading(state, {payload}) {
             state.user.modifyAvatar=payload
         },
+        resetModifyCurrentUserPasswordLoading(state) {
+            state.user.modifyPassword= {success: false, isLoading: false, message: ''}
+        },
+        resetModifyCurrentUserEmailLoading(state) {
+            state.user.modifyEmail= {success: false, isLoading: false, message: ''}
+        },
+        resetModifyCurrentUserNameLoading(state) {
+            state.user.modifyName= {success: false, isLoading: false, message: ''}
+        },
+        resetModifyCurrentUserAvatarLoading(state) {
+            state.user.modifyAvatar= {success: false, isLoading: false, message: ''}
+        },
         setReceiveTitleLoading(state, {payload}) {
             state.receiveTitle = payload
         },
@@ -136,6 +148,10 @@ export const {
     setModifyCurrentUserEmailLoading,
     setModifyCurrentUserNameLoading,
     setModifyCurrentUserAvatarLoading,
+    resetModifyCurrentUserPasswordLoading,
+    resetModifyCurrentUserEmailLoading,
+    resetModifyCurrentUserNameLoading,
+    resetModifyCurrentUserAvatarLoading,
     setForgetUserPasswordLoading,
     setResetUserPasswordLoading,
     setFetchAllUsersLoading,

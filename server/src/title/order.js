@@ -13,7 +13,8 @@ const orderSchema = mongoose.Schema({
       amount: Number,
   },
   spinsCount: Number,
-  description: String
+  description: String,
+  date: String
 })
 
 const Order = mongoose.model("Order", orderSchema)

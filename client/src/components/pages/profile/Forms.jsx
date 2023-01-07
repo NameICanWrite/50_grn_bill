@@ -12,9 +12,12 @@ import styles from './Profile.module.sass'
 import emptyAvatar from '../../../assets/img/empty-avatar.jpg'
 import baseUrl from "../../../api/baseUrl";
 import DivWithSpinner from "../../layout/DivWithSpinner";
+import closeCross from '../../../assets/icons/close-window.png'
+import Cleave from "cleave.js/react";
+import { FileUploader } from "react-drag-drop-files";
 
 
-function EditNameFormFunction({ name, modifyCurrentUserName, modifyCurrentUserNameLoading }) {
+function EditNameFormFunction({ name, modifyCurrentUserName, modifyCurrentUserNameLoading, onClose, className }) {
   useEffect(() => {
 
   }, [])
@@ -24,25 +27,57 @@ function EditNameFormFunction({ name, modifyCurrentUserName, modifyCurrentUserNa
     modifyCurrentUserName({ name: event.target.newName.value })
   }
   return (
-    <DivWithSpinner isLoading={modifyCurrentUserNameLoading.isLoading}>
-      <form onSubmit={onSubmit}>
-        <input
-          name={'newName'}
-          type={'text'}
-        />
-        <button type={'submit'}>Change name</button>
-        <p>{modifyCurrentUserNameLoading.message}</p>
-      </form>
-    </DivWithSpinner>
+    <div className={styles.editFormWrapper}>
+      <img className={styles.closeCross} src={closeCross} onClick={onClose} />
+      <DivWithSpinner isLoading={modifyCurrentUserNameLoading.isLoading} spinnerContainerClassName={styles.spinnerContainer}>
+        {
+          !modifyCurrentUserNameLoading.message || !modifyCurrentUserNameLoading.success
+            ?
+            <>
+              <form onSubmit={onSubmit} className={className}>
+                <input
+                  name={'newName'}
+                  type={'text'}
+                />
+                {modifyCurrentUserNameLoading.message && <p>{modifyCurrentUserNameLoading.message}</p>}
+                <button className={styles.blackSubmit} type={'submit'}>Change name</button>
+                
+              </form>
+            </>
+            :
+            <>
+              {
+                modifyCurrentUserNameLoading.success
+                  ?
+                  <>
+                    <p className={`${styles.message} ${styles.success}`}>
+                      {modifyCurrentUserNameLoading.message}
+                    </p>
+                    <button className={`${styles.blackSubmit} ${styles.small}`} onClick={onClose}>OK</button>
+                  </>
+                  :
+                  <>
+                    <p className={`${styles.message} ${styles.error}`}>
+                      {modifyCurrentUserNameLoading.message}
+                    </p>
+                    <button className={`${styles.blackSubmit} ${styles.small}`} onClick={onClose}>OK</button>
+                  </>
+              }
+            </>
+
+        }
+      </DivWithSpinner>
+    </div>
+
 
   )
 }
 
 
 
-function EditEmailFormFunction({ email, modifyCurrentUserEmail, modifyCurrentUserEmailLoading }) {
+function EditEmailFormFunction({ email, modifyCurrentUserEmail, modifyCurrentUserEmailLoading, onClose, className }) {
   useEffect(() => {
-    
+
   }, [])
 
   const onSubmit = event => {
@@ -51,21 +86,53 @@ function EditEmailFormFunction({ email, modifyCurrentUserEmail, modifyCurrentUse
   }
 
   return (
-    <DivWithSpinner isLoading={modifyCurrentUserEmailLoading.isLoading}>
-      <form onSubmit={onSubmit}>
-        <input
-          name={'newEmail'}
-          type={'text'}
-        />
-        <button type={'submit'}>Change email</button>
-        <p>{modifyCurrentUserEmailLoading.message}</p>
-      </form>
-    </DivWithSpinner>
+    <div className={styles.editFormWrapper}>
+      <img className={styles.closeCross} src={closeCross} onClick={onClose} />
+      <DivWithSpinner isLoading={modifyCurrentUserEmailLoading.isLoading} spinnerContainerClassName={styles.spinnerContainer}>
+
+        {
+          !modifyCurrentUserEmailLoading.message
+            ?
+            <>
+              <form onSubmit={onSubmit} className={className}>
+                <input
+                  name={'newEmail'}
+                  type={'text'}
+                />
+                <button className={styles.blackSubmit} type={'submit'}>Change email</button>
+                <p>{modifyCurrentUserEmailLoading.message}</p>
+              </form>
+            </>
+            :
+            <>
+              {
+                modifyCurrentUserEmailLoading.success
+                  ?
+                  <>
+                    <p  className={`${styles.message} ${styles.success}`}>
+                      {modifyCurrentUserEmailLoading.message}
+                    </p>
+                    <button className={`${styles.blackSubmit} ${styles.small}`} onClick={onClose}>OK</button>
+                  </>
+                  :
+                  <>
+                    <p className={`${styles.message} ${styles.error}`}>
+                      {modifyCurrentUserEmailLoading.message}
+                    </p>
+                    <button className={`${styles.blackSubmit} ${styles.small}`} onClick={onClose}>OK</button>
+                  </>
+              }
+            </>
+
+        }
+      </DivWithSpinner>
+    </div>
+
 
   )
 }
 
-function EditPasswordFormFunction({ modifyCurrentUserPassword, modifyCurrentUserPasswordLoading }) {
+function EditPasswordFormFunction({ modifyCurrentUserPassword, modifyCurrentUserPasswordLoading, onClose, className }) {
   useEffect(() => {
 
   }, [])
@@ -75,21 +142,53 @@ function EditPasswordFormFunction({ modifyCurrentUserPassword, modifyCurrentUser
     modifyCurrentUserPassword({ password: event.target.newPassword.value })
   }
   return (
-    <DivWithSpinner isLoading={modifyCurrentUserPasswordLoading.isLoading}>
-      <form onSubmit={onSubmit}>
-        <input
-          name={'newPassword'}
-          type={'text'}
-        />
-        <button type={'submit'}>Change password</button>
-        <p>{modifyCurrentUserPasswordLoading.message}</p>
-      </form>
-    </DivWithSpinner>
+    <div className={styles.editFormWrapper}>
+      <img className={styles.closeCross} src={closeCross} onClick={onClose} />
+      <DivWithSpinner isLoading={modifyCurrentUserPasswordLoading.isLoading} spinnerContainerClassName={styles.spinnerContainer}>
+
+        {
+          !modifyCurrentUserPasswordLoading.message
+            ?
+            <>
+              <form onSubmit={onSubmit} className={className}>
+                <input
+                  name={'newPassword'}
+                  type={'text'}
+                />
+                <button className={styles.blackSubmit} type={'submit'}>Change password</button>
+                <p>{modifyCurrentUserPasswordLoading.message}</p>
+              </form>
+            </>
+            :
+            <>
+              {
+                modifyCurrentUserPasswordLoading.success
+                  ?
+                  <>
+                    <p  className={`${styles.message} ${styles.success}`}>
+                      {modifyCurrentUserPasswordLoading.message}
+                    </p>
+                    <button onClick={onClose} className={`${styles.blackSubmit} ${styles.small}`}>OK</button>
+                  </>
+                  :
+                  <>
+                    <p className={`${styles.message} ${styles.error}`}>
+                      {modifyCurrentUserPasswordLoading.message}
+                    </p>
+                    <button onClick={onClose} className={`${styles.blackSubmit} ${styles.small}`}>OK</button>
+                  </>
+              }
+            </>
+
+        }
+      </DivWithSpinner>
+    </div>
+
 
   )
 }
 
-function EditAvatarFormFunction({ modifyCurrentUserAvatar, modifyCurrentUserAvatarLoading }) {
+function EditAvatarFormFunction({ modifyCurrentUserAvatar, modifyCurrentUserAvatarLoading, onClose, className, avatar }) {
   const [selectedFile, setSelectedFile] = useState()
   const [preview, setPreview] = useState()
 
@@ -110,15 +209,14 @@ function EditAvatarFormFunction({ modifyCurrentUserAvatar, modifyCurrentUserAvat
     return () => URL.revokeObjectURL(objectUrl)
   }, [selectedFile])
 
-  const onSelectFile = e => {
-    if (!e.target.files || e.target.files.length === 0) {
+  const onSelectFile = file => {
+    if (!file) {
       setSelectedFile(undefined)
       return
     }
-    setSelectedFile(e.target.files[0])
+    console.log(file)
+    setSelectedFile(file)
   }
-
-  useEffect(() => { console.log(modifyCurrentUserAvatarLoading) }, [modifyCurrentUserAvatarLoading])
 
   const onSubmit = event => {
     event.preventDefault()
@@ -129,18 +227,62 @@ function EditAvatarFormFunction({ modifyCurrentUserAvatar, modifyCurrentUserAvat
   }
 
   return (
-    <DivWithSpinner isLoading={modifyCurrentUserAvatarLoading.isLoading}>
-      <form onSubmit={onSubmit}>
-        {preview && <img src={preview} alt="preview" style={{ height: '20px', width: '20px' }} />}
-        <input
-          name='newAvatar'
-          type={'file'}
-          onChange={onSelectFile}
-        />
-        <button type={'submit'}>Change avatar</button>
-        <p>{modifyCurrentUserAvatarLoading.message}</p>
-      </form>
-    </DivWithSpinner>
+    <div className={styles.editFormWrapper}>
+      <img className={styles.closeCross} src={closeCross} onClick={onClose} />
+      <DivWithSpinner isLoading={modifyCurrentUserAvatarLoading.isLoading} spinnerContainerClassName={styles.spinnerContainer}>
+        {
+          !modifyCurrentUserAvatarLoading.message
+            ?
+            <>
+
+              <form onSubmit={onSubmit} className={className}>
+                {
+                  preview 
+                    ?
+                      <img src={preview} alt="preview" className={styles.avatarPreview} />
+                    :
+                      <p className={styles.noFileSelected}>No file selected</p>
+                }
+                
+                <div>
+                  <FileUploader
+                    name='newAvatar'
+                    handleChange={onSelectFile}
+                    accept="image/*"
+                    classes={styles.avatarInput}
+                  />
+                  <button className={`${styles.blackSubmit} ${!selectedFile ? styles.disabled : ''}`} type={'submit'} disabled={!selectedFile}>Change avatar</button>
+                  <p className={styles.message}>{modifyCurrentUserAvatarLoading.message}</p>
+
+                </div>
+              </form>
+            </>
+            :
+            <>
+              {
+                modifyCurrentUserAvatarLoading.success
+                  ?
+                  <>
+                    <p className={`${styles.message} ${styles.success}`}>
+                      {modifyCurrentUserAvatarLoading.message}
+                    </p>
+                    <button onClick={onClose} className={`${styles.blackSubmit} ${styles.small}`}>OK</button>
+                  </>
+                  :
+                  <>
+                    <p className={`${styles.message} ${styles.error}`}>
+                      {modifyCurrentUserAvatarLoading.message}
+                    </p>
+                    <button onClick={onClose} className={`${styles.blackSubmit} ${styles.small}`}>OK</button>
+                  </>
+              }
+            </>
+
+        }
+      </DivWithSpinner>
+    </div>
+
+
 
   )
 

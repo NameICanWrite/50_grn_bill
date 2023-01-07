@@ -60,7 +60,8 @@ export async function orderSpin(req, res, next) {
           amount: totalPrice,
       },
       spinsCount: count,
-      description
+      description,
+      date: new Date().toISOString()
   })
   await order.save()
 

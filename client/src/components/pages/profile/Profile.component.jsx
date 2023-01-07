@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { createStructuredSelector } from "reselect";
 import { forgetUserPassword, selectCurrentUser, modifyCurrentUser, modifyCurrentUserPassword, selectUserById, modifyCurrentUserEmail, modifyCurrentUserName, modifyCurrentUserAvatar, selectAllUsers } from "../../../redux/user/user.slice";
-import { removeModifyLoadingMessages, selectAllUsersLoading, selectAuthLoading, selectCurrentUserLoading, selectModifyCurrentUserAvatarLoading, selectModifyCurrentUserEmailLoading, selectModifyCurrentUserNameLoading, selectModifyCurrentUserPasswordLoading } from '../../../redux/loading.slice'
+import { removeModifyLoadingMessages, resetModifyCurrentUserAvatarLoading, resetModifyCurrentUserEmailLoading, resetModifyCurrentUserNameLoading, resetModifyCurrentUserPasswordLoading, selectAllUsersLoading, selectAuthLoading, selectCurrentUserLoading, selectModifyCurrentUserAvatarLoading, selectModifyCurrentUserEmailLoading, selectModifyCurrentUserNameLoading, selectModifyCurrentUserPasswordLoading, setModifyCurrentUserNameLoading } from '../../../redux/loading.slice'
 import { connect, useSelector } from "react-redux";
 
-import {Modal, Box, Typography} from '@mui/material'
+import { Modal, Box, Typography, AvatarGroup } from '@mui/material'
 
 import styles from './Profile.module.sass'
 import WithSpinner from '../../layout/WithSpinner/WithSpinner'
@@ -21,106 +21,97 @@ const Profile = ({
     setShowEditUserAvatar,
     setShowEditUserName,
     setShowEditUserEmail,
-    setShowEditUserPassword, 
-    isAuthLoading, 
-    isCurrentUserLoading, 
+    setShowEditUserPassword,
+    isAuthLoading,
+    isCurrentUserLoading,
     isAllUsersLoading,
-    ...otherProps 
+    ...otherProps
 }) => {
 
     const { userId } = useParams()
-    const { name, avatar, isCurrent, email, title } = (useSelector(state => selectUserById(userId)(state)) || {})
+    const { name, avatar, isCurrent, email, title, shouldBeActivated } = (useSelector(state => selectUserById(userId)(state)) || {})
     const navigate = useNavigate()
+
+    const closeModifyModal = () => {
+        removeLoadingMessages()
+        navigate('.')
+    }
+
+    if (shouldBeActivated) return (
+        <DivWithSpinner isLoading={isAuthLoading || isCurrentUserLoading || isAllUsersLoading}>
+            <h2>{name}</h2>
+            <h2>{email}</h2>
+            <p>Please activate user</p>
+        </DivWithSpinner>
+    )
+
 
     return (
         <div>
-            <DivWithSpinner isLoading={isAuthLoading || isCurrentUserLoading || isAllUsersLoading}>
-                <div>
-                    <img src={avatar ? `${baseUrl}/image/${avatar}` : emptyAvatar} alt="" style={{height: '40px', width: '40px'}} />
-                    {isCurrent && <button onClick={() => {
-                        navigate('set-avatar')
-                    }}>Edit avatar</button>}
+            <DivWithSpinner isLoading={isAuthLoading || isCurrentUserLoading || isAllUsersLoading} className={styles.container}>
+                <div className={styles.avatarWrapper}>
+                    <img src={avatar ? `${baseUrl}/image/${avatar}` : emptyAvatar} alt="" className={styles.avatar} style={{cursor: isCurrent ? 'pointer' : 'default'}}
+                        onClick={() => {
+                            isCurrent && navigate('set-avatar')
+                        }}
+                    />
+                    {isCurrent && <button ></button>}
                 </div>
-                <div >
-                    <div>
-                        {name}
+                <div className={styles.accountPropsWrapper}>
+                    <div className={styles.nameWrapper}>
+                        <div className={styles.username}>
+                            {name}
+                        </div>
+                        {isCurrent && <button onClick={() => {
+                            navigate('set-name')
+                        }}></button>}
                     </div>
-                    {isCurrent && <button onClick={() => {
-                        navigate('set-name')
-                    }}>Edit name</button>}
+                    <div className={styles.titleWrapper}>
+                        <div className={styles.title}>
+                            {title}
+                        </div>
+                        {isCurrent && <button onClick={() => navigate('/receive-random-title')}></button>}
+                    </div>
+                    {isCurrent && <>
+                        <div className={styles.emailWrapper}>
+                            <div className={styles.email}>{email}</div>
+                            <button onClick={() => {
+                                navigate('set-email')
+                            }}></button>
+                        </div>
+                        <div className={styles.passwordWrapper}>
+                            <button  className={styles.changePasswordButton} onClick={() => {
+                                navigate('set-password')
+                            }}>Change password</button>
+                        </div>
+                    </>}
                 </div>
-                <div>
-                    <div>
-                        {title}
-                    </div>
-                    {isCurrent && <button onClick={() => navigate('/receive-random-title')}>Receive new title</button>}
-                </div>
-                {isCurrent && <>
-                    <div>
-                        <div>{email}</div>
-                        <button onClick={() => {
-                        navigate('set-email')
-                        }}>Change email</button>
-                    </div>
-                    <div>
-                        <button onClick={() => {
-                        navigate('set-password')
-                        }}>Change password</button>
-                    </div>
-                </>}
+
             </DivWithSpinner>
-            
+
             {isCurrent && <Routes>
                 <Route path={'set-name'} element={
-                    <Modal open={true} onClose={() => navigate('.')} >
-                        <EditNameForm name={name}/>
+                    <Modal open={true} onClose={closeModifyModal} >
+                        <EditNameForm className={styles.editForm} onClose={closeModifyModal} name={name} />
                     </Modal>
                 } />
                 <Route path={'set-email'} element={
-                    <Modal open={true} onClose={() => navigate('.')} >
-                        <EditEmailForm email={email}/>
+                    <Modal open={true} onClose={closeModifyModal} >
+                        <EditEmailForm className={styles.editForm} onClose={closeModifyModal} email={email} />
                     </Modal>
                 } />
                 <Route path={'set-password'} element={
-                    <Modal open={true} onClose={() => navigate('.')} >
-                        <EditPasswordForm />
+                    <Modal open={true} onClose={closeModifyModal} >
+                        <EditPasswordForm className={styles.editForm} onClose={closeModifyModal} />
                     </Modal>
                 } />
                 <Route path={'set-avatar'} element={
-                    <Modal open={true} onClose={() => navigate('.')} >
-                        <EditAvatarForm />
+                    <Modal open={true} onClose={closeModifyModal} >
+                        <EditAvatarForm className={`${styles.editForm} ${styles.avatarForm}`} onClose={closeModifyModal} avatar={avatar} />
                     </Modal>
                 } />
             </Routes>}
-                {/* {
-                    (() => {
-                        console.log(isModalOpen);
-                        if (currentFormName === 'name') return (
-                            <Modal open={isModalOpen} onClose={closeModal}>
-                                <EditNameForm name={name} />
-                            </Modal>
-                        )
-    
-                        if (currentFormName === 'email') return (
-                            <Modal open={isModalOpen} onClose={closeModal}>
-                                <EditEmailForm  email={email} />
-                            </Modal>
-                        )
-                
-                        if (currentFormName === 'password') return (
-                            <Modal open={isModalOpen} onClose={closeModal}>
-                                <EditPasswordForm  />
-                            </Modal>
-                        )
-                   
-                        if (currentFormName === 'avatar') return (
-                            <Modal open={isModalOpen} onClose={closeModal}>
-                                <EditAvatarForm  />
-                            </Modal>
-                        )
-                        return <></>
-                    })()
-                } */}
+
         </div>
     )
 
@@ -189,7 +180,7 @@ const mapStateToProps = (state, ownProps) => ({
     // modifyCurrentUserPasswordLoading: selectModifyCurrentUserPasswordLoading(state),
     // modifyCurrentUserEmailLoading: selectModifyCurrentUserEmailLoading(state),
     // modifyCurrentUserAvatarLoading: selectModifyCurrentUserAvatarLoading(state)
-   
+
     isAuthLoading: selectAuthLoading(state).isLoading,
     isCurrentUserLoading: selectCurrentUserLoading(state).isLoading,
     isAllUsersLoading: selectAllUsersLoading(state).isLoading,
@@ -201,10 +192,15 @@ const mapDispatchToProps = dispatch => ({
     modifyCurrentUserPassword: data => dispatch(modifyCurrentUserPassword(data)),
     modifyCurrentUserAvatar: avatar => dispatch(modifyCurrentUserAvatar(avatar)),
     removeLoadingMessages: () => dispatch(removeModifyLoadingMessages()),
+    resetModifyNameLoading: () => dispatch(resetModifyCurrentUserNameLoading()),
+    resetModifyEmailLoading: () => dispatch(resetModifyCurrentUserEmailLoading()),
+    resetModifyPasswordLoading: () => dispatch(resetModifyCurrentUserPasswordLoading()),
+    resetModifyAvatarLoading: () => dispatch(resetModifyCurrentUserAvatarLoading()),
+
     setShowEditUserAvatar: () => dispatch(setShowEditUserAvatar()),
     setShowEditUserEmail: () => dispatch(setShowEditUserEmail()),
     setShowEditUserPassword: () => dispatch(setShowEditUserPassword()),
-    setShowEditUserName: () => dispatch(setShowEditUserName()), 
+    setShowEditUserName: () => dispatch(setShowEditUserName()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)

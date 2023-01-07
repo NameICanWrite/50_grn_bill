@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { loginWithGoogle, loginWithNameAndPassword } from '../../../../redux/user/user.slice';
+import { loginWithGoogle, loginWithNameAndPassword, selectCurrentUser } from '../../../../redux/user/user.slice';
 import AuthMessage from '../../../layout/AuthMessage';
 import { selectAuthLoading } from '../../../../redux/loading.slice';
 
@@ -9,7 +9,7 @@ import styles from '../AuthMenu.module.sass'
 import GoogleLoginButton from '../oauth-buttons/GoogleLoginButton';
 import WithSpinner from '../../../layout/WithSpinner/WithSpinner';
 
-const Login = ({ login, isAuthenticated, isLoading, match, location, loginWithGoogle, isLoadingAuth }) => {
+const Login = ({ login, isAuthenticated, isLoading, match, location, loginWithGoogle, isLoadingAuth, currentUser }) => {
   const [formData, setFormData] = useState({
     emailOrName: '',
     password: ''
@@ -26,7 +26,7 @@ const Login = ({ login, isAuthenticated, isLoading, match, location, loginWithGo
   };
 
   if (isAuthenticated) {
-    return <Navigate to='/dashboard' />;
+    return <Navigate to={'/profile/' + currentUser._id} />;
   }
 
   return (
@@ -74,7 +74,8 @@ const Login = ({ login, isAuthenticated, isLoading, match, location, loginWithGo
 
 const mapStateToProps = state => ({
   isAuthenticated: selectAuthLoading(state).success,
-  isLoading: selectAuthLoading(state).isLoading
+  isLoading: selectAuthLoading(state).isLoading,
+  currentUser: selectCurrentUser(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({

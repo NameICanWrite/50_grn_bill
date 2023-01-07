@@ -148,9 +148,11 @@ const modifyCurrentUserEmailSaga= withLoading( function* ({payload}){
 export const modifyCurrentUserAvatarSaga = withLoading(function* ({payload}) {
     let formData = new FormData();
     formData.append('avatar', payload)
-    yield userApi.postSingle('set-avatar', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+    const message = yield userApi.postSingle('set-avatar', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
     yield call(getCurrentUserSaga)
     yield call(fetchAllUsersSaga)
+
+    return message
 }, setModifyCurrentUserAvatarLoading) 
 
 export const receiveTitleSaga = withLoading(function* ({payload}) {

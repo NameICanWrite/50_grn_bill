@@ -16,9 +16,31 @@ const Posts = ({posts, isAuthenticated, setCreatePostLoading}) => {
 		console.log(posts);
 	}, [posts])
 	const navigate = useNavigate()
+	const closeCreatePostModal = () => {
+		setCreatePostLoading({success: false, message: '', isLoading: false})
+		navigate('.')
+	}
 	return (
 		<div className={styles.container}>
-			<button className={styles.createPostButton} onClick={() => navigate('create-post')}>+</button>
+			<button className={styles.createPostButton} 
+				onClick={() => 
+					isAuthenticated 
+						? 
+							navigate('create-post') 
+						: 
+							navigate('/login')
+			}>+</button>
+			{
+				isAuthenticated && 
+					<Routes>
+						<Route path={'create-post'} element={
+							<Modal open={true} onClose={closeCreatePostModal} >
+								<CreatePostForm onClose={closeCreatePostModal} />
+							</Modal>
+						}>
+						</Route>
+					</Routes>
+			}
 
 			<hr />
 			<div className={styles.postsContainer}>
@@ -55,17 +77,7 @@ const Posts = ({posts, isAuthenticated, setCreatePostLoading}) => {
 				}
 			</div>
 			
-			<Routes>
-				<Route path={'create-post'} element={
-					<Modal open={true} onClose={() => {
-						setCreatePostLoading({success: false, message: '', isLoading: false})
-						navigate('.')
-						}} >
-						<CreatePostForm />
-					</Modal>
-				}>
-				</Route>
-			</Routes>
+			
 		</div>
 	)
 }

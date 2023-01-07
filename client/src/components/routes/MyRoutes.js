@@ -54,7 +54,9 @@ const MyRoutes = ({isAuthLoading, isCurrentUserLoading, isAllUsersLoading, isPos
         <Route path={'/posts/*'} element={<Posts isLoading={isPostsLoading || isAllUsersLoading || isCurrentUserLoading}/>} />
         <Route path={'/receive-random-title/*'} element={<ReceiveTitlePage />}/>
         <Route path='/reward' element={
-          <PrivateRoute isLoading={isAuthLoading || isCurrentUserLoading} component={RewardPage} />
+          <RewardPage isLoading={
+            false// isAuthLoading || isCurrentUserLoading
+          } />
         }/>
         <Route path="*" element={<NotFound/>} />
       </Routes>
