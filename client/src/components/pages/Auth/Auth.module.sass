@@ -1,0 +1,147 @@
+@import '../../../_utilities'
+
+.large
+  font-size: 3rem
+  line-height: 1.2
+  margin-bottom: 1rem
+
+.btn
+  display: inline-block
+  background: light-color
+  color: #333
+  padding: 0.4rem 1.3rem
+  font-size: 1rem
+  border: none
+  cursor: pointer
+  margin-right: 0.5rem
+  transition: opacity 0.2s ease-in
+  outline: none
+
+  &:hover
+    opacity: 0.8
+
+.primary
+  background: $primary-color
+  color: #fff
+
+.btn_primary, .bg_primary, .badge_primary, .alert-primary
+  background: $primary-color
+  color: #fff
+
+.light
+  background: $light-color
+  color: #333
+
+.container
+  margin: 5vh auto
+
+  h1
+    padding: 20px
+    display: block
+    text-align: center
+    font-size: 40px
+
+  .loginWithGoogleWrapper
+    margin: 20px auto
+    width: 300px
+
+    p
+      font-size: 15px
+
+    button
+      width: 100%
+      margin-top: 10px
+      cursor: pointer
+
+.form
+  width: 300px
+  margin: 0 auto
+  margin-bottom: 20px
+
+  .message
+    min-height: 1.5rem
+    height: fit-content
+    position: relative
+
+    .spinnerContainer
+      height: 100%
+      position: absolute
+      left: 10px
+      top: 5px
+      display: block
+
+    .spinner
+      height: 1rem
+      width: 1rem
+
+  //remove number input arrows
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button
+    -webkit-appearance: none
+    margin: 0
+
+  /* Firefox */
+  input[type=number]
+    -moz-appearance: textfield
+
+  .error
+    color: red
+
+  .success
+    color: green
+
+  hr
+    margin: 20px 0
+
+  div
+    input
+      width: 100%
+      font-size: 20px
+      border-radius: 10px
+      padding: 5px
+      margin-top: 5px
+      border: 2px black solid
+
+  .submit
+    background-color: #5fcc55
+    color: #fff
+    padding: 10px
+    border: none
+    border-radius: 10px
+    font-weight: bold
+    font-size: 20px
+    margin: 10px auto
+    margin-bottom: 0
+    display: block
+    width: 100%
+    cursor: pointer
+
+    &.disabled
+      background-color: #747474
+      cursor: default
+
+  .sendCodeButton
+    background-color: #5557cc
+    color: #fff
+    padding: 5px
+    border: none
+    border-radius: 8px
+    font-weight: bold
+    font-size: 15px
+    margin: 5px auto
+    display: block
+    width: 100%
+    cursor: pointer
+
+@media (max-width: 350px)
+  .form
+    width: 250px
+
+  .container
+    h1
+      font-size: 30px
+      padding: 5px
+
+    .loginWithGoogleWrapper
+      width: 250px

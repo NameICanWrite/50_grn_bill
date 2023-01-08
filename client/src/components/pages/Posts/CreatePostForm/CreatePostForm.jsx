@@ -69,13 +69,12 @@ const CreatePostForm = ({ createPost, loading, onClose }) => {
 	return (
 		<div className={styles.container}>
 			<img className={styles.closeCross} src={closeCross} alt='close' onClick={onClose}/>
-			<DivWithSpinner className={styles.container} isLoading={loading.isLoading}>
+			<DivWithSpinner isLoading={loading.isLoading} spinnerContainerClassName={styles.spinnerContainer}>
 				{
 					!loading.message
 						?
 							<>
-								{preview && <img src={preview} alt="preview" style={{ height: '20px', width: '20px' }} />}
-								<form onSubmit={(event) => {
+								<form className={`${styles.form} ${!isDefaultImage ? styles.withPreview : ''}`} onSubmit={(event) => {
 									event.preventDefault()
 									const website = event.target.website.value
 									// const tags = postTags.filter(tag => event.target[`${tag}Tag`].checked == true)
@@ -85,18 +84,27 @@ const CreatePostForm = ({ createPost, loading, onClose }) => {
 										image: selectedFile
 									})
 								}}>
+									{
+										(!isDefaultImage && preview) && 
+											<img src={preview} className={styles.preview} alt="preview" />
+									}
+									{
+										(!isDefaultImage && !preview) &&
+										<p className={styles.noFileSelected}>Виберіть файл</p>
+									}								
 									{!isDefaultImage && <FileUploader
 										handleChange={onSelectFile}
 										name="image"
 										// types={fileTypes}
+										classes={styles.imageInput}
 										accept="image/*"
 									/>}
-									<input type="text" name="website" />
+									<input type="text" name="website" placeholder='Посилання на сторінку' />
 									<label className={styles.getImageAuthomaticallyCheckbox}>
 										<input key='is-default-image-checkbox' type='checkbox' name='isDefaultImage' defaultChecked={isDefaultImage} onChange={(event) => setIsDefaultImage(event.target.checked)} />
 										<span>Отримати картинку автоматично</span>
 									</label>
-									<button type='submit'>Create post</button>
+									<button type='submit' className={`${styles.blackSubmit} ${(!isDefaultImage && !selectedFile) ? styles.disabled : ''}`} disabled={!isDefaultImage && !selectedFile}>Create post</button>
 								</form>
 								<p>{loading.message}</p>
 								
@@ -107,17 +115,17 @@ const CreatePostForm = ({ createPost, loading, onClose }) => {
 									loading.success
 									?
 										<>
-											<p className={styles.message}>
+											<p  className={`${styles.message} ${styles.success}`}>
 												{loading.message}
 											</p>
-											<button onClick={onClose}>OK</button>
+											<button className={`${styles.blackSubmit} ${styles.small}`} onClick={onClose}>OK</button>
 										</>
 									:
 										<>
-											<p>
+											<p className={`${styles.message} ${styles.error}`}>
 												{loading.message}
 											</p>
-											<button onClick={onClose}>OK</button>
+											<button className={`${styles.blackSubmit} ${styles.small}`} onClick={onClose}>OK</button>
 										</>
 								}
 							</>

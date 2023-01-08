@@ -1,6 +1,9 @@
 .container
   position: absolute
-  max-width: 500px
+  max-width: 550px
+  min-width: 350px
+  width: fit-content
+  min-height: 100px
   background-color: #fff
   left: 50%
   top: 50%
@@ -11,10 +14,90 @@
   .getImageAuthomaticallyCheckbox
     display: block
 
-  .closeCross
-    position: absolute
-    top: -40px
-    right: -40px
-    height: 40px
-    width: 40px
+
+
+  .spinnerContainer
+    height: 100px
+
+  .form
+    height: 150px
+    display: flex
+    flex-direction: column
+    justify-content: space-around
+
+    &.withPreview
+      height: 350px
+      justify-content: space-between
+
+    input[type=text]
+      width: 98%
+      display: block
+      height: 30px
+      font-size: 20px
+      margin: 10px auto
+      margin-bottom: 0
+      border: 1px solid black
+      padding: 5px
+      border-radius: 5px
+
+    input
+      margin-top: 10px
+      
+    span
+      margin-left: 5px
+
+
+  .blackSubmit
+    display: block
+    background-color: black
+    border-radius: 10px
+    font-size: 15px
+    color: #fff
+    padding: 5px
+    width: 100%
+    margin: 10px auto
+    margin-bottom: 0
+    background-size: cover
     cursor: pointer
+
+    &.disabled
+      background-color: #6e6e6e
+      cursor: not-allowed
+
+  .small
+    width: 70%
+
+  .message
+    font-weight: bold
+    text-align: center
+    font-size: 20px
+
+    .success
+      color: green
+
+    .error
+      color: red
+
+
+  .getImageAuthomaticallyCheckbox
+    display: block
+
+.preview
+  display: block
+  max-height: 50%
+  object-fit: cover
+
+.noFileSelected
+  text-align: center
+  height: 60%
+  vertical-align: middle
+  padding: 20% 0
+  font-size: 20px
+
+.closeCross
+  position: absolute
+  top: -30px
+  right: -30px
+  height: 30px
+  width: 30px
+  cursor: pointer

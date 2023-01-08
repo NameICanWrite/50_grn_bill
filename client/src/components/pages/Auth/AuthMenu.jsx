@@ -9,7 +9,7 @@ import GoogleLoginButton from './oauth-buttons/GoogleLoginButton'
 import Login from './password-auth/Login'
 import Register from './password-auth/Register'
 
-import styles from './AuthMenu.module.sass'
+import styles from './Auth.module.sass'
 import { useEffect } from 'react'
 
 export function PasswordAuthMenu({ history, match }) {

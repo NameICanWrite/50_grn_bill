@@ -111,6 +111,12 @@ const loadingSlice = createSlice({
         setReceiveTitleLoading(state, {payload}) {
             state.receiveTitle = payload
         },
+        resetAuthLoadingMessage(state, {payload}) {
+            state.user.auth = {...state.user.auth, message: ''} 
+        },
+        resetSendActivationCodeLoadingMessage(state) {
+            state.user.sendActivationCode = {...state.user.sendActivationCode, message: ''}
+        },
 
        
         setAuthLoading(state, {payload}) {
@@ -159,6 +165,8 @@ export const {
     setSendActivationCodeLoading,
     removeModifyLoadingMessages,
     setReceiveTitleLoading,
+    resetAuthLoadingMessage,
+    resetSendActivationCodeLoadingMessage
 } = loadingSlice.actions
 
 export const selectLoading = state => state.loading

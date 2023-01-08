@@ -1,19 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { loginWithGoogle, loginWithNameAndPassword, selectCurrentUser } from '../../../../redux/user/user.slice';
 import AuthMessage from '../../../layout/AuthMessage';
-import { selectAuthLoading } from '../../../../redux/loading.slice';
+import { resetAuthLoadingMessage, selectAuthLoading } from '../../../../redux/loading.slice';
 
-import styles from '../AuthMenu.module.sass'
+import styles from '../Auth.module.sass'
 import GoogleLoginButton from '../oauth-buttons/GoogleLoginButton';
 import WithSpinner from '../../../layout/WithSpinner/WithSpinner';
 
-const Login = ({ login, isAuthenticated, isLoading, match, location, loginWithGoogle, isLoadingAuth, currentUser }) => {
+const Login = ({ login, isAuthenticated, isLoading, match, location, loginWithGoogle, isLoadingAuth, currentUser, resetAuthMessage }) => {
   const [formData, setFormData] = useState({
     emailOrName: '',
     password: ''
   });
+
+  useEffect(() => {
+    resetAuthMessage()
+  }, [])
 
   const { emailOrName, password } = formData;
 
@@ -30,43 +34,49 @@ const Login = ({ login, isAuthenticated, isLoading, match, location, loginWithGo
   }
 
   return (
-    <>
-      <h1 className='large text-primary'>Sign In</h1>
-      <p className='lead'> Sign Into Your Account</p>
-      <AuthMessage isLoading={isLoading} />
+    <div className={styles.container}>
+      <h1 className={styles.header}>Увійдіть</h1>
+      {/* <p className={styles.preHeader}> Sign Into Your Account</p> */}
 
-      <form className='form' onSubmit={e => onSubmit(e)}>
-        <div className='form-group'>
+      <form className={styles.form} onSubmit={e => onSubmit(e)}>
+        <div className={styles.name}>
           <input
             id='email-input'
             type='text'
-            placeholder='nameOrEmail'
+            placeholder="Ім'я або E-mail"
             name='emailOrName'
             value={emailOrName}
             onChange={e => onChange(e)}
             required
           />
         </div>
-        <div className='form-group'>
+        <div  className={styles.password}>
           <input
             id='password-input'
             type='password'
-            placeholder='Password'
+            placeholder='Пароль'
             name='password'
             value={password}
             onChange={e => onChange(e)}
             minLength='1'
           />
         </div>
-        <input type='submit' className={`${styles.btn} ${styles.primary}`} value='Login' />
+        <div className={`${styles.message} ${styles.error}`}>
+          <AuthMessage isLoading={isLoading} spinnerContainerClassName={styles.spinnerContainer} spinnerClassName={styles.spinner}/>
+        </div>
+        <input type='submit' className={styles.submit} value='Увійти' />
+        <p className={styles.hint}>
+          Ще не зареєстровані? <Link to={`/register`}>Зареєструйтеся</Link>
+        </p>
+        <hr />
       </form>
-      <p className='my-1'>
-        Don't have an account? <Link to={`/register`}>Sign Up</Link>
-      </p>
-      <hr />
-      <p>or login with google</p>
-      <GoogleLoginButton handleToken={loginWithGoogle} />
-    </>
+      
+      
+      <div className={styles.loginWithGoogleWrapper}>
+        <p>Або увійдіть із Google</p>
+        <GoogleLoginButton handleToken={loginWithGoogle} isLoading={false} />
+      </div>
+    </div>
   );
 };
 
@@ -81,6 +91,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch) => ({
   login: (credentials) => dispatch(loginWithNameAndPassword(credentials)),
   loginWithGoogle: (token) => dispatch(loginWithGoogle({ token })),
+  resetAuthMessage: () => dispatch(resetAuthLoadingMessage())
 })
 
 export default WithSpinner(connect(

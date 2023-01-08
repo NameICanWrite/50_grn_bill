@@ -50,7 +50,7 @@ const MyRoutes = ({isAuthLoading, isCurrentUserLoading, isAllUsersLoading, isPos
         <Route path={ '/reset-password/:token' } element={<PasswordReset />}/>
         <Route  path={'/register'} element={<Register />} />
         <Route  path={`/login`} element={<Login />} />
-        <Route path={`/activate-with-code`} element={<ActivationPage />} />
+        <Route path={`/activate-with-code`} element={<ActivationPage isLoading={isCurrentUserLoading} />} />
         <Route path={'/posts/*'} element={<Posts isLoading={isPostsLoading || isAllUsersLoading || isCurrentUserLoading}/>} />
         <Route path={'/receive-random-title/*'} element={<ReceiveTitlePage />}/>
         <Route path='/reward' element={
