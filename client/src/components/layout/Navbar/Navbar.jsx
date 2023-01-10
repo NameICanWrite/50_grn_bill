@@ -34,7 +34,7 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser }) => {
     <nav className={styles.navbar}>
       <h1>
         <Link to='/landing'>
-          Unoriginal startup ideas
+          Використані ідеї стартапів
         </Link>
       </h1>
 
