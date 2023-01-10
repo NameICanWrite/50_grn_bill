@@ -22,7 +22,7 @@ const PrivateRoute = ({
       ?
         <Navigate to="/activate-with-code" />
       :
-        <Navigate to="/login" />
+        <Navigate to="/register" />
 );}
 
 

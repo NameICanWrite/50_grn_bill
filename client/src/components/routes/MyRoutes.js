@@ -52,7 +52,12 @@ const MyRoutes = ({isAuthLoading, isCurrentUserLoading, isAllUsersLoading, isPos
         <Route  path={`/login`} element={<Login />} />
         <Route path={`/activate-with-code`} element={<ActivationPage isLoading={isCurrentUserLoading} />} />
         <Route path={'/posts/*'} element={<Posts isLoading={isPostsLoading || isAllUsersLoading || isCurrentUserLoading}/>} />
-        <Route path={'/receive-random-title/*'} element={<ReceiveTitlePage />}/>
+        <Route path={'/receive-random-title/*'} element={
+          <PrivateRoute
+            isLoading={isAuthLoading || isCurrentUserLoading} 
+            component={() => <ReceiveTitlePage />}
+           />
+        }/>
         <Route path='/reward' element={
           <RewardPage isLoading={
             false// isAuthLoading || isCurrentUserLoading
@@ -64,12 +69,12 @@ const MyRoutes = ({isAuthLoading, isCurrentUserLoading, isAllUsersLoading, isPos
   )
 
 };
-
 const mapStateToProps = (state) => ({
   isCurrentUserLoading: selectCurrentUserLoading(state).isLoading,
   isAuthLoading: selectAuthLoading(state).isLoading,
   isAllUsersLoading: selectAllUsersLoading(state).isLoading,
   isPostsLoading: selectPostsLoading(state).isLoading,
 })
+console.log(undefined?.hello || 'hi');
 
 export default connect(mapStateToProps, null)(MyRoutes);

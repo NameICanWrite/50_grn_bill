@@ -1,7 +1,132 @@
 .container
 
+  .header
+    font-size: 40px
+    text-align: center
+
+  .currentTitle
+    font-size: 20px
+    text-align: center
+
+  .wheelWrapper
+    width: fit-content
+    margin: 20px auto
+
+  .bottomWrapper
+    // display: flex
+
+  .spinButton
+    display: block
+    color: #fff
+    background-color: #70c066
+    border: none
+    border-radius: 20px
+    padding: 10px
+    font-size: 20px
+    margin: 0 auto
+    cursor: pointer
+
+    &.disabled
+      background-color: #868686
+      cursor: not-allowed
+
+  .spins
+    font-size: 15px
+    text-align: center
+
+  .buySpinsForm
+    width: fit-content
+    margin: 10px auto
+
+    button.disabled
+      background-color: #868686
+      cursor: not-allowed
+
+    input[type=number]
+      width: 40px
+      font-size: 20px
+      padding: 5px
+      border-radius: 5px
+      border: 1px black solid
+      margin-left: 10px
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button
+      -webkit-appearance: none
+      margin: 0
+
+    /* Firefox */
+    input[type=number]
+      -moz-appearance: textfield
+
+    button
+      color: #fff
+      background-color: #70c066
+      border: none
+      border-radius: 10px
+      padding: 6px
+      font-size: 20px
+      margin: 0 auto
+      cursor: pointer
+
 .purchaseStatusModal
   background-color: #fb707073
   min-height: 40px
-  min-width: 40px 
+  min-width: 40px
 
+.resultModal
+  font-size: 20px
+
+
+.purchaseStatusModal, .resultModal
+  position: absolute
+  left: 50%
+  top: 50%
+  transform: translate(-50%, -50%)
+  max-width: 500px
+  min-width: 300px
+  min-height: 100px
+  background-color: #fff
+  padding: 20px
+  border-radius: 15px
+
+  .modalInner
+    display: flex
+    flex-direction: column
+
+    p
+      width: fit-content
+      margin: 5px auto
+      font-size: 20px
+
+    .modalHeader
+      font-size: 30px
+
+    .success
+      color: green
+
+    .error
+      color: red
+
+  .spinnerContainer
+    height: 100px
+
+  .blackSubmit
+    display: block
+    background-color: black
+    border-radius: 10px
+    font-size: 15px
+    color: #fff
+    padding: 5px
+    width: 100%
+    margin: 10px auto
+    margin-bottom: 0
+    background-size: cover
+    cursor: pointer
+
+    &.disabled
+      background-color: #6e6e6e
+      cursor: not-allowed
+
+  .small
+    width: 70%

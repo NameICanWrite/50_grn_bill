@@ -2,12 +2,13 @@ import { Modal } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import titleApi from "../../../api/title.api"
+import DivWithSpinner from "../../layout/DivWithSpinner"
 import styles from './ReceiveTitlePage.module.sass'
 
 export function PurchaseStatusModal({onClose}) {
   const {orderId} = useParams()
-  const [order, setOrder] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [order, setOrder] = useState()
+  const [loading, setLoading] = useState(true)
 
   const navigate = useNavigate()
 
@@ -32,13 +33,31 @@ export function PurchaseStatusModal({onClose}) {
     <div>
       <Modal open={true} onClose={onClose}>
         <div className={styles.purchaseStatusModal}>
-          {
-            !loading && <div>
-              <p>Payment status is "{order?.payment.status}"</p>
-              <p>Amount: {order?.payment.amount} UAH</p>
-              <p>Your order is {order?.description}</p>
-            </div>
-          }
+            <DivWithSpinner className={styles.modalInner} isLoading={loading} spinnerContainerClassName={styles.spinnerContainer}>
+              {
+                order && order?.payment.status === 'approved' &&
+                [
+                  <p className={`${styles.modalHeader} ${styles.success}`}>Оплата успішна</p>,
+                  <p> Сплачено {order?.payment.amount} грн</p>,
+                  <p>Ви купили {order?.description}</p>,
+                ]
+              }
+              {
+                order && order?.payment.status === 'pending' && 
+                [
+                  <p className={styles.modalHeader}>Оплата в процесі...</p>,
+                  <p>Ви сплачуєте {order?.payment.amount} грн</p>,
+                  <p>Ви купуєте {order?.description}</p>
+                ]
+              }
+              {
+                order && order.payment.status === 'declined' &&
+                  <p className={`${styles.modalHeader} ${styles.error}`}>Платіж відхилено!</p>
+              }
+              
+              <button className={`${styles.blackSubmit} ${styles.small}`} onClick={onClose}>Ок</button>
+            </DivWithSpinner>
+          
         </div>
         
         

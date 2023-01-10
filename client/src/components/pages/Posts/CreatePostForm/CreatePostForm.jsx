@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 
-import * as htmlToImage from 'html-to-image';
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 import { createPost } from '../../../../redux/post/post.slice';
 import DivWithSpinner from '../../../layout/DivWithSpinner'
 import { selectCreatePostLoading } from '../../../../redux/loading.slice';

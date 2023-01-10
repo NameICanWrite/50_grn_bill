@@ -18,7 +18,8 @@
 
 .nameWrapper, .emailWrapper, .titleWrapper
   display: flex
-  justify-content: center
+  justify-content: start
+  padding-right: 30px
 
 .username
   font-size: 40px
@@ -47,8 +48,9 @@
   color: inherit
   border: none
   width: 30px
+  height: 30px
   display: block
-  margin-left: 30px
+  margin-left: 10px
   margin-top: 10px
 
   padding: 0
@@ -57,7 +59,18 @@
   outline: inherit
 
 .username~button
+  width: 50px
+
+.title~button
+  background-image: url(/assets/icons/roulette-icon.webp)
   width: 40px
+  height: 40px
+  transition: all 1s ease-in-out 0s
+  transform: rotate(0deg)
+
+  &:hover
+    transform: rotate(3600deg)
+    transition: all 3s ease-in-out 0s
 
 .passwordWrapper
   margin-top: 70px
@@ -227,7 +240,9 @@
     font-size: 20px
 
     ~button
-      width: 20px
+      width: 40px
+      margin-top: 0
+      
 
   .changePassword
     margin: auto

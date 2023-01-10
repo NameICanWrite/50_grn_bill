@@ -3,7 +3,7 @@ import styles from './ReceiveTitlePage.module.sass'
 import React, { createRef, useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import {Wheel} from "react-custom-roulette"
+import { Wheel } from "react-custom-roulette"
 import { receiveTitle, selectCurrentUserPendingTitle, selectCurrentUserSpins, selectCurrentUserTitle, setCurrentUser, setPendingTitle, setTitle } from '../../../redux/user/user.slice'
 import { selectCurrentUserLoading, selectReceiveTitleLoading } from '../../../redux/loading.slice'
 import DivWithSpinner from '../../layout/DivWithSpinner'
@@ -16,25 +16,26 @@ import baseUrl from '../../../api/baseUrl'
 import userApi from '../../../api/user.api'
 
 const titles = [
-  'Терміналтор',
-  'Hard code and a hammer',
-  'Звезда по имени User',
-  'Той, хто біжить 2FA: Випробування вогнем',
-  '50grn bill Gates ',
-  'Людина-web. Уже тиждень дома',
-  'Мирний диванний воїн',
-  'Кіберпанк 24/7',
-  'Кодер да Вінчі',
-  'Люк Skype Walker'
+	'Терміналтор',
+	'Hard code and a hammer',
+	'Звезда по имени User',
+	'Той, хто біжить 2FA',
+	'50grn bill Gates ',
+	'Людина-web. Уже тиждень дома',
+	'Мирний диванний воїн',
+	'Кіберпанк 24/7',
+	'Кодер да Вінчі',
+	'Люк Skype Walker'
 ]
 
-const rouletteData = titles.map(title => ({option: title}))
+const rouletteData = titles.map(title => ({ option: title }))
 
-const ReceiveTitlePage = ({title, pendingTitle, spins, receiveTitle, setTitle, setPendingTitle, setCurrentUser, loading, currentUserLoading}) => {
+const ReceiveTitlePage = ({ title, pendingTitle, spins, receiveTitle, setTitle, setPendingTitle, setCurrentUser, loading, currentUserLoading }) => {
 	const [prizeNumber, setPrizeNumber] = useState()
 	const [mustSpin, setMustSpin] = useState(false)
 	const [isModalWithResultOpen, setIsModalWithResultOpen] = useState(false)
 	const [isBuySpinsLoading, setIsBuySpinsLoading] = useState(false)
+	const [spinsToBuy, setSpinsToBuy] = useState(1)
 
 	const formRef = createRef()
 
@@ -47,7 +48,7 @@ const ReceiveTitlePage = ({title, pendingTitle, spins, receiveTitle, setTitle, s
 			setMustSpin(true)
 			setPendingTitle('')
 		}
-		
+
 	}, [pendingTitle, setPendingTitle, setCurrentUser])
 	useEffect(() => {
 		console.log(title);
@@ -57,14 +58,14 @@ const ReceiveTitlePage = ({title, pendingTitle, spins, receiveTitle, setTitle, s
 	async function onBuySpinsSubmit(event) {
 		event.preventDefault()
 		setIsBuySpinsLoading(true)
- 		const count = event.target.count.value 
-		 const wayforpayData = await titleApi.postSingle('order-spins', {
+		const count = event.target.count.value
+		const wayforpayData = await titleApi.postSingle('order-spins', {
 			count
-		}, {withCredentials: true})
+		}, { withCredentials: true })
 
 		const {
-			merchantSignature, 
-			amount, 
+			merchantSignature,
+			amount,
 			orderReference,
 			orderDate,
 			merchantAccount,
@@ -83,7 +84,7 @@ const ReceiveTitlePage = ({title, pendingTitle, spins, receiveTitle, setTitle, s
 
 			if ((typeof item == 'string') || (typeof item == 'number')) {
 				console.log(item);
-			
+
 				const input = document.createElement('input')
 				input.name = prop
 				input.value = item
@@ -117,42 +118,51 @@ const ReceiveTitlePage = ({title, pendingTitle, spins, receiveTitle, setTitle, s
 		setIsBuySpinsLoading(false)
 		console.log('btw code runs after submit');
 	}
-	
+
 	return (
 		<DivWithSpinner isLoading={currentUserLoading.isLoading} className={styles.container}>
-			<p>Your current title is {title}</p>
-			<p>{spins} spins left</p>
-			<Wheel
-        mustStartSpinning={mustSpin}
-        prizeNumber={prizeNumber}
-        data={rouletteData}
-        onStopSpinning={() => {
-          setMustSpin(false)
-					console.log('stop spinning')
-					setTitle(titles[prizeNumber])
-					setIsModalWithResultOpen(true)
-					userApi.getSingle('one/current').then((data) => setCurrentUser(data)).catch()
-        }}
-      />
-			{!mustSpin && 
-				<DivWithSpinner isLoading={loading.isLoading}>
-					<button onClick={() => {
+			<h1 className={styles.header}>Отримайте звання!</h1>
+			<p className={styles.currentTitle}>Зараз ваше звання <b>{title}</b></p>
+
+			<div className={styles.wheelWrapper}>
+				<Wheel
+					mustStartSpinning={mustSpin}
+					prizeNumber={prizeNumber}
+					data={rouletteData}
+					fontSize={10}
+					backgroundColors={['#3f5fb4', '#df9928']}
+					onStopSpinning={() => {
+						setMustSpin(false)
+						console.log('stop spinning')
+						setTitle(titles[prizeNumber])
+						setIsModalWithResultOpen(true)
+						userApi.getSingle('one/current').then((data) => setCurrentUser(data)).catch()
+					}}
+				/>
+			</div>
+
+			{!mustSpin &&
+				<DivWithSpinner isLoading={loading.isLoading} className={styles.bottomWrapper}>
+					<button className={`${styles.spinButton} ${(!spins || spins < 1) ? styles.disabled : ''}`} disabled={!spins || spins < 1} onClick={() => {
 						if (spins > 0) {
 							receiveTitle()
 						}
-					}}>Spin to receive title</button>
-						<form onSubmit={onBuySpinsSubmit} method="post" action="https://secure.wayforpay.com/pay" accept-charset="utf-8" ref={formRef}>
-							<input type="hidden" name="merchantAuthType" value="SimpleSignature" /><input type="hidden" name="merchantTransactionSecureType" value="AUTO" /><input type="hidden" name="orderTimeout" value="5" /><input type="hidden" name="clientPhone" value="+380992856055" /><input type="hidden" name="clientEmail" value="some@mail.com" />
-							
-							<input type="number" defaultValue={1} min="1" name='count' />
-							<button type='submit'>Buy spins</button>
-						</form>
-					
+					}}>Крутіть щоб отримати звання</button>
+					<p className={styles.spins}>У вас зараз <b>{spins}</b> спінів</p>
+					<form className={styles.buySpinsForm} onSubmit={onBuySpinsSubmit} method="post" action="https://secure.wayforpay.com/pay" accept-charset="utf-8" ref={formRef}>
+						<input type="hidden" name="merchantAuthType" value="SimpleSignature" /><input type="hidden" name="merchantTransactionSecureType" value="AUTO" /><input type="hidden" name="orderTimeout" value="5" /><input type="hidden" name="clientPhone" value="+380992856055" /><input type="hidden" name="clientEmail" value="some@mail.com" />
+						
+
+						<button type='submit' disabled={!spinsToBuy || spinsToBuy < 1} className={(!spinsToBuy || spinsToBuy < 1) ? styles.disabled : ''} >Купити спіни</button>
+						<input type="number" defaultValue={1} min="1" name='count' onChange={(e) => setSpinsToBuy(e.target.value)} />
+					</form>
+					<p className={styles.disclaimer}>Зверніть увагу! Оплата тут з ціллю тестування, тому гроші нікуди не дінуться, вони одразу повернуться вам на карту. 1 спін = 2 грн 50 коп</p>
+
 				</DivWithSpinner>
 			}
 			<Modal open={isModalWithResultOpen} onClose={() => setIsModalWithResultOpen(false)}>
-				<div>
-					<p>{loading.message}</p> <button onClick={() => setIsModalWithResultOpen(false)}>Ok</button>
+				<div className={styles.resultModal}>
+					<p className={styles.message}>{loading.message}</p> <button className={`${styles.blackSubmit} ${styles.setIsModalWithResultOpen}`} onClick={() => setIsModalWithResultOpen(false)}>Ok</button>
 				</div>
 			</Modal>
 			<Routes>
@@ -170,7 +180,7 @@ const mapStateToProps = createStructuredSelector({
 	currentUserLoading: selectCurrentUserLoading
 })
 const mapDispatchToProps = (dispatch) => ({
-	receiveTitle: () => dispatch(receiveTitle()) ,
+	receiveTitle: () => dispatch(receiveTitle()),
 	setTitle: (title) => dispatch(setTitle(title)),
 	setPendingTitle: (title) => dispatch(setPendingTitle(title)),
 	setCurrentUser: (user) => dispatch(setCurrentUser(user))
