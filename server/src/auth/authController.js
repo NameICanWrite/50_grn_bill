@@ -83,7 +83,7 @@ export async function activateUserWithCode(req, res) {
 
   const inactiveUser = await InactiveUser.findById(id)
 
-  const isMatch = await bcrypt.compare(code, inactiveUser.activationCode)
+  const isMatch = await bcrypt.compare(code, inactiveUser.activationCode).catch()
   const isValid = new Date(inactiveUser.activationCodeExpiresIn).getTime() > Date.now()
 
   if (!(isValid && isMatch)) return res.status(400).send(`The code is invalid or has expired`)
@@ -167,7 +167,7 @@ export const loginWithEmailOrNameAndPassword = async (req, res) => {
   }
 
   //check password
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password, user.password).catch(err => {});
   if (!isMatch) {
     return res.status(401).send('Password incorrect');
   }

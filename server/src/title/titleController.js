@@ -9,7 +9,7 @@ const titles = [
   'Терміналтор',
   'Hard code and a hammer',
   'Звезда по имени User',
-  'Той, хто біжить 2FA: Випробування вогнем',
+  'Той, хто біжить 2FA',
   '50grn bill Gates ',
   'Людина-web. Уже тиждень дома',
   'Мирний диванний воїн',
@@ -128,6 +128,8 @@ export async function receivePaymentWayforpay(req, res, next) {
           return res.status(400).send('Purchase invalid')
       }
 
+      console.log(data);
+
       //check if status has changed ()
       const order = await Order.findById(data.orderReference)
       const prevStatus = order.payment.status
@@ -141,6 +143,15 @@ export async function receivePaymentWayforpay(req, res, next) {
           await order.save()
           // await sendEmailOrderUpdateToAdmin({...order, email: user.email})
       }
+
+      if (prevStatus !== 'declined' && order.payment.status === 'declined') {
+        const user = await User.findById(order.uid)
+        user.spins += order.spinsCount
+        await user.save()
+        await order.save()
+        // await sendEmailOrderUpdateToAdmin({...order, email: user.email})
+    }
+
 
       return res.send(`received an update on order with id ${order._id}: ${order.payment.status}`)
 
@@ -164,10 +175,15 @@ export async function getUserOrders(req, res, next) {
 
 export async function getUserOrderById(req, res, next) {
   const { orderId }= req.params
-  const orders = await Order.find({
+  let orders
+  if (!req.auth.isAdmin) {
+    orders = await Order.find({
       uid: req.user?._id
-  })
-  const order = orders.find(order => order._id = orderId)
+    })
+  } else {
+    orders = await Order.find({})
+  }
+  const order = orders.find(order => order._id == orderId)
   if (!order) res.status(400).send('No order found')
   res.send(order)
 }
