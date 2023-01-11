@@ -12,6 +12,7 @@ import router from './router.js'
 import connectDB from './utils/connectDB.js';
 import bodyParser from 'body-parser';
 import { checkAllUsersNamesForBeingFreelanceInProject } from './reward/rewardController.js';
+import Settings from './settings/settings.js';
 
 process.setMaxListeners(0)
 
@@ -80,4 +81,13 @@ app.use('/', router)
 app.listen(port, () => console.log(`Listening on port ${port}`))
 
 cron.schedule('*/5 * * * *', async () => await checkAllUsersNamesForBeingFreelanceInProject())
+const localSettings = await Settings.find({})
+
+if (!localSettings || localSettings.length == 0) {
+  await Settings.create({
+    spinPrice: 2.5,
+    whitelistedUsers: [],
+    receivedRewardUsers: []
+  })
+}
 
