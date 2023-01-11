@@ -33,7 +33,10 @@ export async function setUserPassword(req, res) {
 export async function createInactiveUser(req, res) {
   const {email, name, password} = req.body
 
+  if (!/^[A-Za-z0-9_]*$/.test(name)) return res.status(400).send('Name should only contain symbols like A-Z, a-z, 0-9, or _')
+
   if (await User.exists({email})) return res.status(400).send('User with such email already exists')
+  if (await User.exists({name})) return res.status(400).send('User with such name already exists')
 
   const hashedPassword = await bcrypt.hash(password, 12)
   let inactiveUser = await User.findOne({ email })
