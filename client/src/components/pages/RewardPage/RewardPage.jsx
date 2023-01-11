@@ -46,26 +46,27 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 			<h2 className={styles.header}>Виконайте завдання і отримайте 50 грн</h2>
 			<div className={styles.checkpoints}>
 				<Link to='/register'>
-					<p>{isAuthenticated ? '✔️' : '❌'} Register</p>
+					<p>{isAuthenticated ? '✔️' : '❌'} Зареєструйтесь</p>
 				</Link>
 				<Link to={isAuthenticated ? '/posts/create-post' : '/register'}>
-					<p>{didAddPost ? '✔️' : '❌'} Create a post</p>
+					<p>{didAddPost ? '✔️' : '❌'} Створіть 1 пост</p>
 				</Link>
 				<Link to='/posts'>
-					<p>{didLikePost ? '✔️' : '❌'} Like 1 post</p>
+					<p>{didLikePost ? '✔️' : '❌'} Лайкніть 1 пост</p>
 				</Link>
 				<Link to={isAuthenticated ? `/profile/${_id}/set-avatar` : '/register'} >
-					<p>{didAddAvatar ? '✔️' : '❌'} Add avatar to profile</p>
+					<p>{didAddAvatar ? '✔️' : '❌'} Додайте аватар у профіль</p>
 				</Link>
 				<Link to={'/receive-random-title'}>
-					<p>{didReceiveTitle ? '✔️' : '❌'} Receive a title</p>
+					<p>{didReceiveTitle ? '✔️' : '❌'} Отримайте звання</p>
 				</Link>
-				<p>{isWhitelisted ? '✔️' : '❌'} Get whitelisted</p>
+				
+				<p>{isWhitelisted ? '✔️' : '❌'} Прийміть участь у вайтлисті</p>
 			</div>
 			{isEligible && <Cleave
 				options={{ creditCard: true }}
 				// onFocus={this.onCreditCardFocus}
-				placeholder={'Enter credit card number'}
+				placeholder={'Введіть номер карти'}
 				autocomplete="cc-number" x-autocompletetype="cc-number"
 				onChange={(event) => setCardNumber(event.target.value)}
 			/>}
@@ -84,6 +85,10 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 					</div>
 					
 
+			}
+			{/* <p className={styles.explanation}>Виконайте всі завда</p> */}
+			{
+				!isWhitelisted && isAuthenticated && <p className={styles.explanation}>*Ваш нікнейм або email завайтлистить адміністратор. Або, якщо ви у моєму фріланс проекті, ваш нік звідти уже завайтлищено автоматично.</p>
 			}
 			<DivWithSpinner isLoading={isAskForRewardLoading}>
 				<p className={styles.success}>{askForRewardSuccess}</p>

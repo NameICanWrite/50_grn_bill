@@ -18,16 +18,16 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser }) => {
     // </div>,
     
       <Link to={`/profile/${currentUser?._id}`}>
-        🆔 Account
+        🆔 Аккаунт
       </Link>,
     
     
-      <Link to='/landing' onClick={logout}>↪️ Logout</Link>
+      <Link to='/landing' onClick={logout}>↪️ Вийти</Link>
     
   ]
 
   const guestLinks = [
-      <Link to='/login'>➡️ Login</Link>
+      <Link to='/login'>➡️ Увійти</Link>
   ]
 
   return (
@@ -42,16 +42,16 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser }) => {
       <div className={styles.navContainer} role='navigation'>
         
           <Link to="/posts">
-            📝 Posts
+          📝 Пости
           </Link>
         
         
           <Link to="/reward">
-            🤑 Get 50 grn reward!
+          🤑 Винагорода
           </Link>
         
           <Link to="/landing">
-            🧐 About
+          🧐 Про сайт
           </Link>
         
         {!isAuthLoading && (isAuthenticated ? authLinks : guestLinks)}

@@ -45,45 +45,48 @@ const Post = ({ post: {
 					<div className={styles.dateCreated}>{new Date(date).toLocaleDateString()}</div>
 				</div>
 			</Link>
-			
+
 			<div className={styles.textBlock}>
 				{/* metadata can contain some html syntax */}
 				<div className={styles.siteName} dangerouslySetInnerHTML={{ __html: siteName || '' }}></div>
 				<div className={styles.title} dangerouslySetInnerHTML={{ __html: title || '' }}></div>
-				<div className={styles.description} dangerouslySetInnerHTML={{ __html: description ? (description?.length <= descriptionLimit ? description : description?.substring(0, descriptionLimit) + '...') : '' } }></div>
+				<div className={styles.description} dangerouslySetInnerHTML={{ __html: description ? (description?.length <= descriptionLimit ? description : description?.substring(0, descriptionLimit) + '...') : '' }}></div>
 			</div>
 
-			<img
-				onClick={newTabWithPostWebsite}
-				src={imageUrl || (screenshotFileId && `${baseUrl}/image/${screenshotFileId}`) || emptyPostImage} alt="post"
-				className={styles.postImage}
-			/>
+			<div className={styles.bottomBlock}>
+				<img
+					onClick={newTabWithPostWebsite}
+					src={imageUrl || (screenshotFileId && `${baseUrl}/image/${screenshotFileId}`) || emptyPostImage} alt="post"
+					className={styles.postImage}
+				/>
 
 
 
-			{/* <p>tags: {tags.map((tag, index, array) => index < array.length - 1 ? `${tag}, ` : tag)}</p> */}
-			<div 
-				className={styles.websiteUrlContainer} 
-				onClick={newTabWithPostWebsite}
-			>
-				<div className={styles.websiteUrl}>{website.length <= urlLimit ? website : website?.substring(0, urlLimit) + '...'}</div>
-				<hr />
+				{/* <p>tags: {tags.map((tag, index, array) => index < array.length - 1 ? `${tag}, ` : tag)}</p> */}
+				<div
+					className={styles.websiteUrlContainer}
+					onClick={newTabWithPostWebsite}
+				>
+					<div className={styles.websiteUrl}>{website.length <= urlLimit ? website : website?.substring(0, urlLimit) + '...'}</div>
+					<hr />
+				</div>
+				<div className={styles.likesContainer}>
+
+					<i
+						className={`${styles.likeButton} ${likedBy.some(id => id == currentUser?._id) ? styles.liked : ''}`}
+						onClick={() => {
+							if (likedBy.some(id => id == currentUser?._id)) {
+								removeLike()
+							} else {
+								like()
+							}
+						}}
+					></i>
+					<p className={styles.likeCount}>{likedBy.length}</p>
+					{/* <span className={likedBy.some(id => id == currentUser?._id) ? styles.liked : ''}>Liked!</span> */}
+				</div>
 			</div>
-			<div className={styles.likesContainer}>
-				
-				<i
-					className={`${styles.likeButton} ${likedBy.some(id => id == currentUser?._id) ? styles.liked : ''}`}
-					onClick={() => {
-						if (likedBy.some(id => id == currentUser?._id)) {
-							removeLike()
-						} else {
-							like()
-						}
-					}}
-				></i>
-				<p className={styles.likeCount}>{likedBy.length}</p>
-				{/* <span className={likedBy.some(id => id == currentUser?._id) ? styles.liked : ''}>Liked!</span> */}
-			</div>
+
 		</div>
 	)
 }

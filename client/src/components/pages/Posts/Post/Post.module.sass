@@ -1,16 +1,17 @@
 .container
   border: solid 1px black
-  height: 100%
+  // height: 100%
   justify-content: space-between
   display: flex
   flex-direction: column
-  margin: 5px
+  margin: 15px auto
   padding: 5%
   position: relative
   border-radius: 20px
   background-color: #f4f4f4
   box-shadow: inset 0 3px 6px rgba(0,0,0,0.16), 0 4px 6px rgba(0,0,0,0.45);
-  max-width: 350px
+  width: 350px
+  display: flex
 
   .top
     border-radius: 20px
@@ -40,17 +41,18 @@
       font-size: 10px
 
   .textBlock
-    margin-top: 2%
-    height: 20%
+    margin-top: 10px
+    height: fit-content
 
     .siteName
-      font-size: 20px
+      font-size: 15px
+      font-weight: bold
 
     .title
       font-size: 15px
     
     .description
-      margin-top: 10px
+      // margin-top: 10px
       font-size: 13px
   
   .postImage
@@ -148,10 +150,12 @@
   cursor: pointer
 
 @media (max-height: 700px) 
-  .description
-    visibility: hidden
+  // .description
+  //   visibility: hidden
 
-  .container
+  // .container
+  //   // transform: scale(0.7)
+  //   .textBlock
+  //     height: 5%
 
-    .textBlock
-      height: 5%
+
