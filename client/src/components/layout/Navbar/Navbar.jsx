@@ -62,7 +62,10 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHa
         
         {!isAuthLoading && (isAuthenticated ? authLinks : guestLinks)}
       </div>
-      {/* <Link><img className={styles.githubLogo} src={githubLogo} alt="github" /></Link> */}
+      <div className={styles.githubLogoWrapper}>
+        <a href='https://github.com/NameICanWrite/50_grn_bill'><img className={styles.githubLogo} src={githubLogo} alt="github" /></a>
+      </div>
+      
 
       {/* hamburger menu */}
       <div id={styles["menuToggle"]}>
