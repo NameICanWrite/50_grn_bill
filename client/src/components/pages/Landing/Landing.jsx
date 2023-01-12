@@ -6,8 +6,9 @@ import styles from './Landing.module.sass'
 import ideaLamp from '../../../assets/img/idea-lamp.png'
 import notAllowed from '../../../assets/img/not-allowed.webp'
 import ideaNotAllowed from '../../../assets/img/idea-not-allowed.png'
+import { selectCurrentUserShouldBeActivated } from '../../../redux/user/user.slice';
 
-const Landing = ({ isAuthenticated }) => {
+const Landing = ({ isAuthenticated, shouldBeActivated }) => {
   
   const navigate = useNavigate()
 
@@ -42,7 +43,8 @@ const Landing = ({ isAuthenticated }) => {
         <li>Лайки</li>
         <li>Справжні 50 грн</li>
       </ol>
-      <button onClick={() => navigate('/register')}>Зареєструватися</button>
+      {isAuthenticated && !shouldBeActivated  ? <button onClick={() => navigate('/posts/create-post')}>Запостити щось</button> : <button onClick={() => navigate('/register')}>Зареєструватися</button>}
+      {isAuthenticated && !shouldBeActivated  && <button onClick={() => navigate('/activate-with-code')}>Активувати</button>}
       
     </div>
   );
@@ -50,7 +52,8 @@ const Landing = ({ isAuthenticated }) => {
 
 
 const mapStateToProps = state => ({
-  isAuthenticated: selectAuthLoading(state).success
+  isAuthenticated: selectAuthLoading(state).success,
+  shouldBeActivated: selectCurrentUserShouldBeActivated(state)
 });
 
 export default connect(mapStateToProps)(Landing);

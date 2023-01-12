@@ -6,13 +6,13 @@ import { createStructuredSelector } from 'reselect'
 
 import emptyPostImage from '../../../../assets/img/empty-white-letterboard.png'
 import baseUrl from '../../../../api/baseUrl'
-import { selectCurrentUser, selectUserById } from '../../../../redux/user/user.slice'
+import { selectCurrentUser, selectCurrentUserShouldBeActivated, selectUserById } from '../../../../redux/user/user.slice'
 import { Link, useNavigate } from 'react-router-dom'
 import { deletePost, likePost, removeLike } from '../../../../redux/post/post.slice'
 import emptyAvatar from '../../../../assets/img/empty-avatar.jpg'
 import { selectAuthLoading } from '../../../../redux/loading.slice'
 
-const Post = ({ isAuthenticated, deletePost, post: {
+const Post = ({ isAuthenticated, deletePost, shouldBeActivated, post: {
 	website,
 	tags,
 	linkPreview: {
@@ -85,6 +85,7 @@ const Post = ({ isAuthenticated, deletePost, post: {
 							className={`${styles.likeButton} ${likedBy.some(id => id == currentUser?._id) ? styles.liked : ''}`}
 							onClick={() => {
 								if (!isAuthenticated) return navigate('/register')
+								if (shouldBeActivated) return navigate('/activate-with-code')
 								if (likedBy.some(id => id == currentUser?._id)) {
 									removeLike()
 								} else {
@@ -106,7 +107,8 @@ const Post = ({ isAuthenticated, deletePost, post: {
 const mapStateToProps = (state, ownProps) => ({
 	currentUser: selectCurrentUser(state),
 	post: { ...ownProps.post, author: selectUserById(ownProps.post.author)(state) },
-	isAuthenticated: selectAuthLoading(state).success
+	isAuthenticated: selectAuthLoading(state).success,
+	shouldBeActivated: selectCurrentUserShouldBeActivated(state)
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

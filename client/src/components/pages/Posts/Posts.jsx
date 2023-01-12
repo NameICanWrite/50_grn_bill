@@ -10,8 +10,9 @@ import { selectAuthLoading, setCreatePostLoading } from '../../../redux/loading.
 import { Modal } from '@mui/material'
 import CreatePostForm from './CreatePostForm/CreatePostForm'
 import WithSpinner from '../../layout/WithSpinner/WithSpinner'
+import PrivateRoute from '../../routes/PrivateRoute'
 
-const Posts = ({ posts, isAuthenticated, setCreatePostLoading }) => {
+const Posts = ({ posts, isAuthenticated, setCreatePostLoading, isA }) => {
 	useEffect(() => {
 		console.log(posts);
 	}, [posts])
@@ -31,17 +32,15 @@ const Posts = ({ posts, isAuthenticated, setCreatePostLoading }) => {
 							:
 							navigate('/login')
 					}>+</button>
-				{
-					isAuthenticated &&
 					<Routes>
 						<Route path={'create-post'} element={
-							<Modal open={true} onClose={closeCreatePostModal} >
-								<CreatePostForm onClose={closeCreatePostModal} />
-							</Modal>
-						}>
-						</Route>
+							<PrivateRoute component={ () =>
+								<Modal open={true} onClose={closeCreatePostModal} >
+									<CreatePostForm onClose={closeCreatePostModal} />
+								</Modal>
+							} />
+						} />
 					</Routes>
-				}
 
 				<hr />
 				<div className={styles.postsContainer}>

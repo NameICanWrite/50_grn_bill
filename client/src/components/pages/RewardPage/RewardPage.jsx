@@ -14,7 +14,7 @@ import WithSpinner from '../../layout/WithSpinner/WithSpinner'
 import { Link } from 'react-router-dom'
 import { Modal } from '@mui/material'
 
-const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didReceiveTitle, isWhitelisted, didReceiveReward }, isUserLoading, isAuthenticated, getCurrentUser, isAuthLoading }) => {
+const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didReceiveTitle, isWhitelisted, didReceiveReward, shouldBeActivated }, isUserLoading, isAuthenticated, getCurrentUser, isAuthLoading }) => {
 	const [isAskForRewardLoading, setIsAskForRewardLoading] = useState(false)
 	const [askForRewardSuccess, setAskForRewardSuccess] = useState('')
 	const [askForRewardError, setAskForRewardError] = useState('')
@@ -50,8 +50,8 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 		<DivWithSpinner isLoading={isUserLoading || isAuthLoading || didntUseEffect} className={styles.container}>
 			<h2 className={styles.header}>Виконайте завдання і отримайте 50 грн</h2>
 			<div className={styles.checkpoints}>
-				<Link to='/register'>
-					<p>{isAuthenticated ? '✔️' : '❌'} Зареєструйтесь</p>
+				<Link to={'/register'}>
+					<p>{isAuthenticated && !shouldBeActivated ? '✔️' : '❌'} Зареєструйтесь</p>
 				</Link>
 				<Link to={isAuthenticated ? '/posts/create-post' : '/register'}>
 					<p>{didAddPost ? '✔️' : '❌'} Створіть 1 пост</p>

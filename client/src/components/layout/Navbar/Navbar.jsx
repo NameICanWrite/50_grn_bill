@@ -36,6 +36,16 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHa
       <Link to='/login' onClick={() => setShowNavHamburger(false)}>➡️ Увійти</Link>
   ]
 
+  const inactiveUserLinks = [
+    <Link to={`/activate-with-code`} onClick={() => setShowNavHamburger(false)}>
+      🆔 Активація
+    </Link>,
+    <Link to='/landing' onClick={() => {
+      logout()
+      setShowNavHamburger(false)
+    }}>↪️ Вийти</Link>
+  ]
+
   return (
     <nav className={styles.navbar}>
       <h1>
@@ -60,7 +70,8 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHa
           🧐 Про сайт
           </Link>
         
-        {!isAuthLoading && (isAuthenticated ? authLinks : guestLinks)}
+        {!isAuthLoading && !currentUser?.shouldBeActivated && (isAuthenticated ? authLinks : guestLinks)}
+        {!isAuthLoading && currentUser?.shouldBeActivated && inactiveUserLinks}
       </div>
       <div className={styles.githubLogoWrapper}>
         <a href='https://github.com/NameICanWrite/50_grn_bill'><img className={styles.githubLogo} src={githubLogo} alt="github" /></a>
@@ -79,7 +90,8 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHa
           <Link to='/posts' onClick={() => setShowNavHamburger(false)}><li>📝 Пости</li></Link>
           <Link to='/reward' onClick={() => setShowNavHamburger(false)}><li>🤑 Винагорода</li></Link>
           <Link to='/landing' onClick={() => setShowNavHamburger(false)}><li>🧐 Про сайт</li></Link>
-          {!isAuthLoading && (isAuthenticated ? authLinks : guestLinks).map(({props: {children, ...otherProps}}) => <Link {...otherProps}><li>{children}</li></Link>)}
+          {!isAuthLoading && !currentUser?.shouldBeActivated && (isAuthenticated ? authLinks : guestLinks).map(({props: {children, ...otherProps}}) => <Link {...otherProps}><li>{children}</li></Link>)}
+          {!isAuthLoading && currentUser?.shouldBeActivated && inactiveUserLinks.map(({props: {children, ...otherProps}}) => <Link {...otherProps}><li>{children}</li></Link>)}
         </ul>
 
 
