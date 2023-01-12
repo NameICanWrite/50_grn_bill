@@ -9,7 +9,7 @@ import {
 import withLoading from '../../utils/redux-utils/withLoading.saga'
 import { setCreatePostLoading, setPostsLoading } from '../loading.slice'
 import postsApi from '../../api/posts.api'
-import { addPost, createPost, getAllPosts, likePost, likePostLocally, removeLike, removeLikeLocally, setAllPosts } from './post.slice'
+import { addPost, createPost, deletePost, deletePostLocally, getAllPosts, likePost, likePostLocally, removeLike, removeLikeLocally, setAllPosts } from './post.slice'
 import { selectCurrentUser } from '../user/user.slice'
 
 
@@ -30,6 +30,12 @@ const removeLikeSaga = withLoading(function* ({payload}) {
   const postId = payload
   yield put(removeLikeLocally({currentUserId: currentUser._id, postId}))
   yield postsApi.getSingle(`one/${postId}/remove-like`)
+})
+
+const deletePostSaga = withLoading(function* ({payload}) {
+  const postId = payload
+  yield put(deletePostLocally({postId}))
+  yield postsApi.deleteSingle(`one/${postId}`)
 })
 
 
@@ -65,4 +71,5 @@ export default function* postSaga() {
 	yield takeLatest(likePost, likePostSaga)
 	yield takeLatest(removeLike, removeLikeSaga)
   yield takeLatest(createPost, createPostSaga)
+  yield takeLatest(deletePost, deletePostSaga)
 }

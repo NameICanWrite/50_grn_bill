@@ -36,10 +36,19 @@ const postSlice = createSlice({
         return post
       })
     },
+    
+    deletePostLocally(state, {payload: {postId}}) {
+      state.all = state.all.filter(post => {
+        
+        if (post._id == postId) return false
+        else return true
+      })
+    },
     likePost() {},
     removeLike() {},
     createPost() {
     } ,
+    deletePost() {},
     addPost(state, {payload}) {
       state.all.push(payload)
     }
@@ -55,7 +64,9 @@ export const {
   likePostLocally,
   removeLikeLocally,
   removeLike,
-  addPost
+  addPost,
+  deletePost,
+  deletePostLocally
 } = postSlice.actions
 
 export const selectPostSlice = state => state.post

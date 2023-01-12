@@ -8,11 +8,11 @@ import emptyPostImage from '../../../../assets/img/empty-white-letterboard.png'
 import baseUrl from '../../../../api/baseUrl'
 import { selectCurrentUser, selectUserById } from '../../../../redux/user/user.slice'
 import { Link, useNavigate } from 'react-router-dom'
-import { likePost, removeLike } from '../../../../redux/post/post.slice'
+import { deletePost, likePost, removeLike } from '../../../../redux/post/post.slice'
 import emptyAvatar from '../../../../assets/img/empty-avatar.jpg'
 import { selectAuthLoading } from '../../../../redux/loading.slice'
 
-const Post = ( {isAuthenticated, post: {
+const Post = ({ isAuthenticated, deletePost, post: {
 	website,
 	tags,
 	linkPreview: {
@@ -34,9 +34,9 @@ const Post = ( {isAuthenticated, post: {
 	const newTabWithPostWebsite = () => {
 		window.open(website)
 	}
-	
+
 	return (
-		<div className={styles.container}>
+		<div className={styles.container} key={_id}>
 			<Link to={`/profile/${author._id}`}>
 				<div className={styles.top}>
 					<img src={author.avatar ? `${baseUrl}/image/${author.avatar}` : emptyAvatar} alt="avatar" className={styles.avatar} />
@@ -73,22 +73,30 @@ const Post = ( {isAuthenticated, post: {
 					<div className={styles.websiteUrl}>{website.length <= urlLimit ? website : website?.substring(0, urlLimit) + '...'}</div>
 					<hr />
 				</div>
-				<div className={styles.likesContainer}>
-
-					<i
-						className={`${styles.likeButton} ${likedBy.some(id => id == currentUser?._id) ? styles.liked : ''}`}
-						onClick={() => {
-							if (!isAuthenticated) return navigate('/register')
-							if (likedBy.some(id => id == currentUser?._id)) {
-								removeLike()
-							} else {
-								like()
-							}
-						}}
-					></i>
-					<p className={styles.likeCount}>{likedBy.length}</p>
-					{/* <span className={likedBy.some(id => id == currentUser?._id) ? styles.liked : ''}>Liked!</span> */}
+				<div className={styles.bottom}>
+					<div className={styles.deletePostWrapper}></div>
+					{
+						currentUser._id === author._id && 
+						<button className={styles.deletePost} onClick={() => deletePost(_id)}></button>
+					}
+					
+					<div className={styles.likesContainer}>
+						<i
+							className={`${styles.likeButton} ${likedBy.some(id => id == currentUser?._id) ? styles.liked : ''}`}
+							onClick={() => {
+								if (!isAuthenticated) return navigate('/register')
+								if (likedBy.some(id => id == currentUser?._id)) {
+									removeLike()
+								} else {
+									like()
+								}
+							}}
+						></i>
+						<p className={styles.likeCount}>{likedBy.length}</p>
+						{/* <span className={likedBy.some(id => id == currentUser?._id) ? styles.liked : ''}>Liked!</span> */}
+					</div>
 				</div>
+
 			</div>
 
 		</div>
@@ -103,7 +111,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
 	like: () => { console.log(ownProps); return dispatch(likePost(ownProps.post._id)) },
-	removeLike: () => dispatch(removeLike(ownProps.post._id))
+	removeLike: () => dispatch(removeLike(ownProps.post._id)),
+	deletePost: (postId) => dispatch(deletePost(postId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post)
