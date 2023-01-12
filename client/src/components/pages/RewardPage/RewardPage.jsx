@@ -88,7 +88,7 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 			}
 			{/* <p className={styles.explanation}>Виконайте всі завда</p> */}
 			{
-				!isWhitelisted && isAuthenticated && <p className={styles.explanation}>*Ваш нікнейм або email завайтлистить адміністратор. Або, якщо ви у моєму фріланс проекті, ваш нік звідти уже завайтлищено автоматично.</p>
+				!isWhitelisted && isAuthenticated && <p className={styles.explanation}>*Ваш нікнейм або email завайтлистив (-ть) адміністратор. Спробуйте змінити нік на той, який у вас в телеграмі.  Або, якщо ви у моєму фріланс проекті, ваш нік звідти уже завайтлищено автоматично.</p>
 			}
 			<DivWithSpinner isLoading={isAskForRewardLoading}>
 				<p className={styles.success}>{askForRewardSuccess}</p>
