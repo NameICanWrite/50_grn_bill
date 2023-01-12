@@ -4,6 +4,8 @@ import Order from "./order.js"
 import {isValidPurchaseWayforpay, signProductsPurchaseWayforpay} from '../utils/pay.utils.js'
 import localtunnel from 'localtunnel'
 import { sendEmailOrderUpdateToAdmin } from "../utils/email/email.utils.js"
+import dotenv from 'dotenv'
+dotenv.config()
 
 const titles = [
   'Терміналтор',
@@ -89,7 +91,7 @@ export async function orderSpin(req, res, next) {
   const serviceUrl = (process.env.NODE_ENV == 'production' ? process.env.ROOT_URL : (await localtunnel({
       port: 5000
   })).url) + '/title/update-online-payment/' // for local testing use 3d-party server to receive post requests from wayforpay server
-
+  console.log('service url:' + serviceUrl)
 
   const paymentSystems = 'card'
   const apiVersion = 1
@@ -118,7 +120,7 @@ export async function orderSpin(req, res, next) {
 
 export async function receivePaymentWayforpay(req, res, next) {
   try {
-
+    console.log('received payment update')
       const data = JSON.parse(req.rawrawBody)
 
       if (!isValidPurchaseWayforpay({

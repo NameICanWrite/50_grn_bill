@@ -5,7 +5,8 @@ import dotenv from 'dotenv'
 const connectDB = async () => {
   try {
     await mongoose.connect(
-      process.env.NODE_ENV == 'production' ? process.env.DATABASE : process.env.DATABASE_LOCAL, 
+      process.env.DATABASE,
+      // process.env.NODE_ENV == 'production' ? process.env.DATABASE : process.env.DATABASE_LOCAL, 
       {
       useNewUrlParser: true
     });

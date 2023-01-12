@@ -39,9 +39,10 @@ export async function createInactiveUser(req, res) {
   if (await User.exists({name})) return res.status(400).send('User with such name already exists')
 
   const hashedPassword = await bcrypt.hash(password, 12)
-  let inactiveUser = await User.findOne({ email })
+  let inactiveUser = await InactiveUser.findOne({ email })
 
-  if (!inactiveUser) inactiveUser = new InactiveUser({ email }) 
+
+  if (!inactiveUser) inactiveUser = await InactiveUser.create({ email }) 
 
   inactiveUser.name = name
   inactiveUser.password = hashedPassword
@@ -287,19 +288,19 @@ export const isNewUsernameAndEmailValid = async (req, res, next) => {
 
   if (uid) {
 
-    const oldName = users.find(user => user._id == uid).name
-    const oldEmail = users.find(user => user._id == uid).email
+    const oldName = users?.find(user => user._id == uid).name
+    const oldEmail = users?.find(user => user._id == uid).email
 
     if (name != oldName) 
-      if (users.some(user => user.name == name)) res.status(400).send('The name is already registered. Choose a unique name')
+      if (users.some(user => user.name == name)) return res.status(400).send('The name is already registered. Choose a unique name')
     
     if (email != oldEmail)
-      if (users.some(user => user.email == email)) res.status(400).send('The email is already registered. Choose a unique email')
+      if (users.some(user => user.email == email)) return res.status(400).send('The email is already registered. Choose a unique email')
 
     next()
   } else {
-    if (users.some(user => user.name == name)) res.status(400).send('The name is already registered. Choose a unique name')
-    if (users.some(user => user.email == email)) res.status(400).send('The email is already registered. Choose a unique email')
+    if (users.some(user => user.name == name)) return res.status(400).send('The name is already registered. Choose a unique name')
+    if (users.some(user => user.email == email)) return res.status(400).send('The email is already registered. Choose a unique email')
 
     next()
   }

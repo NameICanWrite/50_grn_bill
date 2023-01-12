@@ -54,7 +54,7 @@
     "nodemon": "^2.0.12",
     "novaposhta": "^1.1.1",
     "npm": "^7.19.1",
-    "puppeteer": "^19.4.0",
+    "puppeteer": "^18.1.0",
     "puppeteer-extra": "^3.3.4",
     "puppeteer-extra-plugin-stealth": "^2.11.1",
     "reflect-metadata": "^0.1.13",

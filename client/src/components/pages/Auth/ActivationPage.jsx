@@ -33,7 +33,7 @@ const ActivationPage = ({ sendCode, activateWithCode, authLoading, sendCodeLoadi
 
 				}}>
 					<div className={styles.codeInputWrapper}>
-						<input type="number" name="code" onChange={(e) => setCode(e.target.value)} />
+						<input type="number" name="code" placeholder='Введіть код активації' onChange={(e) => setCode(e.target.value)} />
 					</div>
 
 					<div className={styles.message}>
