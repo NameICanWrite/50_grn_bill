@@ -62,7 +62,7 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHa
         
         {!isAuthLoading && (isAuthenticated ? authLinks : guestLinks)}
       </div>
-      <Link><img className={styles.githubLogo} src={githubLogo} alt="github" /></Link>
+      {/* <Link><img className={styles.githubLogo} src={githubLogo} alt="github" /></Link> */}
 
       {/* hamburger menu */}
       <div id={styles["menuToggle"]}>
