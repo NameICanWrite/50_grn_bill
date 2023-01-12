@@ -7,6 +7,7 @@ const initialState = {
   showEditUserPassword: false,
   showEditUserEmail: false,
   showEditUserAvatar: false,
+  showNavHamburger: false
 }
 
 const modalsSlice = createSlice({
@@ -25,11 +26,15 @@ const modalsSlice = createSlice({
 		setShowEditUserAvatar(state, {payload}) {
 			state.showEditUserAvatar = payload
 		},
+    setShowNavHamburger(state, {payload}) {
+      state.showNavHamburger = payload
+    }
   }
 })
 
 export default modalsSlice.reducer
 export const {
+  setShowNavHamburger,
   setShowEditUserAvatar,
   setShowEditUserEmail,
   setShowEditUserName,
@@ -40,3 +45,4 @@ export const selectShowEditUserName = state => state.modals.showEditUserName
 export const selectShowEditUserEmail = state => state.modals.showEditUserEmail
 export const selectShowEditUserAvatar = state => state.modals.showEditUserAvatar
 export const selectShowEditUserPassword = state => state.modals.showEditUserPassword
+export const selectShowNavHamburger = state => state.modals.showNavHamburger

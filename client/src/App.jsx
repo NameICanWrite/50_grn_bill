@@ -11,9 +11,10 @@ import { createStructuredSelector } from 'reselect';
 import { getAllUsers, getCurrentUser, selectCurrentUser } from './redux/user/user.slice';
 import { getAllPosts } from './redux/post/post.slice';
 import {LinkPreview} from "@dhaiwat10/react-link-preview"
+import { setShowNavHamburger } from './redux/modals/modals.slice';
 
 
-const App = ({ getCurrentUser, getAllUsers, getAllPosts, match }) => {
+const App = ({ getCurrentUser, getAllUsers, getAllPosts, setShowNavHamburger }) => {
   useEffect(() => {
     getAllUsers()
     getCurrentUser()
@@ -23,7 +24,7 @@ const App = ({ getCurrentUser, getAllUsers, getAllPosts, match }) => {
       <section className={styles.container}>
         <Navbar />
         {/* <LinkPreview url="https://www.npmjs.com/package/@dhaiwat10/react-link-preview"/> */}
-        <div className={styles.mainContainer}>
+        <div className={styles.mainContainer} onClick={() => setShowNavHamburger(false)}>
           <MyRoutes />
         </div>
         
@@ -38,7 +39,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   getCurrentUser: () => dispatch(getCurrentUser()),
   getAllUsers: () => dispatch(getAllUsers()),
-  getAllPosts: () => dispatch(getAllPosts())
+  getAllPosts: () => dispatch(getAllPosts()),
+  setShowNavHamburger: (payload) => dispatch(setShowNavHamburger(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

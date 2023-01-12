@@ -7,9 +7,11 @@ import emptyAvatar from '../../../assets/img/empty-avatar.jpg'
 import styles from './Navbar.module.sass'
 import baseUrl from '../../../api/baseUrl';
 import DivWithSpinner from '../DivWithSpinner';
+import { set } from 'lodash';
+import { selectShowNavHamburger, setShowNavHamburger } from '../../../redux/modals/modals.slice';
 
 
-const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser }) => {
+const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHamburger, setShowNavHamburger }) => {
   const authLinks = [
     // <div className={styles.navLink}>
     //   <Link to='/dashboard'>
@@ -17,23 +19,26 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser }) => {
     //   </Link>
     // </div>,
     
-      <Link to={`/profile/${currentUser?._id}`}>
+      <Link to={`/profile/${currentUser?._id}`} onClick={() => setShowNavHamburger(false)}>
         🆔 Аккаунт
       </Link>,
     
     
-      <Link to='/landing' onClick={logout}>↪️ Вийти</Link>
+      <Link to='/landing' onClick={() => {
+        logout()
+        setShowNavHamburger(false)
+      }}>↪️ Вийти</Link>
     
   ]
 
   const guestLinks = [
-      <Link to='/login'>➡️ Увійти</Link>
+      <Link to='/login' onClick={() => setShowNavHamburger(false)}>➡️ Увійти</Link>
   ]
 
   return (
     <nav className={styles.navbar}>
       <h1>
-        <Link to='/landing'>
+        <Link to='/landing' onClick={() => setShowNavHamburger(false)}>
           Використані ідеї стартапів
         </Link>
       </h1>
@@ -60,16 +65,16 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser }) => {
 
       {/* hamburger menu */}
       <div id={styles["menuToggle"]}>
-        <input type="checkbox" />
+        <input type="checkbox" checked={showNavHamburger} onClick={() => setShowNavHamburger(!showNavHamburger)} />
 
         <span></span>
         <span></span>
         <span></span>
 
         <ul id={styles["menu"]}>
-          <Link to='/posts'><li>📝 Пости</li></Link>
-          <Link to='/reward'><li>🤑 Винагорода</li></Link>
-          <Link to='/about'><li>🧐 Про сайт</li></Link>
+          <Link to='/posts' onClick={() => setShowNavHamburger(false)}><li>📝 Пости</li></Link>
+          <Link to='/reward' onClick={() => setShowNavHamburger(false)}><li>🤑 Винагорода</li></Link>
+          <Link to='/landing' onClick={() => setShowNavHamburger(false)}><li>🧐 Про сайт</li></Link>
           {!isAuthLoading && (isAuthenticated ? authLinks : guestLinks).map(({props: {children, ...otherProps}}) => <Link {...otherProps}><li>{children}</li></Link>)}
         </ul>
 
@@ -85,11 +90,13 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser }) => {
 const mapStateToProps = state => ({
   isAuthenticated: selectAuthLoading(state).success,
   isAuthLoading: selectAuthLoading(state).isLoading,
-  currentUser: selectCurrentUser(state)
+  currentUser: selectCurrentUser(state),
+  showNavHamburger: selectShowNavHamburger(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  logout: () => dispatch(logout())
+  logout: () => dispatch(logout()),
+  setShowNavHamburger: (payload) => dispatch(setShowNavHamburger(payload)),
 })
 
 export default connect(
