@@ -7,11 +7,12 @@ import { createStructuredSelector } from 'reselect'
 import emptyPostImage from '../../../../assets/img/empty-white-letterboard.png'
 import baseUrl from '../../../../api/baseUrl'
 import { selectCurrentUser, selectUserById } from '../../../../redux/user/user.slice'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { likePost, removeLike } from '../../../../redux/post/post.slice'
 import emptyAvatar from '../../../../assets/img/empty-avatar.jpg'
+import { selectAuthLoading } from '../../../../redux/loading.slice'
 
-const Post = ({ post: {
+const Post = ( {isAuthenticated, post: {
 	website,
 	tags,
 	linkPreview: {
@@ -26,12 +27,14 @@ const Post = ({ post: {
 	likedBy = [],
 	_id
 }, currentUser, like, removeLike }) => {
+	const navigate = useNavigate()
 	//to short text if too long
 	const descriptionLimit = 100
 	const urlLimit = 30
 	const newTabWithPostWebsite = () => {
 		window.open(website)
 	}
+	
 	return (
 		<div className={styles.container}>
 			<Link to={`/profile/${author._id}`}>
@@ -75,6 +78,7 @@ const Post = ({ post: {
 					<i
 						className={`${styles.likeButton} ${likedBy.some(id => id == currentUser?._id) ? styles.liked : ''}`}
 						onClick={() => {
+							if (!isAuthenticated) return navigate('/register')
 							if (likedBy.some(id => id == currentUser?._id)) {
 								removeLike()
 							} else {
@@ -93,7 +97,8 @@ const Post = ({ post: {
 
 const mapStateToProps = (state, ownProps) => ({
 	currentUser: selectCurrentUser(state),
-	post: { ...ownProps.post, author: selectUserById(ownProps.post.author)(state) }
+	post: { ...ownProps.post, author: selectUserById(ownProps.post.author)(state) },
+	isAuthenticated: selectAuthLoading(state).success
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
