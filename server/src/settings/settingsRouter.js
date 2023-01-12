@@ -39,5 +39,16 @@ settingsRouter
 
     res.send(settings)
   })
+  .post('/remove-whitelisted-users', decodeAuthToken, isAdmin, async (req, res) => {
+    const unlistedUsers = req.body
+
+
+    let settings = (await Settings.findOne()) || (await Settings.create({}))
+    settings.whitelistedUsers = settings.whitelistedUsers.filter(usernameOrEmail => unlistedUsers.includes(usernameOrEmail))
+
+    await settings.save()
+
+    res.send(settings)
+  })
   
 export default settingsRouter

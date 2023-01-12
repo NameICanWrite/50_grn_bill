@@ -42,7 +42,7 @@ const Landing = ({ isAuthenticated }) => {
         <li>Лайки</li>
         <li>Справжні 50 грн</li>
       </ol>
-      <button onClick={() => navigate()}>Зареєструватися</button>
+      <button onClick={() => navigate('/register')}>Зареєструватися</button>
       
     </div>
   );
