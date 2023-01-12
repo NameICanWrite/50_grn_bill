@@ -52,10 +52,23 @@
 
   .disclaimer
     margin-top: 20px
+
+.explanationWrapper
+  position: absolute
+  left: 50%
+  top: 50%
+  transform: translate(-50%, -50%)
+  max-width: 500px
+  min-width: 300px
+  min-height: 100px
+  background-color: #fff
+  padding: 20px
+  border-radius: 15px
     
-.explanation
-  margin: 50px auto
-  max-width: 400px
+  .explanation
+    margin: 0 auto
+    max-width: 400px
+    margin-bottom: 10px
 
 @media (max-width: 450px)
   .container
@@ -71,6 +84,28 @@
       margin-top: 20px
       width: 200px
       font-size: 15px
+
     .explanation
-      margin: 20px auto
+      margin: 0 auto
       max-width: 400px
+
+
+.blackSubmit
+  display: block
+  background-color: black
+  border-radius: 10px
+  font-size: 15px
+  color: #fff
+  padding: 5px
+  width: 100%
+  margin: 10px auto
+  margin-bottom: 0
+  background-size: cover
+  cursor: pointer
+
+  &.disabled
+    background-color: #6e6e6e
+    cursor: not-allowed
+
+  &.small
+    width: 70%

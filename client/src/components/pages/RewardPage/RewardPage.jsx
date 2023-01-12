@@ -12,12 +12,14 @@ import Cleave from 'cleave.js/react'
 import { selectAuthLoading, selectCurrentUserLoading } from '../../../redux/loading.slice'
 import WithSpinner from '../../layout/WithSpinner/WithSpinner'
 import { Link } from 'react-router-dom'
+import { Modal } from '@mui/material'
 
 const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didReceiveTitle, isWhitelisted, didReceiveReward }, isUserLoading, isAuthenticated, getCurrentUser, isAuthLoading }) => {
 	const [isAskForRewardLoading, setIsAskForRewardLoading] = useState(false)
 	const [askForRewardSuccess, setAskForRewardSuccess] = useState('')
 	const [askForRewardError, setAskForRewardError] = useState('')
 	const [didntUseEffect, setDidntUseEffect] = useState(true)
+	const [isWhitelistExplanationOpen, setIsWhitelistExplanationOpen] = useState(false)
 
 	const [cardNumber, setCardNumber] = useState('')
 	didLikePost = false
@@ -39,8 +41,11 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 		getCurrentUser()
 		setDidntUseEffect(false)
 	}, [])
+	useEffect(() => {
+		console.log(isWhitelistExplanationOpen);
+	}, [])
 
-	
+
 	return (
 		<DivWithSpinner isLoading={isUserLoading || isAuthLoading || didntUseEffect} className={styles.container}>
 			<h2 className={styles.header}>Виконайте завдання і отримайте 50 грн</h2>
@@ -60,8 +65,10 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 				<Link to={'/receive-random-title'}>
 					<p>{didReceiveTitle ? '✔️' : '❌'} Отримайте звання</p>
 				</Link>
+				<Link onClick={() => setIsWhitelistExplanationOpen(true)}>
+					<p>{isWhitelisted ? '✔️' : '❌'} Візьміть участь у вайтлисті</p>
+				</Link>
 				
-				<p>{isWhitelisted ? '✔️' : '❌'} Прийміть участь у вайтлисті</p>
 			</div>
 			{isEligible && <Cleave
 				options={{ creditCard: true }}
@@ -77,19 +84,25 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 						className={!isEligible ? styles.disabled : ''}
 						disabled={!isEligible}
 						onClick={async () => await askForReward()
-						}>Receive reward!</button>
+						}>Отримати винагороду</button>
 					:
 					<div>
 						<p className={styles.received}>Нагороду вже вислано на вашу карту</p>
 						<p className={styles.disclaimer}>Зверніть увагу! Кошти можуть іти протягом години...</p>
 					</div>
-					
+
 
 			}
 			{/* <p className={styles.explanation}>Виконайте всі завда</p> */}
-			{
-				!isWhitelisted && isAuthenticated && <p className={styles.explanation}>*Ваш нікнейм або email завайтлистив (-ть) адміністратор. Спробуйте змінити нік на той, який у вас в телеграмі.  Або, якщо ви у моєму фріланс проекті, ваш нік звідти уже завайтлищено автоматично.</p>
-			}
+			<Modal open={isWhitelistExplanationOpen}
+			 onClose={() => setIsWhitelistExplanationOpen(false)}
+			 >
+				<div className={styles.explanationWrapper}>
+					<p className={styles.explanation}>Вайтлист - це список імен тих хто може отримати винагороду. Можливо я вже додав твій нік з телеги. Або ще додам. Спробуй змінити нік на той який там</p>
+					<button onClick={() => setIsWhitelistExplanationOpen(false)} className={`${styles.blackSubmit} ${styles.small}`}>Ok</button>
+				</div>
+				</Modal>
+
 			<DivWithSpinner isLoading={isAskForRewardLoading}>
 				<p className={styles.success}>{askForRewardSuccess}</p>
 				<p className={styles.error}>{askForRewardError}</p>

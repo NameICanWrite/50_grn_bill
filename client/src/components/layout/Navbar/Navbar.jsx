@@ -9,6 +9,7 @@ import baseUrl from '../../../api/baseUrl';
 import DivWithSpinner from '../DivWithSpinner';
 import { set } from 'lodash';
 import { selectShowNavHamburger, setShowNavHamburger } from '../../../redux/modals/modals.slice';
+import githubLogo from '../../../assets/img/github-logo.png'
 
 
 const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHamburger, setShowNavHamburger }) => {
@@ -61,7 +62,7 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHa
         
         {!isAuthLoading && (isAuthenticated ? authLinks : guestLinks)}
       </div>
-      
+      <Link><img className={styles.githubLogo} src={githubLogo} alt="github" /></Link>
 
       {/* hamburger menu */}
       <div id={styles["menuToggle"]}>
