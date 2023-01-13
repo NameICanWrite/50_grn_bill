@@ -44,7 +44,7 @@ const Landing = ({ isAuthenticated, shouldBeActivated }) => {
         <li>Справжні 50 грн</li>
       </ol>
       {isAuthenticated && !shouldBeActivated  ? <button onClick={() => navigate('/posts/create-post')}>Запостити щось</button> : <button onClick={() => navigate('/register')}>Зареєструватися</button>}
-      {isAuthenticated && !shouldBeActivated  && <button onClick={() => navigate('/activate-with-code')}>Активувати</button>}
+      {isAuthenticated && shouldBeActivated  && <button onClick={() => navigate('/activate-with-code')}>Активувати</button>}
       
     </div>
   );
