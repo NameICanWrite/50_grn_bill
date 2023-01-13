@@ -70,8 +70,14 @@ app.use(fileUpload({
 }))
 app.use(helmet())
 app.get('/', (req, res) => {
-  console.log(req.body)
-  res.send('123')})
+  console.log('get root');
+  res.send('123')
+})
+
+app.head('/ping', (req, res) => {
+  console.log('ping');
+  res.send()
+})
 
 app.use('/', router)
 

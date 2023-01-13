@@ -15,7 +15,8 @@ export async function getImage(req, res) {
 			return data.pipe(res)
 		}
 	} catch (err) {
-		return res.status(404).send('not found')
+		console.log(err.message);
+		return res.status(404).send('err message')
 	}
 }
 
