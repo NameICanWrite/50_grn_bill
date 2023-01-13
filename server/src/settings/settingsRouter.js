@@ -33,7 +33,7 @@ settingsRouter
       if (!settings.whitelistedUsers.includes(userNameOrEmail)) {
       settings.whitelistedUsers.push(userNameOrEmail)
       }
-      settings.receivedRewardUsers.filter(user => !((user.name == userNameOrEmail) || (user.email == userNameOrEmail)))
+      settings.receivedRewardUsers = settings.receivedRewardUsers.filter(user => !((user.name == userNameOrEmail) || (user.email == userNameOrEmail)))
     })
     await settings.save()
 
@@ -44,7 +44,7 @@ settingsRouter
 
 
     let settings = (await Settings.findOne()) || (await Settings.create({}))
-    settings.whitelistedUsers = settings.whitelistedUsers.filter(usernameOrEmail => unlistedUsers.includes(usernameOrEmail))
+    settings.whitelistedUsers = settings.whitelistedUsers.filter(usernameOrEmail => !unlistedUsers.includes(usernameOrEmail))
 
     await settings.save()
 
