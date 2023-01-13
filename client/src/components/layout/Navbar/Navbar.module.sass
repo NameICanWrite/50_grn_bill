@@ -22,9 +22,7 @@
     width: 90%
     max-width: 700px
 
-  .githubLogo
-    width: 40px
-    height: 40px
+  
 
   .currentUserInfo
     display: flex
@@ -139,7 +137,7 @@
     position: absolute
     width: 300px
     height: fit-content
-    margin: 20px 0 0 -50px
+    margin: 13px 0 0 -50px
     padding: 50px
     // padding-left: 100px
     // padding-top: 125px
@@ -160,4 +158,53 @@
   width: fit-content
   right: 20px
   top: 40px
+
+  .githubLogo
+    width: 40px
+    height: 40px
+
+@media (max-width: 400px)
+  .navbar
+    padding: 10px
+
+    h1
+      font-size: 15px
+      margin: 0 auto
+
+    #menuToggle
+      // margin: 0 auto
+      margin-left: 15px
+      top: 5px
+
+    #menu
+      margin-top: 5px
+
+    .githubLogoWrapper
+      right: 5px
+      top: 20px
+
+      .githubLogo
+        width: 30px
+        height: 30px
+
+  @media (max-width: 340px)
+    .navbar
+      #menuToggle
+        margin: 0
+        // margin-left: 5px
+
+  @media (max-width: 300px)
+    .navbar
+      padding: 5px
+
+      h1
+        font-size: 13px
+      .githubLogoWrapper
+        .githubLogo
+          width: 20px
+          height: 20px
+
+      #menuToggle
+        margin-left: 5px
+  
 
