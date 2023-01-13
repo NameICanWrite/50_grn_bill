@@ -22,7 +22,6 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 	const [isWhitelistExplanationOpen, setIsWhitelistExplanationOpen] = useState(false)
 
 	const [cardNumber, setCardNumber] = useState('')
-	didLikePost = false
 	const isEligible = didAddPost && didAddAvatar && didLikePost && didReceiveTitle && isWhitelisted && !didReceiveReward
 
 	const askForReward = useCallback(async () => {
