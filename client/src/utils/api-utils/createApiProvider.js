@@ -64,7 +64,7 @@ const createApiProvider = ({baseUrl = DEFAULT_BASE_URL, url}) => ({
 
 	deleteSingle: async (id, model, { withCredentials = true, ...otherSettings } = {withCredentials: true}) => {
 		return await axios
-			.delete(`${baseUrl}/${url}/${id}`, model, { withCredentials, ...otherSettings })
+			.delete(`${baseUrl}/${url}/${id}`, { withCredentials, ...otherSettings })
 			.then(handleResponse)
 			.catch(handleError);
 	},
