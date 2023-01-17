@@ -134,7 +134,7 @@ export async function checkAllUsersNamesForBeingFreelanceInProject() {
     }
   }
 
-  console.log('checked all users names for being freelance in project')
-  console.log(curr);
+  // console.log('checked all users names for being freelance in project')
+  // console.log(curr);
 }
 
