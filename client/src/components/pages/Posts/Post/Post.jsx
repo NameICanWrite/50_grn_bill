@@ -76,7 +76,7 @@ const Post = ({ isAuthenticated, deletePost, shouldBeActivated, post: {
 				<div className={styles.bottom}>
 					<div className={styles.deletePostWrapper}></div>
 					{
-						currentUser._id === author._id && 
+						((currentUser._id === author._id) || currentUser.isAdmin) && 
 						<button className={styles.deletePost} onClick={() => deletePost(_id)}></button>
 					}
 					

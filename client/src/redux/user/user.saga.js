@@ -72,14 +72,17 @@ function* loginWithNameAndPasswordSaga({payload}) {
     yield call(handleAuth, async () => await authApi.postSingle('login', payload))
 }
 
-function* createUserWithNameAndPasswordSaga({payload}) {
-    yield call(handleAuth, async () => await authApi.postSingle('create-inactive-user', payload))
-}
-
 const sendActivationCodeSaga = withLoading(function* () {
     const message = yield authApi.postSingle('send-activation-code')
     return message
 }, setSendActivationCodeLoading)
+
+function* createUserWithNameAndPasswordSaga({payload}) {
+    yield call(handleAuth, async () => await authApi.postSingle('create-inactive-user', payload))
+    yield call(sendActivationCodeSaga)
+}
+
+
 
 const activateAccountWithCodeSaga = withLoading(function* ({payload}) {
     const message = yield authApi.postSingle('activate-user-with-code', {code: payload})

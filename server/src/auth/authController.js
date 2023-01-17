@@ -22,6 +22,7 @@ import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-
 export async function setUserPassword(req, res) {
   const id = req.auth.uid
   const {password} = req.body
+  if (!password || password.length >= 4) return res.status(400).send('Password should be 4 symbols or longer')
   const hashedPassword = await bcrypt.hash(password, 12)
 
   await User.findByIdAndUpdate(id, {password: hashedPassword})
@@ -37,6 +38,8 @@ export async function createInactiveUser(req, res) {
 
   if (await User.exists({email})) return res.status(400).send('User with such email already exists')
   if (await User.exists({name})) return res.status(400).send('User with such name already exists')
+  if (!password || password.length >= 4) return res.status(400).send('Password should be 4 symbols or longer')
+  
 
   const hashedPassword = await bcrypt.hash(password, 12)
   let inactiveUser = await InactiveUser.findOne({ email })

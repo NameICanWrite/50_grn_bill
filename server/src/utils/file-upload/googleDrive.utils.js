@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { google } from 'googleapis'
 import dotenv from 'dotenv'
-import { createAuthorizedGoogleClient, createAuthorizedOAuth2Client } from './googleCredentials.utils.js'
+import { createAuthorizedGoogleClient } from './googleCredentials.utils.js'
 
 
 

@@ -50,22 +50,22 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 			<h2 className={styles.header}>Виконайте завдання і отримайте 50 грн</h2>
 			<div className={styles.checkpoints}>
 				<Link to={'/register'}>
-					<p>{isAuthenticated && !shouldBeActivated ? '✔️' : '❌'} Зареєструйтесь</p>
+					<span className={styles.check}>{isAuthenticated && !shouldBeActivated ? '✔️' : '❌'}</span><p className={styles.link}>Зареєструйтесь</p>
 				</Link>
 				<Link to={isAuthenticated ? '/posts/create-post' : '/register'}>
-					<p>{didAddPost ? '✔️' : '❌'} Створіть 1 пост</p>
+					<span className={styles.check}>{didAddPost ? '✔️' : '❌'}</span><p className={styles.link}>Створіть 1 пост</p>
 				</Link>
 				<Link to='/posts'>
-					<p>{didLikePost ? '✔️' : '❌'} Лайкніть 1 пост</p>
+					<span className={styles.check}>{didLikePost ? '✔️' : '❌'}</span><p className={styles.link}>Лайкніть 1 пост</p>
 				</Link>
 				<Link to={isAuthenticated ? `/profile/${_id}/set-avatar` : '/register'} >
-					<p>{didAddAvatar ? '✔️' : '❌'} Додайте аватар у профіль</p>
+					<span className={styles.check}>{didAddAvatar ? '✔️' : '❌'}</span><p className={styles.link}>Додайте аватар у профіль</p>
 				</Link>
 				<Link to={'/receive-random-title'}>
-					<p>{didReceiveTitle ? '✔️' : '❌'} Отримайте звання</p>
+					<span className={styles.check}>{didReceiveTitle ? '✔️' : '❌'}</span><p className={styles.link}>Отримайте звання</p>
 				</Link>
 				<Link onClick={() => setIsWhitelistExplanationOpen(true)}>
-					<p>{isWhitelisted ? '✔️' : '❌'} Візьміть участь у вайтлисті</p>
+					<span className={styles.check}>{isWhitelisted ? '✔️' : '❌'}</span><p className={styles.link}>Візьміть участь у вайтлисті</p>
 				</Link>
 				
 			</div>
