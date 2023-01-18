@@ -25,7 +25,8 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHa
         🆔 Аккаунт
       </Link>,
       <Link to={`/receive-random-title`} onClick={() => setShowNavHamburger(false)}>
-        <img src={salutingEmoji} alt="saluting-emoji" style={{width: '1.2rem', height: '1.2rem', position: 'absolute', top: '0.15rem'}} />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Звання
+        {/* <img src={salutingEmoji} alt="saluting-emoji" style={{width: '1.2rem', height: '1.2rem', position: 'absolute', top: '0.15rem'}} />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
+        🎲 Звання
       </Link>,
     
     

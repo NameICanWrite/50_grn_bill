@@ -65,7 +65,7 @@ const ActivationPage = ({ sendCode, activateWithCode, authLoading, sendCodeLoadi
 						e.preventDefault()
 						sendCode()
 						resetAuthMessage()
-					}}>Отримати код активації на {currentUser.email}</button>
+					}}>Не отримали код? Відіслати іще раз {currentUser.email}</button>
 				</form>
 
 
