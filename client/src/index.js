@@ -8,11 +8,11 @@ import store from './redux/store';
 import { BrowserRouter } from 'react-router-dom';
 
 //do not console log if deployed
-// if (process.env.NODE_ENV === 'production') {
-//   console.log = () => {}
-//   console.error = () => {}
-//   console.debug = () => {}
-// }
+if (process.env.NODE_ENV === 'production') {
+  console.log = () => {}
+  console.error = () => {}
+  console.debug = () => {}
+}
 
 
 ReactDOM.render(

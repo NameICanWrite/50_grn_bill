@@ -12,7 +12,7 @@ import InactiveUser from "../user/inactiveUserModel.js"
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator'
 
 
-
+dotenv.config()
 
 
 
@@ -235,7 +235,12 @@ export async function setUserEmail(req, res, next) {
 }
 
 export const logout = (req, res) => {
-  res.clearCookie('jwt')
+  if (process.env.NODE_ENV === 'production') {
+    res.clearCookie('jwt', {domain: process.env.ROOT_DOMAIN, path: '/'})
+  } else {
+    res.clearCookie('jwt')
+  }
+  
   res.status(200).send('Log out successful');
 };
 
