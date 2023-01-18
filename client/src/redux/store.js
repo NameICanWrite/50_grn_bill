@@ -16,7 +16,9 @@ import rootSaga from "./rootSaga";
 const sagaMiddleware = createSagaMiddleware()
 
 const customMiddleware = [sagaMiddleware]
-if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') customMiddleware.push(logger)
+// if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+	customMiddleware.push(logger)
+// }
 
 const store = configureStore({
 	reducer: {
