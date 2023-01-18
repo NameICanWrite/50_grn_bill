@@ -239,7 +239,7 @@ export const logout = (req, res) => {
   if (process.env.NODE_ENV === 'production') {
     console.log('node env is prod of course');
     console.log('domain:', process.env.ROOT_DOMAIN);
-    res.clearCookie('jwt', {domain: process.env.ROOT_DOMAIN, path: '/'})
+    res.clearCookie('jwt', {domain: process.env.ROOT_DOMAIN, path: '/', sameSite: 'none', httpOnly: true, secure: true})
   } else {
     res.clearCookie('jwt')
   }
