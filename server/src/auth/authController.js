@@ -235,7 +235,10 @@ export async function setUserEmail(req, res, next) {
 }
 
 export const logout = (req, res) => {
+  console.log('req.cookies.jwt:',req.cookies.jwt);
   if (process.env.NODE_ENV === 'production') {
+    console.log('node env is prod of course');
+    console.log('domain:', process.env.ROOT_DOMAIN);
     res.clearCookie('jwt', {domain: process.env.ROOT_DOMAIN, path: '/'})
   } else {
     res.clearCookie('jwt')
