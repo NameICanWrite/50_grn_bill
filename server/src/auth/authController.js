@@ -5,7 +5,7 @@ import isEmail from 'isemail'
 import dotenv from 'dotenv'
 import crypto from "crypto"
 import {
-  addJwtCookie
+  addJwtCookie, removeJwtCookie
 } from '../utils/auth/jwt.utils.js'
 import { generateSixDigitCode, sendEmailActivationCode, sendEmailConfirmation, sendEmailRecovery } from "../utils/email/email.utils.js"
 import InactiveUser from "../user/inactiveUserModel.js"
@@ -103,7 +103,7 @@ export async function activateUserWithCode(req, res) {
   await inactiveUser.delete()
 
   
-  res.clearCookie('jwt')
+  removeJwtCookie(req, res)
   addJwtCookie(res, {uid: user._id, isAdmin})
 
   res.status(200).send(`User activated successfully${isAdmin ? '. Logged in as Admin' : ''}`)
@@ -235,14 +235,7 @@ export async function setUserEmail(req, res, next) {
 }
 
 export const logout = (req, res) => {
-  console.log('req.cookies.jwt:',req.cookies.jwt);
-  if (process.env.NODE_ENV === 'production') {
-    console.log('node env is prod of course');
-    console.log('domain:', process.env.ROOT_DOMAIN);
-    res.clearCookie('jwt', {domain: process.env.ROOT_DOMAIN, path: '/', sameSite: 'none', httpOnly: true, secure: true})
-  } else {
-    res.clearCookie('jwt')
-  }
+  removeJwtCookie(req, res)
   
   res.status(200).send('Log out successful');
 };

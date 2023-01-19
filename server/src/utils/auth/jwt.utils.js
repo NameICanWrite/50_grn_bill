@@ -6,12 +6,14 @@ import User from '../../user/user.js'
 
 
 export const addJwtCookie = (res, payload) => {
+  const cookieExpires = new Date(Date.now() + process.env.JWT_COOKIES_EXPIRES_IN * 24 * 3600 * 1000)
+
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_SECRET_EXPIRES_IN
   })
 
   const cookieOptions = {
-    expires: new Date(Date.now() + process.env.JWT_COOKIES_EXPIRES_IN * 24 * 3600 * 1000),
+    expires: cookieExpires,
     httpOnly: true,
   }
 
@@ -21,7 +23,20 @@ export const addJwtCookie = (res, payload) => {
   }
 
   res.cookie('jwt', token, cookieOptions);
+  res.cookie('jwt-cookie-options', JSON.stringify(cookieOptions), {expires: cookieExpires})
   return token
+}
+
+export const removeJwtCookie = (req, res) => {
+  const cookieOptions = JSON.parse(req.cookies['jwt-cookie-options'])
+
+  if (process.env.NODE_ENV == 'production') {
+    cookieOptions.domain = process.env.ROOT_DOMAIN
+    cookieOptions.path = '/'
+  }
+  cookieOptions.expires = new Date(cookieOptions.expires)
+
+  res.clearCookie('jwt', cookieOptions)
 }
 
 
