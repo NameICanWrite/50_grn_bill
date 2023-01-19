@@ -20,6 +20,8 @@ export const addJwtCookie = (res, payload) => {
   if (process.env.NODE_ENV === 'production') {
     cookieOptions.secure = true
     cookieOptions.sameSite = 'none'
+    cookieOptions.domain = process.env.ROOT_DOMAIN
+    cookieOptions.path = '/'
   }
 
   res.cookie('jwt', token, cookieOptions);
@@ -30,11 +32,7 @@ export const addJwtCookie = (res, payload) => {
 export const removeJwtCookie = (req, res) => {
   const cookieOptions = JSON.parse(req.cookies['jwt-cookie-options'])
 
-  if (process.env.NODE_ENV == 'production') {
-    cookieOptions.domain = process.env.ROOT_DOMAIN
-    cookieOptions.path = '/'
-  }
-  cookieOptions.expires = new Date(cookieOptions.expires)
+  cookieOptions.expires = undefined
 
   res.clearCookie('jwt', cookieOptions)
 }
