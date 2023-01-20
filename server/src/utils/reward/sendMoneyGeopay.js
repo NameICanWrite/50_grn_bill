@@ -1,9 +1,10 @@
 import puppeteer from 'puppeteer-extra';
-import {executablePath} from 'puppeteer'
+// import {executablePath} from 'puppeteer'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import dotenv from 'dotenv'
 import { uploadFileToGoogleDrive } from '../file-upload/googleDrive.utils.js';
 import fs from 'fs'
+import Xvfb from 'xvfb'
 
 dotenv.config()
 
@@ -12,7 +13,11 @@ dotenv.config()
 export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, amountToSend = '50'}) {
 
   amountToSend.toString()
-
+  let xvfb
+  if (process.env.NODE_ENV == 'production') {
+    xvfb = new Xvfb()
+    xvfb.startSync()
+  }
   puppeteer.use(StealthPlugin())
 
   const proxy = {
@@ -20,11 +25,12 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
     user: 'vadimbaranivsky83',
     pass: 'uvskus9Z9K'
   }
-  const browser = await puppeteer.launch({ headless: false, executablePath: executablePath(), 
+  const browser = await puppeteer.launch({ headless: false, // executablePath: executablePath(), 
     // currentUserDir: "./puppeteer_user_data" 
     args: [
       '--disable-dev-shm-usage',
-      '--proxy-server=https='+proxy.host
+      '--proxy-server=https='+proxy.host,
+      '--headless'
   ]
   });
   const page = await browser.newPage();
@@ -124,6 +130,7 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   
 
   await browser.close();
+  if (process.env.NODE_ENV == 'production') xvfb.stopSync()
 
 }
 
