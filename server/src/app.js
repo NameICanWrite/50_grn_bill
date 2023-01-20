@@ -13,6 +13,8 @@ import connectDB from './utils/connectDB.js';
 import bodyParser from 'body-parser';
 import { checkAllUsersNamesForBeingFreelanceInProject } from './reward/rewardController.js';
 import Settings from './settings/settings.js';
+import axios from 'axios';
+import HttpsProxyAgent from 'https-proxy-agent'
 
 process.setMaxListeners(0)
 
@@ -72,6 +74,25 @@ app.use(helmet())
 app.get('/', (req, res) => {
   console.log('get root');
   res.send('123')
+})
+app.get('/test', async (req, res) => {
+//   const fetch = require('node-fetch');
+  // const HttpsProxyAgent = require('https-proxy-agent');
+  
+  
+  // (async () => {
+  //     const proxyAgent = new HttpsProxyAgent('http://46.250.171.31:8080');
+  //     const response = await fetch('https://httpbin.org/ip?json', { agent: proxyAgent});
+  //     const body = await response.text();
+  //     console.log(body);
+  // })();
+const httpsAgent = new HttpsProxyAgent({host: "185.238.229.167", port: "50100", auth: "vadimbaranivsky83:uvskus9Z9K"})
+
+//use axios as you normally would, but specify httpsAgent in the config
+let axiosProxy = axios.create({httpsAgent});
+const currentIp = (await axiosProxy.get('https://api.ipify.org')).data
+console.log('current ip is ' + currentIp);
+res.send(currentIp)
 })
 
 app.head('/ping', (req, res) => {
