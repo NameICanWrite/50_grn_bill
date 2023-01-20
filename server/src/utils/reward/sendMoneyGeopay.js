@@ -4,7 +4,7 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import dotenv from 'dotenv'
 import { uploadFileToGoogleDrive } from '../file-upload/googleDrive.utils.js';
 import fs from 'fs'
-// import Xvfb from 'xvfb'
+import Xvfb from 'xvfb'
 import proxyChain from 'proxy-chain'
 
 dotenv.config()
