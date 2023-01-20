@@ -61,7 +61,7 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
     console.log('went to ipfy');
     await page.goto('https://proxy-seller.com', { waitUntil: 'networkidle0', timeout: 120000 })
     console.log('went to proxy-seller');
-    await page.goto('https://geo-pay.net', { waitUntil: 'networkidle0' })
+    await page.goto('https://geo-pay.net', { waitUntil: 'networkidle0', timeout: 120000 })
     console.log('went to geopay');
     console.log('now trying to make screenshot');
 
