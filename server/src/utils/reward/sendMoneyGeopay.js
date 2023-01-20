@@ -35,14 +35,16 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   puppeteer.use(StealthPlugin())
 
 
-  const browser = await puppeteer.launch({ headless: true, // executablePath: executablePath(), 
+  const browser = await puppeteer.launch({ headless: true,  // executablePath: executablePath(), 
     // currentUserDir: "./puppeteer_user_data" 
     args: [
       // '--disable-dev-shm-usage',
       '--proxy-server=https=' + newUrl,
   ]
   });
+  
   const page = await browser.newPage();
+  page.setDefaultNavigationTimeout(120000)
   // await page.authenticate({
   //   username: proxy.user,
   //   password: proxy.pass,
@@ -61,25 +63,25 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
     // console.log('went to ipfy');
     // await page.goto('https://proxy-seller.com', { waitUntil: 'networkidle0', timeout: 120000 })
     // console.log('went to proxy-seller');
-    await page.goto('https://geo-pay.net/auth/log-in', { waitUntil: 'networkidle0', timeout: 120000 })
+    await page.goto('https://geo-pay.net/auth/log-in', { waitUntil: 'networkidle0' })
     console.log('went to geopay');
-    console.log('now trying to make screenshot');
+    // console.log('now trying to make screenshot');
 
 
-    //screenshot
-    const name = 'debugImage' + Date.now() + (Math.floor(Math.random() * 1000)).toString() + '.png'
-    const path = 'temp/' + name
-    await page.screenshot({
-      path
-    })
-    const file = {
-      path,
-      name,
-      mimetype: 'image/png'
-    }
-    const screenshotFileId = (await uploadFileToGoogleDrive(file)).id
-		// fs.unlinkSync(file.path)
-    console.log('geopay screenshot id: ' + screenshotFileId)
+    // //screenshot
+    // const name = 'debugImage' + Date.now() + (Math.floor(Math.random() * 1000)).toString() + '.png'
+    // const path = 'temp/' + name
+    // await page.screenshot({
+    //   path
+    // })
+    // const file = {
+    //   path,
+    //   name,
+    //   mimetype: 'image/png'
+    // }
+    // const screenshotFileId = (await uploadFileToGoogleDrive(file)).id
+		// // fs.unlinkSync(file.path)
+    // console.log('geopay screenshot id: ' + screenshotFileId)
     
     //delete tel prefix
     await page.click('input[type=tel]')
@@ -112,7 +114,7 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
 
 
   //try to withdraw assets
-  await page.goto('https://geo-pay.net/dashboard', { waitUntil: 'networkidle0' });
+  // await page.goto('https://geo-pay.net/dashboard', { waitUntil: 'networkidle0' });
   await page.goto('https://geo-pay.net/dashboard/withdrawal', { waitUntil: 'networkidle0' });
   await page.type('input[name=amount]', amountToSend)
   await page.type('input[name=cardNumber]', cardNumber)
@@ -133,7 +135,10 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
     const [successfulSpan] = await page.$x("//span[contains(., 'Successful withdrawal')]");
     if (successfulSpan) {
       console.log('Successfully sent ' + amountToSend + ' to '  + cardNumber)
-    } 
+    } else{
+      
+      throw new Error()
+    }
   } catch {throw new Error('unknown error while sending money')}
   
   
