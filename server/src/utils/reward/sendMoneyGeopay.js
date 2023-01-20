@@ -24,7 +24,7 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
     // currentUserDir: "./puppeteer_user_data" 
     args: [
       '--disable-dev-shm-usage',
-      '--proxy-server='+vpn.host
+      '--proxy-server=https='+vpn.host
   ]
   });
   const page = await browser.newPage();
@@ -32,13 +32,13 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
     username: vpn.user,
     password: vpn.pass,
   });
-  
+  console.log('authenticated the page');
  
   //login to Geopay using headless browser
   try {
 
     await page.goto('https://nordvpn.com/ru/what-is-my-ip/', { waitUntil: 'networkidle0' });
-    
+    console.log('now trying to make screenshot');
 
 
     //screenshot
