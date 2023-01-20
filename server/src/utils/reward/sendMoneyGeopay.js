@@ -24,6 +24,15 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   //login to Geopay using headless browser
   try {
     await page.goto('https://geo-pay.net/auth/log-in', { waitUntil: 'networkidle0' });
+    
+    //delete tel prefix
+    await page.click('input[type=tel]')
+    await page.keyboard.down('ControlLeft')
+    await page.keyboard.press('KeyA')
+    await page.keyboard.up('ControlLeft')
+    await page.keyboard.press('Backspace')
+
+    //enter credentials
     await page.type('input[type=tel]', process.env.GEOPAY_TEL)
     await page.type('input[type=password]', process.env.GEOPAY_PASSWORD)
     await page.click('button[type=submit]')

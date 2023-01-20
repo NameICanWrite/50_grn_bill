@@ -14,11 +14,12 @@ import {LinkPreview} from "@dhaiwat10/react-link-preview"
 import { setShowNavHamburger } from './redux/modals/modals.slice';
 
 
-const App = ({ getCurrentUser, getAllUsers, getAllPosts, setShowNavHamburger }) => {
+const App = ({ getCurrentUser, getAllUsers, getAllPosts, setShowNavHamburger, currentUser }) => {
   useEffect(() => {
     getAllUsers()
     getCurrentUser()
     getAllPosts()
+
   }, [])
   return (
       <section className={styles.container}>
@@ -40,7 +41,7 @@ const mapDispatchToProps = (dispatch) => ({
   getCurrentUser: () => dispatch(getCurrentUser()),
   getAllUsers: () => dispatch(getAllUsers()),
   getAllPosts: () => dispatch(getAllPosts()),
-  setShowNavHamburger: (payload) => dispatch(setShowNavHamburger(payload))
+  setShowNavHamburger: (payload) => dispatch(setShowNavHamburger(payload)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
