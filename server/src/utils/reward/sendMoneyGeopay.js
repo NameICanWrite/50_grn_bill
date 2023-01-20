@@ -16,9 +16,9 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   puppeteer.use(StealthPlugin())
 
   const vpn = {
-    host: '185.199.229.156:7492',
-    user: 'gltgjeaz',
-    pass: '96gnf0afb0us'
+    host: '185.238.229.167:50100',
+    user: 'vadimbaranivsky83',
+    pass: 'uvskus9Z9K'
   }
   const browser = await puppeteer.launch({ headless: true, executablePath: executablePath(), 
     // currentUserDir: "./puppeteer_user_data" 
