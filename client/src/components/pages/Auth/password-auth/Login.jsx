@@ -65,7 +65,7 @@ const Login = ({ login, isAuthenticated, isLoading, match, location, loginWithGo
           <AuthMessage isLoading={isLoading} spinnerContainerClassName={styles.spinnerContainer} spinnerClassName={styles.spinner}/>
         </div>
         <input type='submit' className={styles.submit} value='Увійти' />
-        <p className={styles.hint}>
+        <p>
           Ще не зареєстровані? <Link to={`/register`}>Зареєструйтеся</Link>
         </p>
         <hr />

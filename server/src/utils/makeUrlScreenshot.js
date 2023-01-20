@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 
 export default async function makeUrlScreenshot(url) {
   puppeteer.use(StealthPlugin())
-  const browser = await puppeteer.launch({ headless: true, executablePath: executablePath()})
+  const browser = await puppeteer.launch({ headless: false, executablePath: executablePath()})
   const page = await browser.newPage()
   await page.goto(url, { waitUntil: 'networkidle0' })
   const name = 'postImage' + Date.now() + (Math.floor(Math.random() * 1000)).toString() + '.png'
