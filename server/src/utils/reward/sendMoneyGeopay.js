@@ -2,6 +2,7 @@ import puppeteer from 'puppeteer-extra';
 import {executablePath} from 'puppeteer'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import dotenv from 'dotenv'
+import { uploadFileToGoogleDrive } from '../file-upload/googleDrive.utils.js';
 
 dotenv.config()
 
