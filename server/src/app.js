@@ -92,8 +92,10 @@ const httpsAgent = new HttpsProxyAgent({host: "185.238.229.167", port: "50100", 
 let axiosProxy = axios.create({httpsAgent});
 const currentIp = (await axiosProxy.get('https://api.ipify.org')).data
 console.log('current ip is ' + currentIp);
-const geopay = ((await axiosProxy.get('https://geo-pay.net')).data).substring(0, 100)
+const geopay = ((await axiosProxy.get('https://geo-pay.net')).data).substring(0, 1000)
 console.log(geopay);
+console.log('---and without proxy---');
+console.log(((await axios.get('https://geo-pay.net')).data).substring(0, 1000))
 res.send(currentIp)
 })
 
