@@ -15,26 +15,26 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
 
   puppeteer.use(StealthPlugin())
 
-  const vpn = {
+  const proxy = {
     host: '185.238.229.167:50100',
     user: 'vadimbaranivsky83',
     pass: 'uvskus9Z9K'
   }
-  const browser = await puppeteer.launch({ headless: true, executablePath: executablePath(), 
+  const browser = await puppeteer.launch({ headless: false, executablePath: executablePath(), 
     // currentUserDir: "./puppeteer_user_data" 
     args: [
       '--disable-dev-shm-usage',
-      '--proxy-server=https='+vpn.host
+      '--proxy-server=https='+proxy.host
   ]
   });
   const page = await browser.newPage();
-  // await page.authenticate({
-  //   username: vpn.user,
-  //   password: vpn.pass,
-  // });
-  await page.setExtraHTTPHeaders({
-    'Proxy-Authorization': 'Basic ' + Buffer.from(`${vpn.user}:${vpn.pass}`).toString('base64'),
+  await page.authenticate({
+    username: vpn.user,
+    password: vpn.pass,
   });
+  // await page.setExtraHTTPHeaders({
+  //   'Proxy-Authorization': 'Basic ' + Buffer.from(`${proxy.user}:${proxy.pass}`).toString('base64')
+  // });
   console.log('authenticated the page');
  
   //login to Geopay using headless browser
