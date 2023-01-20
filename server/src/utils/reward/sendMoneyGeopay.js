@@ -55,13 +55,13 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   //login to Geopay using headless browser
   try {
     
-    await page.goto('https://api.ipify.org', { waitUntil: 'networkidle0' });
-    console.log('went to ipfy api');
-    await page.goto('https://ipify.org', { waitUntil: 'networkidle0' });
-    console.log('went to ipfy');
-    await page.goto('https://proxy-seller.com', { waitUntil: 'networkidle0', timeout: 120000 })
-    console.log('went to proxy-seller');
-    await page.goto('https://geo-pay.net', { waitUntil: 'networkidle0', timeout: 120000 })
+    // await page.goto('https://api.ipify.org', { waitUntil: 'networkidle0' });
+    // console.log('went to ipfy api');
+    // await page.goto('https://ipify.org', { waitUntil: 'networkidle0' });
+    // console.log('went to ipfy');
+    // await page.goto('https://proxy-seller.com', { waitUntil: 'networkidle0', timeout: 120000 })
+    // console.log('went to proxy-seller');
+    await page.goto('https://geo-pay.net/auth/log-in', { waitUntil: 'networkidle0', timeout: 120000 })
     console.log('went to geopay');
     console.log('now trying to make screenshot');
 
