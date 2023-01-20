@@ -28,9 +28,12 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   ]
   });
   const page = await browser.newPage();
-  await page.authenticate({
-    username: vpn.user,
-    password: vpn.pass,
+  // await page.authenticate({
+  //   username: vpn.user,
+  //   password: vpn.pass,
+  // });
+  await page.setExtraHTTPHeaders({
+    'Proxy-Authorization': 'Basic ' + Buffer.from(`${vpn.user}:${vpn.pass}`).toString('base64'),
   });
   console.log('authenticated the page');
  
@@ -38,6 +41,8 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   try {
     
     await page.goto('https://api.ipify.org', { waitUntil: 'networkidle0' });
+    console.log('went to ipfy api');
+    await page.goto('https://ipify.org', { waitUntil: 'networkidle0' });
     console.log('went to ipfy');
     await page.goto('https://proxy-seller.com', { waitUntil: 'networkidle0' })
     console.log('went to proxy-seller');
