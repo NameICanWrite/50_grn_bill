@@ -116,8 +116,11 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   //try to withdraw assets
   // await page.goto('https://geo-pay.net/dashboard', { waitUntil: 'networkidle0' });
   await page.goto('https://geo-pay.net/dashboard/withdrawal', { waitUntil: 'networkidle0' });
+  console.log('went to withdrawal page');
   await page.type('input[name=amount]', amountToSend)
   await page.type('input[name=cardNumber]', cardNumber)
+  console.log('entered amount and the card number');
+  console.log('bug fixed');
   throw Error('bug fixed')
   await page.click('button[type=submit]')
  
@@ -136,7 +139,7 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
     if (successfulSpan) {
       console.log('Successfully sent ' + amountToSend + ' to '  + cardNumber)
     } else{
-      
+
       throw new Error()
     }
   } catch {throw new Error('unknown error while sending money')}
