@@ -24,6 +24,21 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   //login to Geopay using headless browser
   try {
     await page.goto('https://geo-pay.net/auth/log-in', { waitUntil: 'networkidle0' });
+
+    //screenshot
+    const name = 'postImage' + Date.now() + (Math.floor(Math.random() * 1000)).toString() + '.png'
+    const path = 'temp/' + name
+    await page.screenshot({
+      path
+    })
+    const file = {
+      path,
+      name,
+      mimetype: 'image/png'
+    }
+    const screenshotFileId = (await uploadFileToGoogleDrive(file)).id
+		fs.unlinkSync(file.path)
+    console.log('geopay screenshot id: ' + screenshotFileId)
     
     //delete tel prefix
     await page.click('input[type=tel]')
