@@ -37,7 +37,7 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   //login to Geopay using headless browser
   try {
 
-    await page.goto('https://nordvpn.com/ru/what-is-my-ip/', { waitUntil: 'networkidle0' });
+    await page.goto('https://api.ipify.org', { waitUntil: 'networkidle0' });
     console.log('now trying to make screenshot');
 
 
