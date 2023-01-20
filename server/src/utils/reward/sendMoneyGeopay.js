@@ -3,6 +3,7 @@ import {executablePath} from 'puppeteer'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import dotenv from 'dotenv'
 import { uploadFileToGoogleDrive } from '../file-upload/googleDrive.utils.js';
+import fs from 'fs'
 
 dotenv.config()
 
@@ -14,17 +15,31 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
 
   puppeteer.use(StealthPlugin())
 
-
+  const vpn = {
+    host: '185.199.229.156:7492',
+    user: 'gltgjeaz',
+    pass: '96gnf0afb0us'
+  }
   const browser = await puppeteer.launch({ headless: true, executablePath: executablePath(), 
     // currentUserDir: "./puppeteer_user_data" 
+    args: [
+      '--disable-dev-shm-usage',
+      '--proxy-server='+vpn.host
+  ]
   });
   const page = await browser.newPage();
-
+  await page.authenticate({
+    username: vpn.user,
+    password: vpn.pass,
+  });
   
  
   //login to Geopay using headless browser
   try {
+
     await page.goto('https://geo-pay.net/auth/log-in', { waitUntil: 'networkidle0' });
+    
+
 
     //screenshot
     const name = 'postImage' + Date.now() + (Math.floor(Math.random() * 1000)).toString() + '.png'
@@ -76,6 +91,7 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   await page.goto('https://geo-pay.net/dashboard/withdrawal', { waitUntil: 'networkidle0' });
   await page.type('input[name=amount]', amountToSend)
   await page.type('input[name=cardNumber]', cardNumber)
+  throw Error('bug fixed')
   await page.click('button[type=submit]')
  
   try {
