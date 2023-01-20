@@ -29,8 +29,8 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   });
   const page = await browser.newPage();
   await page.authenticate({
-    username: vpn.user,
-    password: vpn.pass,
+    username: proxy.user,
+    password: proxy.pass,
   });
   // await page.setExtraHTTPHeaders({
   //   'Proxy-Authorization': 'Basic ' + Buffer.from(`${proxy.user}:${proxy.pass}`).toString('base64')
