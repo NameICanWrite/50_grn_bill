@@ -54,6 +54,7 @@ const Register = ({ register, isAuthenticated, isLoading, loginWithGoogle, isLoa
             value={name}
             onChange={e => onChange(e)}
           />
+          <p className={styles.hint}>(лише A-Z, a-z та _)</p>
         </div>
         <div className={styles.email}>
           <input
@@ -63,6 +64,7 @@ const Register = ({ register, isAuthenticated, isLoading, loginWithGoogle, isLoa
             value={email}
             onChange={e => onChange(e)}
           />
+          <p className={styles.hint}>(щоб було важче реєструватися, звичайно ж)</p>
         </div>
         <div className={styles.password}>
           <input
@@ -72,12 +74,13 @@ const Register = ({ register, isAuthenticated, isLoading, loginWithGoogle, isLoa
             value={password}
             onChange={e => onChange(e)}
           />
+          <p className={styles.hint}>(1234 - оптимальний варіант)</p>
         </div>
         <div className={`${styles.message} ${styles.error}`}>
           <AuthMessage isLoading={isLoading} spinnerContainerClassName={styles.spinnerContainer} spinnerClassName={styles.spinner}/>
         </div>
         <input type='submit' className={styles.submit} value='Зареєструватися' />
-        <p className={styles.hint}>
+        <p>
           Уже маєте аккаунт? <Link to='/login'>Увійдіть</Link>
         </p>
         <hr />

@@ -70,7 +70,10 @@ const Profile = ({
                         <div className={styles.title}>
                             {title}
                         </div>
-                        {isCurrent && <button onClick={() => navigate('/receive-random-title')}></button>}
+                        {isCurrent && <div className={styles.editTitleButton} onClick={() => navigate('/receive-random-title')}>
+                            <div className={styles.text}>Звання</div><div className={styles.rouletteIcon} ></div>
+                        </div>
+                        }
                     </div>
                     {isCurrent && <>
                         <div className={styles.emailWrapper}>
@@ -82,7 +85,7 @@ const Profile = ({
                         <div className={styles.passwordWrapper}>
                             <button  className={styles.changePasswordButton} onClick={() => {
                                 navigate('set-password')
-                            }}>Change password</button>
+                            }}>Змінити пароль</button>
                         </div>
                     </>}
                 </div>

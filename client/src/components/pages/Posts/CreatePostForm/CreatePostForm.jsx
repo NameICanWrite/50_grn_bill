@@ -82,6 +82,7 @@ const CreatePostForm = ({ createPost, loading, onClose }) => {
 										image: selectedFile
 									})
 								}}>
+									<p className={styles.header}>Дайте посилання на улюблений сайт</p>
 									{
 										(!isDefaultImage && preview) && 
 											<img src={preview} className={styles.preview} alt="preview" />

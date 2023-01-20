@@ -3,38 +3,31 @@ import { promisify } from 'util'
 import dotenv from 'dotenv'
 import User from '../../user/user.js'
 
+const jwtCookieOptions = {
+  httpOnly: true,
+}
+if (process.env.NODE_ENV === 'production') {
+  jwtCookieOptions.secure = true
+  jwtCookieOptions.sameSite = 'none'
+  jwtCookieOptions.domain = process.env.ROOT_DOMAIN
+  jwtCookieOptions.path = '/'
+}
 
 
 export const addJwtCookie = (res, payload) => {
-  const cookieExpires = new Date(Date.now() + process.env.JWT_COOKIES_EXPIRES_IN * 24 * 3600 * 1000)
-
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_SECRET_EXPIRES_IN
   })
 
-  const cookieOptions = {
-    expires: cookieExpires,
-    httpOnly: true,
-  }
-
-  if (process.env.NODE_ENV === 'production') {
-    cookieOptions.secure = true
-    cookieOptions.sameSite = 'none'
-    cookieOptions.domain = process.env.ROOT_DOMAIN
-    cookieOptions.path = '/'
-  }
-
-  res.cookie('jwt', token, cookieOptions);
-  res.cookie('jwt-cookie-options', JSON.stringify(cookieOptions), cookieOptions)
+  const expires = new Date(Date.now() + process.env.JWT_COOKIES_EXPIRES_IN * 24 * 3600 * 1000)
+  res.cookie('jwt', token, {...jwtCookieOptions, expires});
   return token
 }
 
+
 export const removeJwtCookie = (req, res) => {
-  const cookieOptions = JSON.parse(req.cookies['jwt-cookie-options'])
 
-  cookieOptions.expires = undefined
-
-  res.clearCookie('jwt', cookieOptions)
+  res.clearCookie('jwt', jwtCookieOptions)
 }
 
 

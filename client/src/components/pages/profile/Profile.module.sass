@@ -1,3 +1,5 @@
+@import '../../../_utilities'
+  
 .container
   width: 100%
   display: flex
@@ -5,21 +7,61 @@
   margin-top: 7%
   gap: 7%
 
-
-
 .avatarWrapper
   position: relative
 
 .accountPropsWrapper
   width: fit-content
   // padding-left: 4%
-  
+
   height: 100%
 
 .nameWrapper, .emailWrapper, .titleWrapper
   display: flex
   justify-content: start
+  align-items: center
   padding-right: 30px
+
+.editTitleButton
+  margin-top: 5px
+  display: flex
+  align-items: center
+  margin-left: 10px
+  background-color: #4ccb65
+  color: white
+  font-size: 15px
+  padding: 0 5px
+  border-radius: 10px
+  height: fit-content
+  cursor: pointer
+    
+  
+
+  .text
+    height: fit-content
+    // text-align: center
+    // vertical-align: middle
+    // display: inline
+
+
+  .rouletteIcon
+    background-image: url(/assets/icons/roulette-icon.webp)
+    width: 40px
+    height: 100%
+    transition: all 1s ease-in-out 0s
+    transform: rotate(0deg)
+    background-size: contain
+    background-repeat: no-repeat
+    color: inherit
+    border: none
+    width: 30px
+    height: 30px
+    display: inline-block
+    margin-left: 10px
+
+  &:hover .rouletteIcon
+    transform: rotate(3600deg)
+    transition: all 3s ease-in-out 0s
 
 .username
   font-size: 40px
@@ -40,18 +82,18 @@
 .changePasswordButton
   cursor: pointer
 
-.username~button, .email~button, .title~button 
+.username~button, .email~button
   background-color: #ffffff00
   background-image: url(/assets/icons/edit-something.png)
   background-size: contain
   background-repeat: no-repeat
+  background-position: center
   color: inherit
   border: none
   width: 30px
   height: 30px
   display: block
   margin-left: 10px
-  margin-top: 10px
 
   padding: 0
   font: inherit
@@ -61,29 +103,19 @@
 .username~button
   width: 50px
 
-.title~button
-  background-image: url(/assets/icons/roulette-icon.webp)
-  width: 40px
-  height: 40px
-  transition: all 1s ease-in-out 0s
-  transform: rotate(0deg)
-
-  &:hover
-    transform: rotate(3600deg)
-    transition: all 3s ease-in-out 0s
-
 .passwordWrapper
-  margin-top: 70px
+  margin-top: 5px
 
   .changePasswordButton
     display: block
-    padding: 10px
-    margin: 0 auto
-    font-size: 20px
+    padding: 2px
+    font-size: 12px
     border-radius: 10px
-    background-color: #89f382
+    background-color: #ffffff
     color: white
     border: none
+    color: blue
+    text-decoration: underline
 
 .avatar
   height: 300px
@@ -202,8 +234,6 @@
   width: 30px
   cursor: pointer
 
-
-
 @media (max-width: 900px)
   .container
     gap: 10px
@@ -213,7 +243,7 @@
   .container
     display: block
     margin: 0
-  
+
   .avatar
     margin: 0 auto
 
@@ -226,7 +256,7 @@
 
   .username
     font-size: 30px
-  
+
     ~button
       width: 30px
 
@@ -239,10 +269,9 @@
   .title
     font-size: 20px
 
-    ~button
-      width: 40px
-      margin-top: 0
-      
+    // ~button
+    //   width: 40px
+    //   margin-top: 0
 
   .changePassword
     margin: auto
