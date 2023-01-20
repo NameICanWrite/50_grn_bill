@@ -4,40 +4,49 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import dotenv from 'dotenv'
 import { uploadFileToGoogleDrive } from '../file-upload/googleDrive.utils.js';
 import fs from 'fs'
-import Xvfb from 'xvfb'
+// import Xvfb from 'xvfb'
+import proxyChain from 'proxy-chain'
 
 dotenv.config()
 
 
 
 export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, amountToSend = '50'}) {
-
-  amountToSend.toString()
-  let xvfb
-  if (process.env.NODE_ENV == 'production') {
-    xvfb = new Xvfb()
-    xvfb.startSync()
-  }
-  puppeteer.use(StealthPlugin())
-
+ console.log(123);
+ 
   const proxy = {
     host: '185.238.229.167:50100',
-    user: 'vadimbaranivsky83',
-    pass: 'uvskus9Z9K'
+    username: 'vadimbaranivsky83',
+    password: 'uvskus9Z9K'
   }
-  const browser = await puppeteer.launch({ headless: false, // executablePath: executablePath(), 
+
+  amountToSend.toString()
+  // let xvfb
+  // if (process.env.NODE_ENV == 'production') {
+  //   xvfb = new Xvfb()
+  //   xvfb.startSync()
+  // }
+  const originalUrl = `http://${proxy.username}:${proxy.password}@${proxy.host}`;
+
+  // Return anonymized version of original URL - looks like http://127.0.0.1:45678
+  const newUrl = await proxyChain.anonymizeProxy(originalUrl);
+
+
+  puppeteer.use(StealthPlugin())
+
+
+  const browser = await puppeteer.launch({ headless: true, // executablePath: executablePath(), 
     // currentUserDir: "./puppeteer_user_data" 
     args: [
-      '--disable-dev-shm-usage',
-      '--proxy-server=https='+proxy.host,
-      '--headless'
+      // '--disable-dev-shm-usage',
+      '--proxy-server=https=' + newUrl,
   ]
   });
   const page = await browser.newPage();
-  await page.authenticate({
-    username: proxy.user,
-    password: proxy.pass,
-  });
+  // await page.authenticate({
+  //   username: proxy.user,
+  //   password: proxy.pass,
+  // });
   // await page.setExtraHTTPHeaders({
   //   'Proxy-Authorization': 'Basic ' + Buffer.from(`${proxy.user}:${proxy.pass}`).toString('base64')
   // });
@@ -130,7 +139,7 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   
 
   await browser.close();
-  if (process.env.NODE_ENV == 'production') xvfb.stopSync()
+  // if (process.env.NODE_ENV == 'production') xvfb.stopSync()
 
 }
 
