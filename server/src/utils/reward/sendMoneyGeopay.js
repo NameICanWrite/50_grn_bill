@@ -21,11 +21,11 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   }
 
   amountToSend.toString()
-  let xvfb
-  if (process.env.NODE_ENV == 'production') {
-    xvfb = new Xvfb()
-    xvfb.startSync()
-  }
+  // let xvfb
+  // if (process.env.NODE_ENV == 'production') {
+  //   xvfb = new Xvfb()
+  //   xvfb.startSync()
+  // }
   const originalUrl = `http://${proxy.username}:${proxy.password}@${proxy.host}`;
 
   // Return anonymized version of original URL - looks like http://127.0.0.1:45678
@@ -120,8 +120,8 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   await page.type('input[name=amount]', amountToSend)
   await page.type('input[name=cardNumber]', cardNumber)
   console.log('entered amount and the card number');
-  console.log('bug fixed');
-  throw Error('bug fixed')
+  // console.log('bug fixed');
+  // throw Error('bug fixed')
   await page.click('button[type=submit]')
  
   try {
@@ -147,7 +147,7 @@ export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, 
   
 
   await browser.close();
-  if (process.env.NODE_ENV == 'production') xvfb.stopSync()
+  // if (process.env.NODE_ENV == 'production') xvfb.stopSync()
 
 }
 
