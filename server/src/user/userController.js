@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk'
+
 
 import User from "./user.js"
 import bcrypt from 'bcryptjs'
