@@ -76,22 +76,7 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 				autocomplete="cc-number" x-autocompletetype="cc-number"
 				onChange={(event) => setCardNumber(event.target.value)}
 			/>}
-			{
-				!didReceiveReward
-					?
-					<button
-						className={!isEligible ? styles.disabled : ''}
-						disabled={!isEligible}
-						onClick={async () => await askForReward()
-						}>Отримати винагороду</button>
-					:
-					<div>
-						<p className={styles.received}>Нагороду вже вислано на вашу карту</p>
-						<p className={styles.disclaimer}>Зверніть увагу! Кошти можуть іти протягом години...</p>
-					</div>
-
-
-			}
+			
 			{/* <p className={styles.explanation}>Виконайте всі завда</p> */}
 			<Modal open={isWhitelistExplanationOpen}
 			 onClose={() => setIsWhitelistExplanationOpen(false)}
@@ -102,10 +87,29 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 				</div>
 				</Modal>
 
-			<DivWithSpinner isLoading={isAskForRewardLoading}>
-				<p className={styles.success}>{askForRewardSuccess}</p>
-				<p className={styles.error}>{askForRewardError}</p>
+			<DivWithSpinner isLoading={isAskForRewardLoading} spinnerContainerClassName={styles.spinnerContainer}>
+				{/* <p className={styles.success}>{askForRewardSuccess}</p> */}
+				{
+				!didReceiveReward && !askForRewardSuccess
+					?
+					[<button
+						className={!isEligible ? styles.disabled : ''}
+						disabled={!isEligible}
+						onClick={async () => await askForReward()
+						}>Отримати винагороду</button>,
+						<p className={styles.error}>{askForRewardError}</p>
+					]
+					:
+					<div>
+						<p className={styles.received}>Нагороду вже вислано на вашу карту</p>
+						<p className={styles.disclaimer}>Зверніть увагу! Кошти можуть іти протягом години...</p>
+					</div>
+			}
+				
 			</DivWithSpinner>
+			{
+				isAskForRewardLoading && <p className={styles.disclaimer}>Завантаження може тривати до 2-х хвилин... Відсилаю попри всі заборони</p>
+			}
 		</DivWithSpinner>
 	)
 }
