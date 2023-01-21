@@ -9,7 +9,7 @@ import RewardRequest from "./rewardRequest.js"
 
 export async function askForReward(req, res, next) {
   const user = req.user
-
+  
   if (user.isReceivingRewardNow) {
     return res.status(400).send('Wait a little. You reward is already being sent')
   }
@@ -18,7 +18,7 @@ export async function askForReward(req, res, next) {
   const settings = await Settings.findOne()
   const {whitelistedUsers, receivedRewardUsers} = settings
 
-  if (receivedRewardUsers.some(item => (item.name == user.name) || (item.email == user.email) || (item.uid == user._id))) return res.status(400).send('It seems you have already received reward')
+  if (!req.auth.isAdmin) if (receivedRewardUsers.some(item => (item.name == user.name) || (item.email == user.email) || (item.uid == user._id))) return res.status(400).send('It seems you have already received reward')
 
    //check beyond schedule if user name is in freelancehunt project 
     if (!whitelistedUsers.some(item => (item == user.name) || (item == user.email))) {
@@ -34,7 +34,7 @@ export async function askForReward(req, res, next) {
     didAddAvatar,
   } = user
 
-  const isEligible = (
+  let isEligible = (
     didAddAvatar 
     && 
     didAddPost 
@@ -46,6 +46,7 @@ export async function askForReward(req, res, next) {
     isWhitelisted
     )
 
+  if (req.auth.isAdmin) isEligible = true
   if (!isEligible) {
     await user.save()
     return res.status(400).send('You are not eligible')
