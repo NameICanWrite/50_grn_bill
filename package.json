@@ -3,7 +3,7 @@
     "version": "1.0.0",
      "description": "",
      "scripts": {
-         "build": " npm install modclean;npm install minify-all;npm install node-prune;cd server;npm install;modclean -n default:safe,default:caution -r;node-prune;minify-all",
+         "build": " npm install modclean;npm install minify-all;npm install node-prune;cd server;npm install;modclean -n default:safe,default:caution -r;minify-all",
          "test": "echo \"No test specified\" && exit 1",
          "start": "node server/src/app.js"
         
