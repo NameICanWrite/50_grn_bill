@@ -143,6 +143,8 @@ const ReceiveTitlePage = ({ title, pendingTitle, spins, receiveTitle, setTitle, 
 			<div className={styles.wheelWrapper}>
 				<Wheel
 					mustStartSpinning={mustSpin}
+					
+					// mustStartSpinning={true}
 					prizeNumber={prizeNumber}
 					data={rouletteData}
 					fontSize={10}
@@ -157,7 +159,9 @@ const ReceiveTitlePage = ({ title, pendingTitle, spins, receiveTitle, setTitle, 
 				/>
 			</div>
 
-			{!mustSpin &&
+			{
+			!mustSpin &&
+			// false && 
 				<DivWithSpinner isLoading={loading.isLoading} className={styles.bottomWrapper}>
 					<button className={`${styles.spinButton} ${(!spins || spins < 1) ? styles.disabled : ''}`} disabled={!spins || spins < 1} onClick={() => {
 						if (spins > 0) {

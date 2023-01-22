@@ -30,6 +30,7 @@ const App = ({ getCurrentUser, getAllUsers, getAllPosts, setShowNavHamburger, cu
   useEffect(() => {
     const lastShown = localStorage.getItem('shownRewardModalAt')
     const notShowingTooOften = !lastShown || new Date().getTime() - new Date(lastShown).getTime() > 3600000 //only 1 time a hour
+    !isCurrentUserLoading && !currentUser?.didReceiveReward && console.log('would show modal');
     if (!isCurrentUserLoading && !currentUser?.didReceiveReward && notShowingTooOften) {
       setTimeout(() =>{
         setShowModal(true)
@@ -64,7 +65,7 @@ const App = ({ getCurrentUser, getAllUsers, getAllPosts, setShowNavHamburger, cu
 };
 
 const mapStateToProps = (state) => ({
-  user: selectCurrentUser(state),
+  currentUser: selectCurrentUser(state),
   isCurrentUserLoading: selectCurrentUserLoading(state).isLoading
 })
 
