@@ -14,6 +14,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import { PurchaseStatusModal } from './PurchaseStatusModal'
 import baseUrl from '../../../api/baseUrl'
 import userApi from '../../../api/user.api'
+import InfoModal from '../../layout/InfoModal/InfoModal'
 
 const titles = [
 	'Терміналтор',
@@ -28,12 +29,15 @@ const titles = [
 	'Люк Skype Walker'
 ]
 
+const defaultTitle = "Newbie"
+
 const rouletteData = titles.map(title => ({ option: title }))
 
 const ReceiveTitlePage = ({ title, pendingTitle, spins, receiveTitle, setTitle, setPendingTitle, setCurrentUser, loading, currentUserLoading }) => {
 	const [prizeNumber, setPrizeNumber] = useState()
 	const [mustSpin, setMustSpin] = useState(false)
 	const [isModalWithResultOpen, setIsModalWithResultOpen] = useState(false)
+	const [isDisclaimerModalOpen, setDisclaimerModalOpen] = useState(false)
 	const [isBuySpinsLoading, setIsBuySpinsLoading] = useState(false)
 	const [spinsToBuy, setSpinsToBuy] = useState(1)
 
@@ -54,6 +58,18 @@ const ReceiveTitlePage = ({ title, pendingTitle, spins, receiveTitle, setTitle, 
 		console.log(title);
 	}, [title])
 
+	useEffect(() => {
+    const lastShown = localStorage.getItem('shownPaymentDisclaimerModalAt')
+    const notShowingTooOften = !lastShown || new Date().getTime() - new Date(lastShown).getTime() > 300000 //only 1 time in 5 minutes
+    if (!currentUserLoading.isLoading && spins == 0 && title == defaultTitle && notShowingTooOften) { //user didnt use payment at all
+      setTimeout(() =>{
+        setDisclaimerModalOpen(true)
+        localStorage.setItem('shownPaymentDisclaimerModalAt', new Date().toISOString())
+      }, 3000)
+    }
+  }, [currentUserLoading.isLoading, spins, title])
+
+	const onCloseDisclaimerModal = () => setDisclaimerModalOpen(false)
 
 	async function onBuySpinsSubmit(event) {
 		event.preventDefault()
@@ -156,7 +172,7 @@ const ReceiveTitlePage = ({ title, pendingTitle, spins, receiveTitle, setTitle, 
 						<button type='submit' disabled={!spinsToBuy || spinsToBuy < 1} className={(!spinsToBuy || spinsToBuy < 1) ? styles.disabled : ''} >Купити спіни</button>
 						<input type="number" defaultValue={1} min="1" name='count' onChange={(e) => setSpinsToBuy(e.target.value)} />
 					</form>
-					<p className={styles.disclaimer}>Зверніть увагу! Оплата тут з ціллю тестування, тому гроші нікуди не дінуться, вони одразу повернуться вам на карту. 1 спін = 2 грн 50 коп</p>
+					<p className={styles.disclaimer}>Зверніть увагу! Оплата тут з ціллю тестування. Це означає, що гроші одразу повернуться вам на карту. 1 спін = 2 грн 50 коп</p>
 
 				</DivWithSpinner>
 			}
@@ -165,6 +181,12 @@ const ReceiveTitlePage = ({ title, pendingTitle, spins, receiveTitle, setTitle, 
 					<p className={styles.message}>{loading.message}</p> <button className={`${styles.blackSubmit} ${styles.setIsModalWithResultOpen}`} onClick={() => setIsModalWithResultOpen(false)}>Ok</button>
 				</div>
 			</Modal>
+			<InfoModal
+				header="Дисклеймер" 
+				text="Зверніть увагу! Оплата тут з ціллю тестування. Це означає, що гроші одразу повернуться вам на карту. 1 спін = 2 грн 50 коп" 
+				onClose={onCloseDisclaimerModal}
+				open={isDisclaimerModalOpen}
+			/>
 			<Routes>
 				<Route path='order/:orderId' element={<PurchaseStatusModal onClose={() => navigate('/receive-random-title')} />} />
 			</Routes>

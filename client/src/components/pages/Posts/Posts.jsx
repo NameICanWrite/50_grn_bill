@@ -11,6 +11,7 @@ import { Modal } from '@mui/material'
 import CreatePostForm from './CreatePostForm/CreatePostForm'
 import WithSpinner from '../../layout/WithSpinner/WithSpinner'
 import PrivateRoute from '../../routes/PrivateRoute'
+import InfoModal from '../../layout/InfoModal/InfoModal'
 
 const Posts = ({ posts, isAuthenticated, setCreatePostLoading, isA }) => {
 	useEffect(() => {
@@ -76,8 +77,6 @@ const Posts = ({ posts, isAuthenticated, setCreatePostLoading, isA }) => {
 							)
 					}
 				</div>
-
-
 			</div>
 		</div>
 
