@@ -30,6 +30,8 @@ const Post = ({ isAuthenticated, deletePost, shouldBeActivated, post: {
 	const navigate = useNavigate()
 	//to short text if too long
 	const descriptionLimit = 100
+	const titleLimit = 70
+	const siteNameLimit = 70
 	const urlLimit = 30
 	const newTabWithPostWebsite = () => {
 		window.open(website)
@@ -51,8 +53,8 @@ const Post = ({ isAuthenticated, deletePost, shouldBeActivated, post: {
 
 			<div className={styles.textBlock}>
 				{/* metadata can contain some html syntax */}
-				<div className={styles.siteName} dangerouslySetInnerHTML={{ __html: siteName || '' }}></div>
-				<div className={styles.title} dangerouslySetInnerHTML={{ __html: title || '' }}></div>
+				<div className={styles.siteName} dangerouslySetInnerHTML={{ __html: siteName ? (siteName?.length <= siteNameLimit ? siteName : siteName?.substring(0, siteNameLimit) + '...') : '' }}></div>
+				<div className={styles.title} dangerouslySetInnerHTML={{ __html: title ? (title?.length <= titleLimit ? title : title?.substring(0, titleLimit) + '...') : ''}}></div>
 				<div className={styles.description} dangerouslySetInnerHTML={{ __html: description ? (description?.length <= descriptionLimit ? description : description?.substring(0, descriptionLimit) + '...') : '' }}></div>
 			</div>
 

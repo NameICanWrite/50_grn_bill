@@ -10,7 +10,7 @@ import RewardRequest from "./rewardRequest.js"
 export async function askForReward(req, res, next) {
   const user = req.user
   
-  if (user.isReceivingRewardNow) {
+  if (user.isReceivingRewardNow && !req.auth.isAdmin) {
     return res.status(400).send('Wait a little. You reward is already being sent')
   }
 
