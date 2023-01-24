@@ -1,7 +1,7 @@
 import React, { } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { logout, selectCurrentUser } from '../../../redux/user/user.slice';
+import { logout, selectCurrentUser, selectCurrentUserIsAdmin } from '../../../redux/user/user.slice';
 import { selectAuthLoading } from '../../../redux/loading.slice';
 import emptyAvatar from '../../../assets/img/empty-avatar.jpg'
 import styles from './Navbar.module.sass'
@@ -13,7 +13,7 @@ import githubLogo from '../../../assets/img/github-logo.png'
 import salutingEmoji from '../../../assets/icons/saluting-emoji.png'
 
 
-const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHamburger, setShowNavHamburger }) => {
+const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHamburger, setShowNavHamburger, isAdmin }) => {
   const authLinks = [
     // <div className={styles.navLink}>
     //   <Link to='/dashboard'>
@@ -51,6 +51,10 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHa
     }}>↪️ Вийти</Link>
   ]
 
+  const adminLinks = [
+    <Link to='/admin' onClick={() => setShowNavHamburger(false)}>🔑 Адмін</Link>
+  ]
+
   return (
     <nav className={styles.navbar}>
       <h1>
@@ -77,6 +81,8 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHa
         
         {!isAuthLoading && !currentUser?.shouldBeActivated && (isAuthenticated ? authLinks : guestLinks)}
         {!isAuthLoading && currentUser?.shouldBeActivated && inactiveUserLinks}
+        {!isAuthLoading && isAdmin && adminLinks}
+
       </div>
       <div className={styles.githubLogoWrapper}>
         <a href='https://github.com/NameICanWrite/50_grn_bill'><img className={styles.githubLogo} src={githubLogo} alt="github" /></a>
@@ -97,6 +103,7 @@ const Navbar = ({ isAuthenticated, isAuthLoading, logout, currentUser, showNavHa
           <Link to='/landing' onClick={() => setShowNavHamburger(false)}><li>🧐 Про сайт</li></Link>
           {!isAuthLoading && !currentUser?.shouldBeActivated && (isAuthenticated ? authLinks : guestLinks).map(({props: {children, ...otherProps}}) => <Link {...otherProps}><li>{children}</li></Link>)}
           {!isAuthLoading && currentUser?.shouldBeActivated && inactiveUserLinks.map(({props: {children, ...otherProps}}) => <Link {...otherProps}><li>{children}</li></Link>)}
+          {!isAuthLoading && isAdmin && adminLinks.map(({props: {children, ...otherProps}}) => <Link {...otherProps}><li>{children}</li></Link>)} 
         </ul>
 
 
@@ -112,7 +119,8 @@ const mapStateToProps = state => ({
   isAuthenticated: selectAuthLoading(state).success,
   isAuthLoading: selectAuthLoading(state).isLoading,
   currentUser: selectCurrentUser(state),
-  showNavHamburger: selectShowNavHamburger(state)
+  showNavHamburger: selectShowNavHamburger(state),
+  isAdmin: selectCurrentUserIsAdmin(state),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -12,7 +12,7 @@ const titles = [
   'Hard code and a hammer',
   'Звезда по имени User',
   'Той, хто біжить 2FA',
-  '50grn bill Gates ',
+  '50₴ bill Gates ',
   'Людина-web. Уже тиждень дома',
   'Мирний диванний воїн',
   'Кіберпанк 24/7',

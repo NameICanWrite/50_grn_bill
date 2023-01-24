@@ -17,6 +17,7 @@ import ActivationPage from '../pages/Auth/ActivationPage';
 import Posts from '../pages/Posts/Posts';
 import ReceiveTitlePage from '../pages/ReceiveTitlePage/ReceiveTitlePage';
 import RewardPage from '../pages/RewardPage/RewardPage';
+import AdminPage from '../pages/AdminPage/AdminPage';
 
 class DebugRouter extends BrowserRouter {
   constructor(props){
@@ -63,6 +64,14 @@ const MyRoutes = ({isAuthLoading, isCurrentUserLoading, isAllUsersLoading, isPos
             false// isAuthLoading || isCurrentUserLoading
           } />
         }/>
+        <Route path='/admin' element={
+            <PrivateRoute 
+              isForAdmin={true}
+              isLoading={isAuthLoading || isCurrentUserLoading} 
+              component={() => <AdminPage isLoading={isAuthLoading || isCurrentUserLoading} />}
+            />
+          }
+        />
         <Route path="*" element={<NotFound/>} />
       </Routes>
     // </DebugRouter>

@@ -65,7 +65,7 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 					<span className={styles.check}>{didReceiveTitle ? '✔️' : '❌'}</span><p className={styles.link}>Отримайте звання</p>
 				</Link>
 				<Link onClick={() => setIsWhitelistExplanationOpen(true)}>
-					<span className={styles.check}>{isWhitelisted ? '✔️' : '❌'}</span><p className={styles.link}>Візьміть участь у вайтлисті</p>
+					<span className={styles.check}>{(isWhitelisted || didReceiveReward) ? '✔️' : '❌'}</span><p className={styles.link}>Візьміть участь у вайтлисті</p>
 				</Link>
 				
 			</div>

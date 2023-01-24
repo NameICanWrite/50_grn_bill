@@ -21,7 +21,7 @@ const titles = [
 	'Hard code and a hammer',
 	'Звезда по имени User',
 	'Той, хто біжить 2FA',
-	'50grn bill Gates ',
+	'50₴ bill Gates ',
 	'Людина-web. Уже тиждень дома',
 	'Мирний диванний воїн',
 	'Кіберпанк 24/7',
@@ -176,7 +176,7 @@ const ReceiveTitlePage = ({ title, pendingTitle, spins, receiveTitle, setTitle, 
 						<button type='submit' disabled={!spinsToBuy || spinsToBuy < 1} className={(!spinsToBuy || spinsToBuy < 1) ? styles.disabled : ''} >Купити спіни</button>
 						<input type="number" defaultValue={1} min="1" name='count' onChange={(e) => setSpinsToBuy(e.target.value)} />
 					</form>
-					<p className={styles.disclaimer}>Зверніть увагу! Оплата тут з ціллю тестування. Це означає, що гроші одразу повернуться вам на карту. 1 спін = 2 грн 50 коп</p>
+					<p className={styles.disclaimer}>Зверніть увагу! Оплата тут з ціллю тестування. Це означає, що гроші одразу повернуться вам на карту. 1 спін = 1 грн</p>
 
 				</DivWithSpinner>
 			}
@@ -187,7 +187,7 @@ const ReceiveTitlePage = ({ title, pendingTitle, spins, receiveTitle, setTitle, 
 			</Modal>
 			<InfoModal
 				header="Дисклеймер" 
-				text="Зверніть увагу! Оплата тут з ціллю тестування. Це означає, що гроші одразу повернуться вам на карту. 1 спін = 2 грн 50 коп" 
+				text="Зверніть увагу! Оплата тут з ціллю тестування. Це означає, що гроші одразу повернуться вам на карту. 1 спін = 1 грн" 
 				onClose={onCloseDisclaimerModal}
 				open={isDisclaimerModalOpen}
 			/>

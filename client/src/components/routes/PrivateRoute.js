@@ -2,19 +2,20 @@ import React, { useEffect } from 'react';
 import { Route, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { selectAuthLoading } from '../../redux/loading.slice';
-import { selectCurrentUserShouldBeActivated } from '../../redux/user/user.slice';
+import { selectCurrentUserIsAdmin, selectCurrentUserShouldBeActivated } from '../../redux/user/user.slice';
 
 const PrivateRoute = ({
   component: Component,
   redirectUrl,
   isAuthenticated,
   isLoading,
+  isAdmin,
   shouldBeActivated,
+  isForAdmin,
   ...rest
 }) => {
-  console.log(shouldBeActivated)
   return (
-  ((isAuthenticated || isLoading) && !shouldBeActivated) 
+  (((isAuthenticated || isLoading) && !shouldBeActivated && (!isForAdmin || isAdmin || isLoading))) 
     ? 
       <Component {...rest} isLoading={isLoading} /> 
     : 
@@ -28,7 +29,8 @@ const PrivateRoute = ({
 
 const mapStateToProps = state => ({
   isAuthenticated: selectAuthLoading(state).success,
-  shouldBeActivated: selectCurrentUserShouldBeActivated(state)
+  shouldBeActivated: selectCurrentUserShouldBeActivated(state),
+  isAdmin: selectCurrentUserIsAdmin(state),
 });
 
 export default connect(mapStateToProps)(PrivateRoute)

@@ -11,12 +11,12 @@ import { createStructuredSelector } from 'reselect';
 import { getAllUsers, getCurrentUser, selectCurrentUser } from './redux/user/user.slice';
 import { getAllPosts } from './redux/post/post.slice';
 import {LinkPreview} from "@dhaiwat10/react-link-preview"
-import { setShowNavHamburger } from './redux/modals/modals.slice';
+import { selectShowNavHamburger, setShowNavHamburger } from './redux/modals/modals.slice';
 import InfoModal from './components/layout/InfoModal/InfoModal';
 import { selectAuthLoading, selectCurrentUserLoading } from './redux/loading.slice';
 
 
-const App = ({ getCurrentUser, getAllUsers, getAllPosts, setShowNavHamburger, currentUser, isCurrentUserLoading }) => {
+const App = ({ getCurrentUser, getAllUsers, getAllPosts, setShowNavHamburger, currentUser, isCurrentUserLoading, showNavHamburger }) => {
   const [showModal, setShowModal] = useState(false)
   const navigate = useNavigate()
 
@@ -50,7 +50,7 @@ const App = ({ getCurrentUser, getAllUsers, getAllPosts, setShowNavHamburger, cu
       <section className={styles.container}>
         <Navbar />
         {/* <LinkPreview url="https://www.npmjs.com/package/@dhaiwat10/react-link-preview"/> */}
-        <div className={styles.mainContainer} onClick={() => setShowNavHamburger(false)}>
+        <div className={styles.mainContainer} onClick={() => showNavHamburger && setShowNavHamburger(false)}>
           <MyRoutes />
         </div>
         <InfoModal open={showModal} 
@@ -66,7 +66,8 @@ const App = ({ getCurrentUser, getAllUsers, getAllPosts, setShowNavHamburger, cu
 
 const mapStateToProps = (state) => ({
   currentUser: selectCurrentUser(state),
-  isCurrentUserLoading: selectCurrentUserLoading(state).isLoading
+  isCurrentUserLoading: selectCurrentUserLoading(state).isLoading,
+  showNavHamburger: selectShowNavHamburger(state),
 })
 
 const mapDispatchToProps = (dispatch) => ({

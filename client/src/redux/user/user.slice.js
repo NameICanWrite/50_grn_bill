@@ -105,6 +105,7 @@ const selectAllUsersWithoutCheckForCurrent = createSelector(selectUserSlice, use
 
 export const selectCurrentUser = createSelector(selectUserSlice, userSlice => userSlice.current)
 export const selectCurrentUserShouldBeActivated = createSelector(selectCurrentUser, currentUser => currentUser.shouldBeActivated)
+export const selectCurrentUserIsAdmin = createSelector(selectCurrentUser, currentUser => currentUser.isAdmin)
 export const selectCurrentUserName = createSelector(selectCurrentUser, currentUser => currentUser.name)
 export const selectCurrentUserEmail = createSelector(selectCurrentUser, currentUser => currentUser.email)
 export const selectCurrentUserPendingTitle = createSelector(selectCurrentUser, currentUser => currentUser.pendingTitle)

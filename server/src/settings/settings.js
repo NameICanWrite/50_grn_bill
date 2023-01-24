@@ -9,7 +9,7 @@ import dotenv from 'dotenv'
 const settingsSchema = mongoose.Schema({
  spinPrice: {
   type: Number,
-  default: 2.5
+  default: 1
  },
  whitelistedUsers: [String],
  receivedRewardUsers: [{

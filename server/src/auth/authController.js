@@ -22,7 +22,8 @@ dotenv.config()
 export async function setUserPassword(req, res) {
   const id = req.auth.uid
   const {password} = req.body
-  if (!password || password.length < 4) return res.status(400).send('Password should be 4 symbols or longer')
+  if (!password) return res.status(400).send('Password is required')
+  if (!req.auth.isAdmin && (!password || password.length < 4)) return res.status(400).send('Password should be 4 symbols or longer')
   const hashedPassword = await bcrypt.hash(password, 12)
 
   await User.findByIdAndUpdate(id, {password: hashedPassword})
