@@ -102,7 +102,7 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 					:
 					<div>
 						<p className={styles.received}>Нагороду вже вислано на вашу карту</p>
-						<p className={styles.disclaimer}>Зверніть увагу! Кошти можуть іти протягом години...</p>
+						<p className={styles.disclaimer}>Зверніть увагу! Кошти можуть іти від 1 до 60 хв...</p>
 					</div>
 			}
 				

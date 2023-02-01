@@ -11,12 +11,11 @@ dotenv.config()
 
 
 export async function sendMoneyGeopay({cardNumber = process.env.MY_CARD_NUMBER, amountToSend = '50'}) {
- console.log(123);
  
   const proxy = {
-    host: '185.238.229.167:50100',
-    username: 'vadimbaranivsky83',
-    password: 'uvskus9Z9K'
+    host: process.env.PROXY_HOST,
+    username: process.env.PROXY_USERNAME,
+    password: process.env.PROXY_PASSWORD
   }
 
   amountToSend.toString()

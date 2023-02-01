@@ -32,6 +32,8 @@ const AdminPage = () => {
 		setWebsiteSettings(res)
 	}
 
+	
+
 	return (
 		<div className={styles.container}>
 			<form onSubmit={onWhitelistFormSubmit}>
