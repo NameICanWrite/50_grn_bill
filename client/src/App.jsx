@@ -53,9 +53,11 @@ const App = ({ getCurrentUser, getAllUsers, getAllPosts, setShowNavHamburger, cu
         <div className={styles.mainContainer} onClick={() => showNavHamburger && setShowNavHamburger(false)}>
           <MyRoutes />
         </div>
-        <InfoModal open={showModal} 
+        <InfoModal 
+        // open={true}
+        open={showModal} 
         header={'Акція!'} 
-        text={'Привіт! Окрім всього іншого, цей проект уміє видавати 50 грн на 🍺.'} 
+        text={'Привіт, у нас Airdrop! Зроби кілька дій на сайті і отримай 50 грн на 🍺'} 
         buttonText={'Правила'}
         onButtonClick={onModalButtonClick}
         onClose={onCloseModal}
