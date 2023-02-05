@@ -88,7 +88,7 @@ const Register = ({ register, isAuthenticated, isLoading, loginWithGoogle, isLoa
 
       
       <div className={styles.loginWithGoogleWrapper}>
-        <p>Або <b>рекомендуємо</b> увійти із Google</p>
+        <p>Або увійти із Google</p>
         <GoogleLoginButton handleToken={loginWithGoogle} isLoading={false} />
       </div>
     </div>
