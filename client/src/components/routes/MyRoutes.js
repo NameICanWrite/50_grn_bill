@@ -84,6 +84,6 @@ const mapStateToProps = (state) => ({
   isAllUsersLoading: selectAllUsersLoading(state).isLoading,
   isPostsLoading: selectPostsLoading(state).isLoading,
 })
-console.log(undefined?.hello || 'hi');
 
 export default connect(mapStateToProps, null)(MyRoutes);
+

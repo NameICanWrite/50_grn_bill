@@ -82,7 +82,7 @@ const RewardPage = ({ user: { _id, didAddPost, didAddAvatar, didLikePost, didRec
 			 onClose={() => setIsWhitelistExplanationOpen(false)}
 			 >
 				<div className={styles.explanationWrapper}>
-					<p className={styles.explanation}>Вайтлист - це список імен тих хто може отримати винагороду. Він включає всі нікнейми фрілансерів які відгукнулися на freelancehunt, а також імена які я, будучи адміном додаю вручну. Постав постав собі нік з фрілансханту або телеги</p>
+					<p className={styles.explanation}>Вайтлист - це список імен тих хто може отримати винагороду.  Якщо галочка не стоїть, спробуй змінити нік щоб він був схожий на твоє ім'я або нік з телеги</p>
 					<button onClick={() => setIsWhitelistExplanationOpen(false)} className={`${styles.blackSubmit} ${styles.small}`}>Ok</button>
 				</div>
 				</Modal>
