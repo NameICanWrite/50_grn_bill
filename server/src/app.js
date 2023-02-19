@@ -87,15 +87,5 @@ if (!localSettings || localSettings.length == 0) {
   })
 }
 
-// import fs from 'fs'
-import { performance } from 'perf_hooks';
-const timer = performance.now()
-let arr = []
 
-for (let i = 0; i < 100000; i++) {
-  arr[i] = 1
-  // let a = 2 + 2
-}
-console.log(performance.now() - timer)
-fs.writeFileSync('./test', arr.join(','))
 
