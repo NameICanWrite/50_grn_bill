@@ -190,6 +190,8 @@ export async function getUserOrderById(req, res, next) {
   res.send(order)
 }
 
+
+
 export async function clearAllOrders(req, res, next) {
   await Order.deleteMany({})
   res.send('deleted all orders')
