@@ -16,7 +16,7 @@ const HealthCheck = ({children, ...props}) => {
     axios.get(baseUrl)
 			.then(() => setIsSuccess(true))
 			.catch()
-			// .finally(() => setIsLoading(false))
+			.finally(() => setIsLoading(false))
   }, [])
 
 	useEffect(() => {
