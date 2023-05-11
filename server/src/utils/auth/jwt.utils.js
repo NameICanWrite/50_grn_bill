@@ -23,6 +23,7 @@ export const addJwtCookie = (res, payload) => {
   res.cookie('jwt', token, {...jwtCookieOptions, expires});
   console.log('added cookie');
   console.log({...jwtCookieOptions, expires});
+  console.log('token', token);
   return token
 }
 

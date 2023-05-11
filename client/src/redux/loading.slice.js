@@ -62,7 +62,6 @@ const initialState = {
         isLoading: false,
         message: ''
     },
-
 }
 
 const loadingSlice = createSlice({
